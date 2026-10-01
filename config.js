@@ -6,7 +6,7 @@ export const CONFIG = {
   //                 Usar solo en local. Nunca publicar un SHEET_ID de una hoja compartida por enlace.
   // Si falta APPS_SCRIPT_URL / SHEET_ID el dashboard arranca en MODO DEMO con data/sample.csv.
   SOURCE: 'apps_script',
-  APPS_SCRIPT_URL: '',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxlTOL12fWzQCnbfvoV7ZfWMPbtRPOgFGKH2GCP7pzHNbbKE3HuwEmSvsJRTcNhYtfv8g/exec',
 
   SHEET_ID: '',
   TABS: [
