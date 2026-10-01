@@ -3,9 +3,10 @@ import { STATUS, CATEGORY, fmtInt } from './ui.js';
 
 const charts = {};
 const legend = { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true } };
-const pctLabel = (c) => {
+const pctLabel = (items) => (c) => {
   const total = c.dataset.data.reduce((a, b) => a + b, 0);
-  return ` ${c.label}: ${fmtInt(c.raw)} (${((c.raw / total) * 100).toFixed(1)}%)`;
+  const pz = items[c.dataIndex]?.pz;
+  return ` ${c.label}: ${fmtInt(c.raw)} OTs (${((c.raw / total) * 100).toFixed(1)}%)${pz != null ? ` · ${fmtInt(pz)} piezas` : ''}`;
 };
 const pointer = (enabled) => (e, els) => { e.native.target.style.cursor = enabled && els.length ? 'pointer' : 'default'; };
 
@@ -26,7 +27,7 @@ export function doughnut(id, items, onClick) {
     datasets: [{ data: items.map((i) => i.n), backgroundColor: items.map((i) => i.color), borderWidth: 2, borderColor: '#fff' }],
   }, {
     cutout: '62%',
-    plugins: { legend, tooltip: { callbacks: { label: pctLabel } } },
+    plugins: { legend, tooltip: { callbacks: { label: pctLabel(items) } } },
     onClick: (_, els) => els.length && onClick?.(items[els[0].index]),
     onHover: pointer(Boolean(onClick)),
   });
@@ -39,11 +40,11 @@ export function renderCharts(kpis, tab, onPick) {
   if (!ok) return;
 
   doughnut('chartStatus',
-    Object.values(STATUS).filter((s) => kpis[s.key] > 0).map((s) => ({ ...s, n: kpis[s.key] })),
+    Object.values(STATUS).filter((s) => kpis[s.key] > 0).map((s) => ({ ...s, n: kpis[s.key], pz: kpis.pz[s.key] ?? 0 })),
     (s) => onPick({ estado: s.key }));
 
   const cats = Object.values(CATEGORY).filter((c) => tab[c.key]?.total > 0);
-  doughnut('chartCategory', cats.map((c) => ({ ...c, n: tab[c.key].total })), (c) => onPick({ categoria: c.key }));
+  doughnut('chartCategory', cats.map((c) => ({ ...c, n: tab[c.key].total, pz: tab[c.key].pz.total })), (c) => onPick({ categoria: c.key }));
 
   // Barras apiladas: una fila por tipo, un segmento por estado.
   const statuses = Object.values(STATUS).filter((s) => cats.some((c) => tab[c.key][s.key]));
@@ -60,8 +61,9 @@ export function renderCharts(kpis, tab, onPick) {
     plugins: {
       legend,
       tooltip: { callbacks: { label: (c) => {
-        const total = tab[cats[c.dataIndex].key].total;
-        return ` ${c.dataset.label}: ${fmtInt(c.raw)} de ${fmtInt(total)} (${((c.raw / total) * 100).toFixed(1)}%)`;
+        const row = tab[cats[c.dataIndex].key];
+        const pz = row.pz[statuses[c.datasetIndex].key] ?? 0;
+        return ` ${c.dataset.label}: ${fmtInt(c.raw)} de ${fmtInt(row.total)} OTs (${((c.raw / row.total) * 100).toFixed(1)}%) · ${fmtInt(pz)} piezas`;
       } } },
     },
     onClick: (_, els) => els.length &&

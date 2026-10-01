@@ -45,10 +45,14 @@ export function applyFilters(records, s) {
   });
 }
 
-// Conteo total y por estado: { total, entregado: n, proceso: n, ... }
+// Conteo total y por estado + piezas (CANTIDAD): { total, entregado: n, ..., pz: { total, entregado, ... } }
 export function computeKPIs(list) {
-  const k = { total: list.length };
-  for (const r of list) k[r.estado] = (k[r.estado] ?? 0) + 1;
+  const k = { total: list.length, pz: { total: 0 } };
+  for (const r of list) {
+    k[r.estado] = (k[r.estado] ?? 0) + 1;
+    k.pz.total += r.cantidad ?? 0;
+    k.pz[r.estado] = (k.pz[r.estado] ?? 0) + (r.cantidad ?? 0);
+  }
   return k;
 }
 
@@ -56,9 +60,11 @@ export function computeKPIs(list) {
 export function crossTab(list) {
   const t = {};
   for (const r of list) {
-    const row = (t[r.categoria] ??= { total: 0 });
+    const row = (t[r.categoria] ??= { total: 0, pz: { total: 0 } });
     row.total++;
     row[r.estado] = (row[r.estado] ?? 0) + 1;
+    row.pz.total += r.cantidad ?? 0;
+    row.pz[r.estado] = (row.pz[r.estado] ?? 0) + (r.cantidad ?? 0);
   }
   return t;
 }

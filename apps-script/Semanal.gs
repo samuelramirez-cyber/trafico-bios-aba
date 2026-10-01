@@ -5,6 +5,7 @@
  * Las pestañas cuyo nombre es una fecha se detectan solas (incluidas las ocultas); las demás se ignoran.
  *   ?view=pestanas         → índice de semanas (fecha inferida, gid, oculta)
  *   ?view=semana&gid=NNN   → OTs y estados de una semana
+ *   ?view=semanas&gids=a,b → varias semanas en una llamada (máx. 40)
  * No escribe nada en el libro.
  */
 const CUADRO_ID = 'PEGAR_AQUI_EL_ID_DEL_CUADRO';
@@ -61,41 +62,58 @@ function parsePestana_(nombre) {
 
 /** Una semana: leyenda + [llave, texto OT, analista, tango, estado, ingreso, entrega, piezas] por OT. */
 function semana_(gid) {
-  const cache = CacheService.getScriptCache();
-  const hit = cache.get('sem2_' + gid);
-  if (hit) return hit;
+  return JSON.stringify(semanasObj_([gid])[0] || { ok: false, error: 'Semana no encontrada (gid ' + gid + ')' });
+}
 
-  const sh = SpreadsheetApp.openById(CUADRO_ID).getSheets().find((s) => s.getSheetId() === gid);
-  if (!sh) return JSON.stringify({ ok: false, error: 'Semana no encontrada (gid ' + gid + ')' });
+/** Varias semanas en una sola llamada (?view=semanas&gids=1,2,3): abre el libro una vez y usa la caché. */
+function semanas_(gidsCsv) {
+  const gids = String(gidsCsv || '').split(',').map(Number).filter((g) => !isNaN(g)).slice(0, 40);
+  return JSON.stringify({ ok: true, semanas: semanasObj_(gids) });
+}
+
+function semanasObj_(gids) {
+  const cache = CacheService.getScriptCache();
+  const hits = cache.getAll(gids.map((g) => 'sem2_' + g));
+  const faltan = gids.filter((g) => !hits['sem2_' + g]);
+  const nuevas = {};
+  if (faltan.length) {
+    const sheets = SpreadsheetApp.openById(CUADRO_ID).getSheets();
+    faltan.forEach((gid) => {
+      const sh = sheets.find((s) => s.getSheetId() === gid);
+      if (!sh) return;
+      const json = JSON.stringify(leerSemana_(sh));
+      nuevas[gid] = json;
+      if (json.length < 95000) cache.put('sem2_' + gid, json, sh.isSheetHidden() ? CACHE_OCULTA_SEG : CACHE_VISIBLE_SEG);
+    });
+  }
+  return gids.map((g) => hits['sem2_' + g] || nuevas[g]).filter(Boolean).map((j) => JSON.parse(j));
+}
+
+function leerSemana_(sh) {
+  const gid = sh.getSheetId();
   const range = sh.getDataRange();
   const vals = range.getDisplayValues();
   const bgs = range.getBackgrounds();
   const head = vals.findIndex((r) => r.some((c) => norm_(c) === 'OT') && r.some((c) => norm_(c) === 'ANALISTA'));
-  let out;
-  if (head < 0) {
-    out = { ok: true, gid, nombre: sh.getName(), leyenda: [], items: [], error: 'Encabezado (OT, ANALISTA) no encontrado' };
-  } else {
-    const H = vals[head].map(norm_);
-    const c = { no: H.indexOf('NO'), ot: H.indexOf('OT'), an: H.indexOf('ANALISTA'), tg: H.indexOf('TANGO'),
-      ing: H.indexOf('INGRESO'), ent: H.indexOf('ENTREGA'), pz: H.indexOf('PIEZAS') };
-    const leyenda = leyenda_(vals, bgs, head);
-    const vistos = {};
-    const items = [];
-    for (let i = head + 1; i < vals.length; i++) {
-      const r = vals[i];
-      const otTxt = String(r[c.ot]).trim();
-      if (!otTxt || (c.no >= 0 && !/^\d+$/.test(String(r[c.no]).trim()))) continue;   // notas sueltas
-      let key = llave_(otTxt);
-      vistos[key] = (vistos[key] || 0) + 1;
-      if (vistos[key] > 1) key += '#' + vistos[key];                                   // misma OT en varias filas
-      const color = limpiaColor_(bgs[i][c.no >= 0 ? c.no : c.ot]);
-      items.push([key, otTxt, val_(r, c.an), val_(r, c.tg), estadoPorColor_(color, leyenda), val_(r, c.ing), val_(r, c.ent), val_(r, c.pz)]);
-    }
-    out = { ok: true, gid, nombre: sh.getName(), leyenda, items };
+  if (head < 0) return { ok: true, gid, nombre: sh.getName(), leyenda: [], items: [], error: 'Encabezado (OT, ANALISTA) no encontrado' };
+
+  const H = vals[head].map(norm_);
+  const c = { no: H.indexOf('NO'), ot: H.indexOf('OT'), an: H.indexOf('ANALISTA'), tg: H.indexOf('TANGO'),
+    ing: H.indexOf('INGRESO'), ent: H.indexOf('ENTREGA'), pz: H.indexOf('PIEZAS') };
+  const leyenda = leyenda_(vals, bgs, head);
+  const vistos = {};
+  const items = [];
+  for (let i = head + 1; i < vals.length; i++) {
+    const r = vals[i];
+    const otTxt = String(r[c.ot]).trim();
+    if (!otTxt || (c.no >= 0 && !/^\d+$/.test(String(r[c.no]).trim()))) continue;   // notas sueltas
+    let key = llave_(otTxt);
+    vistos[key] = (vistos[key] || 0) + 1;
+    if (vistos[key] > 1) key += '#' + vistos[key];                                   // misma OT en varias filas
+    const color = limpiaColor_(bgs[i][c.no >= 0 ? c.no : c.ot]);
+    items.push([key, otTxt, val_(r, c.an), val_(r, c.tg), estadoPorColor_(color, leyenda), val_(r, c.ing), val_(r, c.ent), val_(r, c.pz)]);
   }
-  const payload = JSON.stringify(out);
-  if (payload.length < 95000) cache.put('sem2_' + gid, payload, sh.isSheetHidden() ? CACHE_OCULTA_SEG : CACHE_VISIBLE_SEG);
-  return payload;
+  return { ok: true, gid, nombre: sh.getName(), leyenda, items };
 }
 
 // Código nuevo "ot_001354_aba_..." (igual a DESCRIPCIÓN en OT's TANGO 2026) o el texto normalizado.

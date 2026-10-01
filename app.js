@@ -139,9 +139,10 @@ function renderKPIs(k) {
       <p class="kpi-label">${esc(label)}</p>
       <p class="kpi-value"${color ? ` style="color:${color}"` : ''}>${fmtInt(value)}</p>
       <p class="text-xs text-slate-500">${sub}</p></div>`;
-  $('#kpis').innerHTML = card('Total OTs', k.total, '', CONFIG.CLIENT_FILTER.map(esc).join(', ')) +
+  const pz = (key) => `${fmtInt(k.pz[key] ?? 0)} piezas`;
+  $('#kpis').innerHTML = card('Total OTs', k.total, '', `${pz('total')} · ${CONFIG.CLIENT_FILTER.map(esc).join(', ')}`) +
     Object.values(STATUS).filter((s) => s.key !== 'otro' || k.otro)
-      .map((s) => card(s.label, k[s.key] ?? 0, s.color, pct(k[s.key] ?? 0))).join('');
+      .map((s) => card(s.label, k[s.key] ?? 0, s.color, `${pct(k[s.key] ?? 0)} · ${pz(s.key)}`)).join('');
 }
 
 // Clic en un gráfico: aplica el filtro y lleva a la tabla.
@@ -216,15 +217,20 @@ async function refreshWeekly({ all = false, force = false } = {}) {
     drawWeekly();
     weeks.index = await loadWeekIndex({ force });
     const loaded = new Map(weeks.loaded.map((w) => [w.gid, w]));
-    const want = all ? weeks.index : weeksForPeriod();
-    const missing = want.filter((t) => force || !loaded.has(t.gid));
-    const got = await loadWeeks(missing, {
-      force,
-      onProgress: (done, total) => { weeks.loading = `Cargando semanas… ${done}/${total}`; drawWeekly(); },
-    });
-    for (const w of got) loaded.set(w.gid, w);
     const order = new Map(weeks.index.map((t, i) => [t.gid, i]));
-    weeks.loaded = [...loaded.values()].filter((w) => order.has(w.gid)).sort((x, y) => order.get(x.gid) - order.get(y.gid));
+    const want = all ? weeks.index : weeksForPeriod();
+    const missing = want.filter((t) => force || !loaded.has(t.gid)).reverse();   // las más recientes primero
+    // Cada lote que llega se integra y se pinta (los gráficos se llenan mientras carga).
+    const merge = (got) => {
+      for (const w of got) loaded.set(w.gid, w);
+      weeks.loaded = [...loaded.values()].filter((w) => order.has(w.gid)).sort((x, y) => order.get(x.gid) - order.get(y.gid));
+      drawWeekly();
+    };
+    await loadWeeks(missing, {
+      force,
+      onProgress: (done, total) => { weeks.loading = done < total ? `Cargando semanas… ${done}/${total}` : null; },
+      onBatch: merge,
+    });
     weeks.error = null;
   } catch (e) {
     weeks.error = `Flujo semanal: ${e.message}`;

@@ -18,6 +18,7 @@ function doGet(e) {
     const view = e && e.parameter && e.parameter.view;
     if (view === 'pestanas') return out_(pestanas_());                       // Semanal.gs
     if (view === 'semana') return out_(semana_(Number(e.parameter.gid)));    // Semanal.gs
+    if (view === 'semanas') return out_(semanas_(e.parameter.gids));          // Semanal.gs
     const cache = CacheService.getScriptCache();
     const hit = cache.get('payload');
     if (hit) return out_(hit);

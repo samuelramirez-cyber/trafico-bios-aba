@@ -6,6 +6,7 @@ const COLS = [
   { key: 'desc', label: 'Descripción' },
   { key: 'categoria', label: 'Tipo' },
   { key: 'pieza', label: 'Pieza' },
+  { key: 'cantidad', label: 'Piezas' },
   { key: 'gerente', label: 'Gerente / Director' },
   { key: 'responsable', label: 'Responsable' },
   { key: 'ingreso', label: 'Ingreso' },
@@ -47,6 +48,7 @@ export function renderTable(list, view, pageSize, onChange) {
       <td class="px-3 py-2 max-w-xs truncate" title="${esc(r.desc)}">${esc(r.desc) || dash}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(CATEGORY[r.categoria].label)}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(r.pieza) || dash}</td>
+      <td class="px-3 py-2 tabular-nums text-right">${r.cantidad != null ? fmtInt(r.cantidad) : dash}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(r.gerente) || dash}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(resp) || dash}</td>
       <td class="px-3 py-2 whitespace-nowrap tabular-nums">${r.ingresoTxt || dash}</td>

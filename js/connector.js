@@ -142,33 +142,59 @@ export async function loadWeekIndex({ force = false } = {}) {
   }
 }
 
-/** Una semana { leyenda, items }. Las ocultas no cambian: su caché local no vence. */
-export async function loadWeek(t, { force = false } = {}) {
-  const key = WEEK_KEY(t.gid);
-  const cached = cachedJSON(key);
-  if (!force && cached && (t.oculta || Date.now() - cached.ts < WEEK_TTL_MIN * 60000)) return cached;
+const isFresh = (t, c) => c && (t.oculta || Date.now() - c.ts < WEEK_TTL_MIN * 60000);
+
+// Un lote de semanas en una sola llamada; si la red falla, se usa la última copia local de cada una.
+async function fetchWeekBatch(tabs) {
   try {
-    const { leyenda, items, error } = await fetchJSON(`${CONFIG.APPS_SCRIPT_URL}?view=semana&gid=${encodeURIComponent(t.gid)}`);
-    const week = { ts: Date.now(), leyenda: leyenda || [], items: items || [], error };
-    storeJSON(key, week);
-    return week;
+    let { semanas } = await fetchJSON(`${CONFIG.APPS_SCRIPT_URL}?view=semanas&gids=${tabs.map((t) => encodeURIComponent(t.gid)).join(',')}`);
+    // Compatibilidad con una API sin ?view=semanas: una llamada por semana.
+    if (!Array.isArray(semanas)) {
+      semanas = await Promise.all(tabs.map((t) => fetchJSON(`${CONFIG.APPS_SCRIPT_URL}?view=semana&gid=${encodeURIComponent(t.gid)}`)));
+    }
+    const byGid = new Map(semanas.map((w) => [w.gid, w]));
+    return tabs.map((t) => {
+      const w = byGid.get(t.gid);
+      if (!w) return null;
+      const week = { ts: Date.now(), leyenda: w.leyenda || [], items: w.items || [], error: w.error };
+      storeJSON(WEEK_KEY(t.gid), week);
+      return { ...t, ...week };
+    }).filter(Boolean);
   } catch (e) {
-    if (cached) return cached;
-    throw e;
+    const stale = tabs.map((t) => { const c = cachedJSON(WEEK_KEY(t.gid)); return c ? { ...t, ...c } : null; }).filter(Boolean);
+    if (!stale.length) throw e;
+    return stale;
   }
 }
 
-/** Carga varias semanas con concurrencia limitada; onProgress(hechas, total). */
-export async function loadWeeks(tabs, { force = false, concurrency = 4, onProgress } = {}) {
-  const out = new Array(tabs.length);
-  let next = 0, done = 0;
+/**
+ * Carga semanas: primero las guardadas localmente (las ocultas no vencen), luego el resto en lotes.
+ * onBatch(semanas) se llama con cada grupo que llega, para pintar de forma progresiva.
+ */
+export async function loadWeeks(tabs, { force = false, batch = 8, concurrency = 4, onProgress, onBatch } = {}) {
+  const out = [], pending = [];
+  for (const t of tabs) {
+    const c = cachedJSON(WEEK_KEY(t.gid));
+    if (!(force && !t.oculta) && isFresh(t, c)) out.push({ ...t, ...c });
+    else pending.push(t);
+  }
+  let done = out.length;
+  onProgress?.(done, tabs.length);
+  if (out.length) onBatch?.(out.slice());
+
+  const chunks = [];
+  for (let i = 0; i < pending.length; i += batch) chunks.push(pending.slice(i, i + batch));
+  let next = 0;
   const worker = async () => {
-    while (next < tabs.length) {
-      const i = next++;
-      out[i] = { ...tabs[i], ...(await loadWeek(tabs[i], { force: force && !tabs[i].oculta })) };
-      onProgress?.(++done, tabs.length);
+    while (next < chunks.length) {
+      const chunk = chunks[next++];
+      const got = await fetchWeekBatch(chunk);
+      out.push(...got);
+      done += chunk.length;
+      onProgress?.(done, tabs.length);
+      onBatch?.(got);
     }
   };
-  await Promise.all(Array.from({ length: Math.min(concurrency, tabs.length) }, worker));
+  await Promise.all(Array.from({ length: Math.min(concurrency, chunks.length) }, worker));
   return out;
 }

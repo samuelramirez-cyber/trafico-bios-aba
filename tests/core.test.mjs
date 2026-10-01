@@ -75,7 +75,11 @@ test('filtro fijo de cliente + filtros temporales sobre data/sample.csv', () => 
   assert.ok(y.every((r) => r.ingreso.getFullYear() === 2025));
 
   const k = computeKPIs(y);
-  assert.equal(Object.entries(k).filter(([key]) => key !== 'total').reduce((a, [, v]) => a + v, 0), k.total);
+  const states = Object.entries(k).filter(([key]) => !['total', 'pz'].includes(key));
+  assert.equal(states.reduce((a, [, v]) => a + v, 0), k.total);
+  assert.equal(k.pz.total, y.reduce((a, r) => a + (r.cantidad ?? 0), 0));
+  assert.ok(k.pz.total > 0);
+  assert.equal(states.reduce((a, [key]) => a + (k.pz[key] ?? 0), 0), k.pz.total);
   assert.ok(issues.some((i) => i.kind === 'date'));
 });
 
