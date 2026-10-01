@@ -7,7 +7,9 @@ import { renderCharts } from './js/charts.js';
 import { renderTable } from './js/table.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
-const FILTERS_KEY = 'bios-trafico:filters:v2';
+const FILTERS_KEY = 'bios-trafico:filters:v3';
+// Solo el periodo se recuerda entre visitas; los filtros de detalle se descartan al recargar.
+const PERSISTED = ['dateField', 'period', 'year', 'month', 'quarter', 'half'];
 const now = new Date();
 const DEFAULTS = {
   dateField: 'ingreso', period: 'year', year: now.getFullYear(), month: now.getMonth() + 1,
@@ -20,11 +22,13 @@ const view = { page: 1, sortKey: 'ingreso', sortDir: -1 };
 let records = [], issues = [], lastLoad = null;
 
 function readSaved() {
-  try { const s = JSON.parse(localStorage.getItem(FILTERS_KEY)); return s && typeof s === 'object' ? s : {}; } catch { return {}; }
+  try {
+    const s = JSON.parse(localStorage.getItem(FILTERS_KEY));
+    return s && typeof s === 'object' ? Object.fromEntries(PERSISTED.filter((k) => k in s).map((k) => [k, s[k]])) : {};
+  } catch { return {}; }
 }
 function saveFilters() {
-  const { q, ...rest } = state;
-  try { localStorage.setItem(FILTERS_KEY, JSON.stringify(rest)); } catch { /* sin almacenamiento */ }
+  try { localStorage.setItem(FILTERS_KEY, JSON.stringify(Object.fromEntries(PERSISTED.map((k) => [k, state[k]])))); } catch { /* sin almacenamiento */ }
 }
 
 /* ---------- Carga ---------- */
@@ -89,6 +93,7 @@ function render() {
   const list = applyFilters(records, state);
   const k = computeKPIs(list);
 
+  renderActiveFilters();
   renderKPIs(k);
 
   const range = periodRange(state);
@@ -98,6 +103,30 @@ function render() {
   renderCharts(k, crossTab(list), pick);
   renderTable(list, view, CONFIG.PAGE_SIZE, render);
   renderIssues(range);
+}
+
+// Chips de filtros de detalle activos (los que reducen el total), con ✕ para quitar cada uno.
+const DETAIL = {
+  categoria: (v) => `Tipo: ${CATEGORY[v]?.label ?? v}`,
+  estado: (v) => `Estado: ${STATUS[v]?.label ?? v}`,
+  gerente: (v) => `Gerente: ${v}`,
+  responsable: (v) => `Responsable: ${v}`,
+  q: (v) => `Búsqueda: "${v}"`,
+};
+function renderActiveFilters() {
+  const active = Object.keys(DETAIL).filter((k) => state[k]);
+  const box = $('#activeFilters');
+  box.hidden = !active.length;
+  box.innerHTML = '<span class="text-sm font-medium text-amber-900">Filtros activos:</span>' +
+    active.map((k) => `<button data-clear="${k}" class="chip">${esc(DETAIL[k](state[k]))} ✕</button>`).join('') +
+    '<button data-clear="*" class="chip chip-strong ml-auto">Quitar filtros</button>';
+  box.onclick = (e) => {
+    const k = e.target.closest('[data-clear]')?.dataset.clear;
+    if (!k) return;
+    for (const f of k === '*' ? active : [k]) state[f] = '';
+    view.page = 1;
+    render();
+  };
 }
 
 // Tarjetas: total + una por estado configurado ("Sin estado" solo si hay filas sin estado).
