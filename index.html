@@ -66,11 +66,24 @@
     <!-- KPIs (generados desde CONFIG.STATUSES) -->
     <section id="kpis" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" aria-label="Indicadores"></section>
 
-    <!-- Gráfico -->
+    <!-- Gráficos (clic en un segmento = filtrar la tabla) -->
     <section class="card">
       <h2 class="section-title">Distribución por estado</h2>
       <div class="chart-box"><canvas id="chartStatus"></canvas></div>
       <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible (no cargó Chart.js — revise la conexión).</p>
+    </section>
+
+    <section class="grid lg:grid-cols-3 gap-3" aria-label="Por tipo de pieza">
+      <div class="card">
+        <h2 class="section-title">Tipos de pieza (% del total)</h2>
+        <div class="chart-box"><canvas id="chartCategory"></canvas></div>
+        <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible.</p>
+      </div>
+      <div class="card lg:col-span-2">
+        <h2 class="section-title">Estado por tipo de pieza <span class="font-normal text-slate-500">· clic en una barra para ver esas OTs</span></h2>
+        <div class="chart-box"><canvas id="chartCategoryStatus"></canvas></div>
+        <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible.</p>
+      </div>
     </section>
 
     <details id="issues" hidden class="card text-sm">
@@ -84,6 +97,7 @@
         <input id="search" type="search" placeholder="Buscar OT, descripción, pieza, responsable…" class="ctl flex-1 min-w-[12rem]">
         <select id="fGerente" class="ctl" aria-label="Gerente / Director"></select>
         <select id="fResponsable" class="ctl" aria-label="Responsable"></select>
+        <select id="fCategoria" class="ctl" aria-label="Tipo de pieza"></select>
         <select id="fEstado" class="ctl" aria-label="Estado"></select>
       </div>
       <div class="overflow-x-auto">

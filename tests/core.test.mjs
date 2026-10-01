@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseCSV, parseDate, formatDate, mapColumns, detectHeader, splitOT, classifyStatus, normalizeTable } from '../js/normalize.js';
+import { parseCSV, parseDate, formatDate, mapColumns, detectHeader, splitOT, classify, normalizeTable } from '../js/normalize.js';
 import { periodRange, applyFilters, computeKPIs } from '../js/filters.js';
 import { CONFIG } from '../config.js';
 
@@ -47,9 +47,14 @@ test('splitOT y estados', () => {
   assert.deepEqual(splitOT('000010'), { ot: 'OT 000010', titulo: '' });
   assert.deepEqual(splitOT('ot_000010_aba_ajuste_empaque_alfalfa'), { ot: 'OT 000010', titulo: 'Ajuste empaque alfalfa' });
   assert.equal(splitOT('Campaña 2026 de verano').ot, 'Campaña 2026 de verano');
-  const c = (t) => classifyStatus(t, CONFIG.STATUSES);
+  const c = (t) => classify(t, CONFIG.STATUSES);
   assert.deepEqual(['Entregado', 'En proceso', 'En revisión', 'En reproceso', 'No realizado', '', 'Otro raro'].map(c),
     ['entregado', 'proceso', 'revision', 'reproceso', 'norealizado', 'otro', 'otro']);
+  const t = (s) => classify(s, CONFIG.CATEGORIES);
+  assert.deepEqual(['ot_001169_aba_fachada_agro_holstein', 'ot_1_aba_fach_la18', 'ot_2_aba_invitacion_charla_leche',
+    'ot_3_aba_charla_rodeo', 'ot_4_aba_ajuste_empaque', 'ot_5_aba_logo_lactia Diseño Grafico',
+    'ot_6_aba_inv_charla_porci', 'ot_7_aba_invi_jornada_pdv', 'ot_8_aba_jornada_pdv_inv', 'ot_9_aba_investigacion_instagram'].map(t),
+    ['fachadas', 'fachadas', 'invitaciones', 'eventos', 'empaques', 'otro', 'invitaciones', 'invitaciones', 'invitaciones', 'otro']);
 });
 
 test('filtro fijo de cliente + filtros temporales sobre data/sample.csv', () => {

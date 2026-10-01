@@ -148,15 +148,18 @@ export function splitOT(raw) {
   return { ot: `OT ${m[1] ?? m[2]}`, titulo: capitalize(titulo) };
 }
 
-export function classifyStatus(text, statuses) {
-  const k = normKey(text);
-  if (!k) return 'otro';
-  return statuses.find((st) => st.match.some((t) => ` ${k}`.includes(` ${t}`)))?.key ?? 'otro';
+// Primera entrada de `list` ({ key, match[] }) cuyo término aparece como prefijo de palabra
+// ('FACH' → fachada, fach); con '$' final exige la palabra completa ('INV$' → inv, no investigacion).
+export function classify(text, list) {
+  const k = ` ${normKey(text)} `;
+  if (!k.trim()) return 'otro';
+  const hit = (t) => (t.endsWith('$') ? k.includes(` ${t.slice(0, -1)} `) : k.includes(` ${t}`));
+  return list.find((it) => it.match.some(hit))?.key ?? 'otro';
 }
 
 /* ---------- Tabla completa ---------- */
 
-export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], clientFilter = [] } = {}) {
+export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], categories = [], clientFilter = [] } = {}) {
   const h = detectHeader(rows);
   if (!h) {
     return { records: [], skipped: 0, map: null,
@@ -201,7 +204,8 @@ export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], cl
         issues.push({ tab, row: i + 1, ot, kind: p.error ? 'date' : 'dateFix', field: f.toUpperCase(), msg });
       }
     }
-    rec.estado = classifyStatus(rec.estadoRaw, statuses);
+    rec.estado = classify(rec.estadoRaw, statuses);
+    rec.categoria = classify(`${rawDesc} ${rec.pieza}`, categories);
     rec._search = normKey([ot, rawDesc, rec.desc, rec.pieza, rec.gerente, rec.responsable, rec.responsable2, rec.estadoRaw].join(' '));
     records.push(rec);
   }

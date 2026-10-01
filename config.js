@@ -35,4 +35,15 @@ export const CONFIG = {
     { key: 'proceso',     label: 'En proceso',   color: '#2563eb', match: ['PROCESO', 'CURSO', 'PRODUCCION'] },
     { key: 'entregado',   label: 'Entregado',    color: '#16a34a', match: ['ENTREGAD', 'APROB', 'FINALIZ', 'TERMINAD'] },
   ],
+
+  // Tipos de pieza, detectados en DESCRIPCIÓN + PIEZA (en orden; la primera que coincide gana).
+  // Término = prefijo de palabra ('FACH' → fachada, fach); con '$' = palabra exacta ('INV$' → inv, no investigación).
+  // Lo que no coincide queda en "Otros".
+  CATEGORIES: [
+    { key: 'fachadas',     label: 'Fachadas',             color: '#0f766e', match: ['FACH'] },
+    { key: 'invitaciones', label: 'Invitaciones',         color: '#db2777', match: ['INV$', 'INVI'] },
+    { key: 'eventos',      label: 'Eventos',              color: '#ea580c', match: ['CHAR', 'FERIA', 'JORN', 'ENCUENTRO', 'RODEO', 'STAND', 'CONGRES', 'EVENTO', 'FENAVI', 'PORKAMERICAS'] },
+    { key: 'empaques',     label: 'Empaques y etiquetas', color: '#7c3aed', match: ['EMPAQUE', 'ETIQUETA'] },
+    { key: 'audiovisual',  label: 'Audiovisual',          color: '#0284c7', match: ['VIDEO', 'FOTO', 'GRAB'] },
+  ],
 };

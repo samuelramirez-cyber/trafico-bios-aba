@@ -39,6 +39,7 @@ export function applyFilters(records, s) {
     if (s.gerente && r.gerente !== s.gerente) return false;
     if (s.responsable && r.responsable !== s.responsable && r.responsable2 !== s.responsable) return false;
     if (s.estado && r.estado !== s.estado) return false;
+    if (s.categoria && r.categoria !== s.categoria) return false;
     if (q && !r._search.includes(q)) return false;
     return true;
   });
@@ -49,6 +50,17 @@ export function computeKPIs(list) {
   const k = { total: list.length };
   for (const r of list) k[r.estado] = (k[r.estado] ?? 0) + 1;
   return k;
+}
+
+// Tabla cruzada tipo × estado: { fachadas: { total, entregado: n, ... }, ... }
+export function crossTab(list) {
+  const t = {};
+  for (const r of list) {
+    const row = (t[r.categoria] ??= { total: 0 });
+    row.total++;
+    row[r.estado] = (row[r.estado] ?? 0) + 1;
+  }
+  return t;
 }
 
 export const uniqueSorted = (list, ...fields) =>

@@ -1,9 +1,10 @@
 // Tabla de OTs: orden por columna y paginación.
-import { STATUS, badge, esc, fmtInt, $ } from './ui.js';
+import { STATUS, CATEGORY, badge, esc, fmtInt, $ } from './ui.js';
 
 const COLS = [
   { key: 'ot', label: 'OT' },
   { key: 'desc', label: 'Descripción' },
+  { key: 'categoria', label: 'Tipo' },
   { key: 'pieza', label: 'Pieza' },
   { key: 'gerente', label: 'Gerente / Director' },
   { key: 'responsable', label: 'Responsable' },
@@ -44,6 +45,7 @@ export function renderTable(list, view, pageSize, onChange) {
     return `<tr class="border-t border-slate-100 hover:bg-slate-50">
       <td class="px-3 py-2 font-medium whitespace-nowrap">${esc(r.ot)}${warn}</td>
       <td class="px-3 py-2 max-w-xs truncate" title="${esc(r.desc)}">${esc(r.desc) || dash}</td>
+      <td class="px-3 py-2 whitespace-nowrap">${esc(CATEGORY[r.categoria].label)}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(r.pieza) || dash}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(r.gerente) || dash}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(resp) || dash}</td>

@@ -2,17 +2,17 @@
 import { CONFIG } from './config.js';
 import { loadData, sourceMode } from './js/connector.js';
 import { normalizeTable } from './js/normalize.js';
-import { applyFilters, computeKPIs, periodRange, uniqueSorted, yearsIn, MONTH_NAMES } from './js/filters.js';
+import { applyFilters, computeKPIs, crossTab, periodRange, uniqueSorted, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
 import { renderTable } from './js/table.js';
-import { STATUS, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
+import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
 const FILTERS_KEY = 'bios-trafico:filters:v2';
 const now = new Date();
 const DEFAULTS = {
   dateField: 'ingreso', period: 'year', year: now.getFullYear(), month: now.getMonth() + 1,
   quarter: Math.floor(now.getMonth() / 3) + 1, half: now.getMonth() < 6 ? 1 : 2,
-  gerente: '', responsable: '', estado: '', q: '',
+  gerente: '', responsable: '', estado: '', categoria: '', q: '',
 };
 
 const state = { ...DEFAULTS, ...readSaved() };
@@ -35,7 +35,7 @@ async function load(force = false) {
   if (!lastLoad) setBanner('info', 'Conectando con Google Sheets…');
   try {
     const res = await loadData({ force });
-    const opts = { dateOrder: CONFIG.DATE_ORDER, statuses: CONFIG.STATUSES, clientFilter: CONFIG.CLIENT_FILTER };
+    const opts = { dateOrder: CONFIG.DATE_ORDER, statuses: CONFIG.STATUSES, categories: CONFIG.CATEGORIES, clientFilter: CONFIG.CLIENT_FILTER };
     records = []; issues = [];
     for (const t of res.tabs) {
       const out = normalizeTable(t.rows, t.name, opts);
@@ -95,7 +95,7 @@ function render() {
   const fieldLabel = state.dateField === 'ingreso' ? 'INGRESO' : 'ENTREGA';
   $('#periodLabel').textContent = range ? `${range.label} · por fecha de ${fieldLabel}` : `Todo el histórico · por fecha de ${fieldLabel}`;
 
-  renderCharts(k);
+  renderCharts(k, crossTab(list), pick);
   renderTable(list, view, CONFIG.PAGE_SIZE, render);
   renderIssues(range);
 }
@@ -112,11 +112,20 @@ function renderKPIs(k) {
       .map((s) => card(s.label, k[s.key] ?? 0, s.color, pct(k[s.key] ?? 0))).join('');
 }
 
+// Clic en un gráfico: aplica el filtro y lleva a la tabla.
+function pick(sel) {
+  Object.assign(state, sel);
+  view.page = 1;
+  render();
+  $('#tableBody').closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function syncControls() {
   fillSelect($('#year'), yearsIn(records, state.dateField, CONFIG.YEARS), state.year);
   state.year = +$('#year').value || DEFAULTS.year;
   fillSelect($('#fGerente'), uniqueSorted(records, 'gerente'), state.gerente, 'Todos los gerentes');
   fillSelect($('#fResponsable'), uniqueSorted(records, 'responsable', 'responsable2'), state.responsable, 'Todos los responsables');
+  fillSelect($('#fCategoria'), Object.values(CATEGORY).map((c) => [c.key, c.label]), state.categoria, 'Todos los tipos');
   fillSelect($('#fEstado'), Object.entries(STATUS).map(([k, s]) => [k, s.label]), state.estado, 'Todos los estados');
   for (const id of ['dateField', 'period', 'month', 'quarter', 'half']) $(`#${id}`).value = state[id];
   $('#search').value = state.q;
@@ -155,6 +164,7 @@ function bind() {
   $('#fGerente').onchange = set('gerente');
   $('#fResponsable').onchange = set('responsable');
   $('#fEstado').onchange = set('estado');
+  $('#fCategoria').onchange = set('categoria');
 
   let t;
   $('#search').oninput = (e) => { clearTimeout(t); t = setTimeout(() => set('q')(e), 200); };

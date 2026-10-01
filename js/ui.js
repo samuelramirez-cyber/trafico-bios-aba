@@ -7,6 +7,11 @@ export const STATUS = Object.fromEntries([
   ['otro', { key: 'otro', label: 'Sin estado', color: '#64748b' }],
 ]);
 
+export const CATEGORY = Object.fromEntries([
+  ...CONFIG.CATEGORIES.map((c) => [c.key, c]),
+  ['otro', { key: 'otro', label: 'Otros', color: '#94a3b8' }],
+]);
+
 // Badge con color del estado (estilo inline: no depende de clases generadas por Tailwind).
 export const badge = (key, text) => {
   const c = STATUS[key].color;
