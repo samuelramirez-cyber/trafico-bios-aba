@@ -109,7 +109,7 @@ export function loadData({ force = false } = {}) {
 /* ---------- Seguimiento semanal (Cuadro Tango: una pestaña por semana) ---------- */
 
 const WEEK_INDEX_KEY = 'bios-trafico:semanas:idx:v1';
-const WEEK_KEY = (gid) => `bios-trafico:semana:v1:${gid}`;
+const WEEK_KEY = (gid) => `bios-trafico:semana:v2:${gid}`;
 const WEEK_TTL_MIN = 10;   // semanas visibles e índice; las ocultas (histórico) se guardan sin vencimiento
 
 async function fetchJSON(url) {
@@ -157,9 +157,6 @@ export async function loadWeek(t, { force = false } = {}) {
     throw e;
   }
 }
-
-// Semana oculta ya guardada localmente (no requiere red).
-export const isWeekCached = (t) => t.oculta && cachedJSON(WEEK_KEY(t.gid)) != null;
 
 /** Carga varias semanas con concurrencia limitada; onProgress(hechas, total). */
 export async function loadWeeks(tabs, { force = false, concurrency = 4, onProgress } = {}) {

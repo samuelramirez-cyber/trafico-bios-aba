@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { parseCSV, parseDate, formatDate, mapColumns, detectHeader, splitOT, classify, normalizeTable } from '../js/normalize.js';
 import { periodRange, applyFilters, computeKPIs } from '../js/filters.js';
 import { CONFIG } from '../config.js';
-import { weeklyBalance } from '../js/weekly.js';
+import { weeklyFlow, flowTotals } from '../js/weekly.js';
 
 const fd = (s) => formatDate(parseDate(s).date);
 const opts = { statuses: CONFIG.STATUSES, clientFilter: ['GRUPO BIOS ABA'] };
@@ -86,19 +86,21 @@ test('periodRange: límites semiabiertos', () => {
   assert.equal(periodRange({ period: 'all' }), null);
 });
 
-test('weeklyBalance: nuevas, cambios, salidas, estancadas y cruce', () => {
-  const it = (key, estado) => [key, key, 'ELI', 'ALEJO', estado, '', ''];
+test('weeklyFlow: entradas, salidas (aprobadas/retiradas), activas y piezas', () => {
+  const it = (key, estado, pz = '') => [key, key, 'ELI', 'ALEJO', estado, '', '', pz];
   const semanas = [
-    { fecha: '2026-09-15', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'EN PROCESO'), it('ot_000003_aba_c', 'PENDIENTE INSUMO')] },
-    { fecha: '2026-09-22', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'APROBADO'), it('ot_000003_aba_c', 'PENDIENTE INSUMO')] },
-    { fecha: '2026-09-29', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'APROBADO'), it('ot_000004_aba_d', 'EN PROCESO')] },
+    { gid: 1, nombre: '15 SEPT', fecha: '2026-09-15', items: [it('ot_000001_aba_a', 'EN PROCESO', '2'), it('ot_000002_aba_b', 'EN PROCESO', '3'), it('ot_000003_aba_c', 'PENDIENTE INSUMO', '1')] },
+    { gid: 2, nombre: '22 SEPT', fecha: '2026-09-22', items: [it('ot_000001_aba_a', 'EN PROCESO', '2'), it('ot_000002_aba_b', 'APROBADO', '3'), it('ot_000004_aba_d', 'EN PROCESO', 'AF')] },
+    { gid: 3, nombre: '29 SEPT', fecha: '2026-09-29', items: [it('ot_000001_aba_a', 'APROBADO', '2'), it('ot_000004_aba_d', 'EN PROCESO', 'AF'), it('ot_000005_aba_e', 'EN PROCESO', '4')] },
   ];
-  const cross = new Map([['ot_000002_aba_b', { estado: 'proceso' }], ['ot_000001_aba_a', { estado: 'proceso' }]]);
-  const b = weeklyBalance(semanas, 2, cross);
-  assert.deepEqual([b.total, b.nuevas.length, b.salieron.length, b.cambios.length], [3, 1, 1, 0]);
-  assert.deepEqual(b.estancadas.map((x) => x.key), ['ot_000001_aba_a']);
-  assert.deepEqual(b.discrepancias.map((x) => x.key), ['ot_000002_aba_b']);   // aprobado en cuadro, en proceso en OT 2026
-  const b1 = weeklyBalance(semanas, 1, cross);
-  assert.deepEqual(b1.aprobadas.map((x) => x.key), ['ot_000002_aba_b']);
-  assert.equal(weeklyBalance(semanas, 0).nuevas.length, 0);
+  const cross = new Map([['ot_000004_aba_d', { cantidad: 6, estado: 'proceso' }]]);   // pieza "AF" → CANTIDAD de OT 2026
+  const [w1, w2, w3] = weeklyFlow(semanas, cross);
+  assert.ok(w1.base);
+  assert.deepEqual([w1.entraron.length, w1.salieron.length, w1.activas.length], [0, 0, 3]);
+  assert.deepEqual(w2.entraron.map((x) => x.key), ['ot_000004_aba_d']);
+  assert.deepEqual(w2.salieron.map((x) => [x.key, x.salida]), [['ot_000002_aba_b', 'Aprobada'], ['ot_000003_aba_c', 'Retirada del cuadro']]);
+  assert.deepEqual([w2.pzEntraron, w2.pzSalieron, w2.entraron[0].piezasFuente], [6, 4, 'OT 2026']);
+  assert.deepEqual([w3.entraron.length, w3.salieron.length, w3.activas.length, w3.pzActivas], [1, 1, 2, 10]);   // la aprobada b se retira: no cuenta de nuevo
+  const t = flowTotals([w1, w2, w3]);
+  assert.deepEqual([t.semanas, t.entraron, t.salieron, t.pzEntraron, t.pzSalieron, t.activas], [2, 2, 3, 10, 6, 2]);
 });

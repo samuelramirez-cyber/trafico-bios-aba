@@ -68,17 +68,20 @@ Para publicarlo (p. ej. Netlify, como la Misión #1) basta arrastrar la carpeta 
 
 Filas omitidas: sin OT, encabezados repetidos y filas `TOTAL`/`SUBTOTAL`.
 
-## 4. Seguimiento semanal (Cuadro Tango)
+## 4. Flujo semanal (Cuadro Tango)
 
 Fuente: libro "CUADRO TANGO – GRUPO BIOS", una pestaña por semana (`1 SEPT`, `6 OCTUBRE`…), la mayoría ocultas
-(histórico desde abr-2024). El estado de cada OT es el **color de la celda "No"**, interpretado con la leyenda de la propia pestaña.
+(histórico desde abr-2024). Cada pestaña es la foto de esa semana; el estado de cada OT es el **color de la celda "No"**.
 
-- `apps-script/Semanal.gs` (mismo proyecto Apps Script): `?view=pestanas` lista las semanas (incluidas ocultas; el año se
-  infiere por el orden de las pestañas y tolera nombres como `2 SPETIEMBRE` o `10 JUNIO 26`); `?view=semana&gid=N` devuelve una semana.
-- El dashboard carga las últimas `WEEKS_INITIAL` semanas + todas las ya guardadas en el navegador; "Cargar histórico completo"
-  descarga el resto una sola vez (las ocultas no cambian y se guardan sin vencimiento).
-- Balance semana vs anterior: nuevas, cambios de estado, pasaron a aprobado, estancadas (≥ `STALE_WEEKS`), salieron, evolución.
-- Cruce con OT's TANGO 2026 por el código `ot_XXXXXX_…` (= DESCRIPCIÓN). "Discrepancias": aprobado en el cuadro pero no
-  entregado en OT 2026, o al revés. El formato antiguo (`OT 000539 GRUPO BIOS …`) no cruza: los números se repiten entre años.
+- **Sigue el periodo global** del dashboard (Mes / Trimestre / Semestre / Año / Todo): solo se muestran las semanas cuya
+  pestaña cae en ese periodo, numeradas "Semana 1, 2…", en barras compuestas (entraron + salieron).
+- **Entraron**: OTs que aparecen por primera vez vs la pestaña anterior. **Salieron**: pasaron a Aprobado esa semana o se
+  retiraron del cuadro sin aprobarse. **Activas**: no aprobadas al cierre de la última semana del periodo.
+- **Piezas**: columna PIEZAS del cuadro; si no es un número ("AF", "PEN", vacío) se usa CANTIDAD de OT's TANGO 2026
+  (cruce por el código `ot_XXXXXX_…` = DESCRIPCIÓN; el formato antiguo `OT 000539 GRUPO BIOS …` no cruza).
+- `apps-script/Semanal.gs` (mismo proyecto): `?view=pestanas` lista las semanas (incluidas ocultas; año inferido por el orden
+  de las pestañas; tolera `2 SPETIEMBRE`, `10 JUNIO 26`); `?view=semana&gid=N` devuelve una semana.
+- Se descargan solo las semanas del periodo elegido (más la anterior, para comparar); las ocultas quedan guardadas en el
+  navegador sin vencimiento. "Cargar histórico completo" baja todas.
 - Colores fuera de la leyenda → `CUADRO_COLORES` en config.js (p. ej. `'#34a853': 'APROBADO'`).
-- Tras editar los `.gs`: pegar en el proyecto (SHEET_ID / CUADRO_ID reales solo allí) → Implementar → Gestionar → Editar → Versión nueva.
+- Tras editar los `.gs`: pegar en el proyecto (SHEET_ID / CUADRO_ID reales solo allí) → Implementar → Gestionar → Editar → **Versión nueva**.

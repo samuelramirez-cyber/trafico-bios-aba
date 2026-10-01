@@ -1,6 +1,6 @@
 // Orquestador del dashboard: estado de filtros, carga de datos y render reactivo.
 import { CONFIG } from './config.js';
-import { isWeekCached, loadData, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
+import { loadData, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
 import { normalizeTable } from './js/normalize.js';
 import { applyFilters, computeKPIs, crossTab, periodRange, uniqueSorted, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
@@ -51,7 +51,6 @@ async function load(force = false) {
     lastLoad = res;
     updateBanner();
     render();
-    drawWeekly();
   } catch (e) {
     if (lastLoad) { lastLoad = { ...lastLoad, origin: 'stale', error: e.message }; updateBanner(); }
     else setBanner('error', `No fue posible cargar los datos: ${e.message}`, true);
@@ -106,6 +105,7 @@ function render() {
   renderCharts(k, crossTab(list), pick);
   renderTable(list, view, CONFIG.PAGE_SIZE, render);
   renderIssues(range);
+  syncWeekly();
 }
 
 // Chips de filtros de detalle activos (los que reducen el total), con ✕ para quitar cada uno.
@@ -182,40 +182,62 @@ function renderIssues(range) {
   ).join('') + (issues.length > 200 ? `<li>… y ${fmtInt(issues.length - 200)} más</li>` : '');
 }
 
-/* ---------- Seguimiento semanal ---------- */
+/* ---------- Flujo semanal (Cuadro Tango) ---------- */
+
+const periodLabelText = () => periodRange(state)?.label ?? 'Todo el histórico';
+
+// Semanas del índice que caen en el periodo global, más la anterior (para comparar la primera).
+function weeksForPeriod() {
+  const range = periodRange(state);
+  if (!range) return weeks.index;
+  const idx = weeks.index.map((t, i) => [t, i]).filter(([t]) => {
+    const d = new Date(`${t.fecha}T00:00`);
+    return d >= range.from && d < range.to;
+  }).map(([, i]) => i);
+  if (!idx.length) return [];
+  return weeks.index.slice(Math.max(0, idx[0] - 1), idx.at(-1) + 1);
+}
 
 function drawWeekly() {
-  if (!weeks.index) return renderWeekly(sourceMode() === 'apps_script' ? { semanas: [], total: 0, loading: weeks.loading, error: weeks.error } : null);
+  if (sourceMode() !== 'apps_script') return renderWeekly(null);
   renderWeekly({
-    semanas: weeks.loaded, total: weeks.index.length, loading: weeks.loading, error: weeks.error,
+    semanas: weeks.loaded, total: weeks.index?.length ?? 0, loading: weeks.loading, error: weeks.error,
+    range: periodRange(state), periodLabel: periodLabelText(),
     cross: new Map(records.map((r) => [r.codigo, r])),
     onLoadAll: () => refreshWeekly({ all: true }),
   });
 }
 
-// Carga las últimas WEEKS_INITIAL semanas (o todas); las ocultas quedan en caché local permanente.
+// Carga las semanas del periodo (o todas) que falten; las ocultas quedan en caché local permanente.
 async function refreshWeekly({ all = false, force = false } = {}) {
   if (sourceMode() !== 'apps_script' || weeks.loading) return;
   try {
     weeks.loading = 'Cargando semanas…';
     drawWeekly();
     weeks.index = await loadWeekIndex({ force });
-    // Últimas N semanas + todo lo que ya esté en caché local (o todas, si se pidió el histórico completo).
-    const n = weeks.index.length;
-    const loadedGids = new Set(weeks.loaded.map((w) => w.gid));
-    const want = all ? weeks.index : weeks.index.filter((t, i) =>
-      i >= n - CONFIG.WEEKS_INITIAL || loadedGids.has(t.gid) || isWeekCached(t));
-    weeks.loaded = await loadWeeks(want, {
+    const loaded = new Map(weeks.loaded.map((w) => [w.gid, w]));
+    const want = all ? weeks.index : weeksForPeriod();
+    const missing = want.filter((t) => force || !loaded.has(t.gid));
+    const got = await loadWeeks(missing, {
       force,
       onProgress: (done, total) => { weeks.loading = `Cargando semanas… ${done}/${total}`; drawWeekly(); },
     });
+    for (const w of got) loaded.set(w.gid, w);
+    const order = new Map(weeks.index.map((t, i) => [t.gid, i]));
+    weeks.loaded = [...loaded.values()].filter((w) => order.has(w.gid)).sort((x, y) => order.get(x.gid) - order.get(y.gid));
     weeks.error = null;
   } catch (e) {
-    weeks.error = `Seguimiento semanal: ${e.message}`;
+    weeks.error = `Flujo semanal: ${e.message}`;
   } finally {
     weeks.loading = null;
     drawWeekly();
   }
+}
+
+// Al cambiar el periodo global: dibuja con lo cargado y trae lo que falte de ese periodo.
+function syncWeekly() {
+  drawWeekly();
+  if (weeks.index && weeksForPeriod().some((t) => !weeks.loaded.some((w) => w.gid === t.gid))) refreshWeekly();
 }
 
 /* ---------- Eventos ---------- */

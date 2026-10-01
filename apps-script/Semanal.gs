@@ -59,10 +59,10 @@ function parsePestana_(nombre) {
   return { d: Number(m[1]), m: mes, y };
 }
 
-/** Una semana: leyenda + [llave, texto OT, analista, tango, estado, ingreso, entrega] por OT. */
+/** Una semana: leyenda + [llave, texto OT, analista, tango, estado, ingreso, entrega, piezas] por OT. */
 function semana_(gid) {
   const cache = CacheService.getScriptCache();
-  const hit = cache.get('sem_' + gid);
+  const hit = cache.get('sem2_' + gid);
   if (hit) return hit;
 
   const sh = SpreadsheetApp.openById(CUADRO_ID).getSheets().find((s) => s.getSheetId() === gid);
@@ -77,7 +77,7 @@ function semana_(gid) {
   } else {
     const H = vals[head].map(norm_);
     const c = { no: H.indexOf('NO'), ot: H.indexOf('OT'), an: H.indexOf('ANALISTA'), tg: H.indexOf('TANGO'),
-      ing: H.indexOf('INGRESO'), ent: H.indexOf('ENTREGA') };
+      ing: H.indexOf('INGRESO'), ent: H.indexOf('ENTREGA'), pz: H.indexOf('PIEZAS') };
     const leyenda = leyenda_(vals, bgs, head);
     const vistos = {};
     const items = [];
@@ -89,12 +89,12 @@ function semana_(gid) {
       vistos[key] = (vistos[key] || 0) + 1;
       if (vistos[key] > 1) key += '#' + vistos[key];                                   // misma OT en varias filas
       const color = limpiaColor_(bgs[i][c.no >= 0 ? c.no : c.ot]);
-      items.push([key, otTxt, val_(r, c.an), val_(r, c.tg), estadoPorColor_(color, leyenda), val_(r, c.ing), val_(r, c.ent)]);
+      items.push([key, otTxt, val_(r, c.an), val_(r, c.tg), estadoPorColor_(color, leyenda), val_(r, c.ing), val_(r, c.ent), val_(r, c.pz)]);
     }
     out = { ok: true, gid, nombre: sh.getName(), leyenda, items };
   }
   const payload = JSON.stringify(out);
-  if (payload.length < 95000) cache.put('sem_' + gid, payload, sh.isSheetHidden() ? CACHE_OCULTA_SEG : CACHE_VISIBLE_SEG);
+  if (payload.length < 95000) cache.put('sem2_' + gid, payload, sh.isSheetHidden() ? CACHE_OCULTA_SEG : CACHE_VISIBLE_SEG);
   return payload;
 }
 

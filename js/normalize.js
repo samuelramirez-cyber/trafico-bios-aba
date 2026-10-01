@@ -89,6 +89,7 @@ export const FIELDS = {
   estado:      ['ESTADO', 'STATUS', 'ESTATUS', 'ESTADO OT'],
   desc:        ['DESCRIPCION', 'PROYECTO', 'TRABAJO', 'NOMBRE'],
   pieza:       ['PIEZA', 'TIPO DE PIEZA', 'TIPO PIEZA'],
+  cantidad:    ['CANTIDAD', 'CANT', 'CANTIDAD PIEZAS'],
 };
 const DATE_FIELDS = new Set(['ingreso', 'entrega']);
 const ID_RE = /^(OT[\s_-]*)?\d{3,}$/i;
@@ -133,6 +134,12 @@ export function detectHeader(rows) {
     if (map.ot >= 0) return { index: i, map };
   }
   return null;
+}
+
+// "3" / "2,5" / "1.5" → número; vacío o texto ("AF", "PEN") → null.
+export function parseCount(raw) {
+  const s = String(raw ?? '').trim().replace(',', '.');
+  return /^\d+(\.\d+)?$/.test(s) ? Number(s) : null;
 }
 
 const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -191,6 +198,7 @@ export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], ca
       cliente: get(r, 'cliente'), gerente: get(r, 'gerente'),
       responsable: get(r, 'responsable'), responsable2: get(r, 'responsable2'),
       desc: splitOT(rawDesc).titulo || rawDesc, pieza: get(r, 'pieza'),
+      cantidad: parseCount(get(r, 'cantidad')),
       codigo: rawDesc.toLowerCase().split(/\s+/)[0],   // "ot_001354_aba_..." = llave de cruce con el Cuadro Tango
       estadoRaw: get(r, 'estado'), issues: [] };
 
