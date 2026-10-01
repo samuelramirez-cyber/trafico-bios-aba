@@ -67,3 +67,18 @@ Para publicarlo (p. ej. Netlify, como la Misión #1) basta arrastrar la carpeta 
 | Fallos | Timeout 15 s, 3 reintentos con backoff (1/2/4 s) en errores de red/5xx/429. Si falla, se muestran los últimos datos en caché con aviso y botón Reintentar. |
 
 Filas omitidas: sin OT, encabezados repetidos y filas `TOTAL`/`SUBTOTAL`.
+
+## 4. Seguimiento semanal (Cuadro Tango)
+
+Fuente: libro "CUADRO TANGO – GRUPO BIOS", una pestaña por semana (`1 SEPT`, `6 OCTUBRE`…), la mayoría ocultas
+(histórico desde abr-2024). El estado de cada OT es el **color de la celda "No"**, interpretado con la leyenda de la propia pestaña.
+
+- `apps-script/Semanal.gs` (mismo proyecto Apps Script): `?view=pestanas` lista las semanas (incluidas ocultas; el año se
+  infiere por el orden de las pestañas y tolera nombres como `2 SPETIEMBRE` o `10 JUNIO 26`); `?view=semana&gid=N` devuelve una semana.
+- El dashboard carga las últimas `WEEKS_INITIAL` semanas + todas las ya guardadas en el navegador; "Cargar histórico completo"
+  descarga el resto una sola vez (las ocultas no cambian y se guardan sin vencimiento).
+- Balance semana vs anterior: nuevas, cambios de estado, pasaron a aprobado, estancadas (≥ `STALE_WEEKS`), salieron, evolución.
+- Cruce con OT's TANGO 2026 por el código `ot_XXXXXX_…` (= DESCRIPCIÓN). "Discrepancias": aprobado en el cuadro pero no
+  entregado en OT 2026, o al revés. El formato antiguo (`OT 000539 GRUPO BIOS …`) no cruza: los números se repiten entre años.
+- Colores fuera de la leyenda → `CUADRO_COLORES` en config.js (p. ej. `'#34a853': 'APROBADO'`).
+- Tras editar los `.gs`: pegar en el proyecto (SHEET_ID / CUADRO_ID reales solo allí) → Implementar → Gestionar → Editar → Versión nueva.
