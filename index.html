@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tráfico Grupo Bios</title>
+  <meta name="description" content="Dashboard de tráfico y estado de Órdenes de Trabajo — Grupo Bios ABA">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <header class="bg-teal-700 text-white">
+    <div class="mx-auto max-w-7xl px-4 py-4 flex flex-wrap items-center gap-3">
+      <img src="icon-192.png" alt="" class="h-9 w-9 rounded-lg bg-white/10">
+      <div class="min-w-0">
+        <h1 class="text-lg font-semibold leading-tight">Tráfico Grupo Bios · ABA 2026</h1>
+        <p id="periodLabel" class="text-sm text-teal-100">—</p>
+      </div>
+      <button id="btnRefresh" class="ml-auto rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium disabled:opacity-50">↻ Actualizar</button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-4 space-y-4">
+    <div id="banner" class="rounded-lg border px-3 py-2 text-sm">Cargando…</div>
+
+    <!-- Filtros temporales -->
+    <section class="card flex flex-wrap items-end gap-3" aria-label="Filtros de periodo">
+      <label class="field">Fecha base
+        <select id="dateField" class="ctl">
+          <option value="ingreso">Ingreso</option>
+          <option value="entrega">Entrega</option>
+        </select>
+      </label>
+      <label class="field">Periodo
+        <select id="period" class="ctl">
+          <option value="all">Todo</option>
+          <option value="month">Mes</option>
+          <option value="quarter">Trimestre</option>
+          <option value="half">Semestre</option>
+          <option value="year">Año</option>
+        </select>
+      </label>
+      <label class="field">&nbsp;
+        <span class="flex gap-2">
+          <select id="month" class="ctl" aria-label="Mes"></select>
+          <select id="quarter" class="ctl" aria-label="Trimestre">
+            <option value="1">Q1 (Ene–Mar)</option><option value="2">Q2 (Abr–Jun)</option>
+            <option value="3">Q3 (Jul–Sep)</option><option value="4">Q4 (Oct–Dic)</option>
+          </select>
+          <select id="half" class="ctl" aria-label="Semestre">
+            <option value="1">H1 (Ene–Jun)</option><option value="2">H2 (Jul–Dic)</option>
+          </select>
+          <select id="year" class="ctl" aria-label="Año"></select>
+        </span>
+      </label>
+      <button id="btnCurrentMonth" class="btn">Mes en curso</button>
+      <button id="btnReset" class="btn ml-auto">Restablecer filtros</button>
+    </section>
+
+    <!-- KPIs (generados desde CONFIG.STATUSES) -->
+    <section id="kpis" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" aria-label="Indicadores"></section>
+
+    <!-- Gráfico -->
+    <section class="card">
+      <h2 class="section-title">Distribución por estado</h2>
+      <div class="chart-box"><canvas id="chartStatus"></canvas></div>
+      <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible (no cargó Chart.js — revise la conexión).</p>
+    </section>
+
+    <details id="issues" hidden class="card text-sm">
+      <summary id="issuesSummary" class="cursor-pointer font-medium text-amber-800"></summary>
+      <ul id="issuesList" class="mt-2 space-y-1 max-h-64 overflow-auto"></ul>
+    </details>
+
+    <!-- Tabla -->
+    <section class="card !p-0 overflow-hidden" aria-label="Órdenes de trabajo">
+      <div class="p-3 flex flex-wrap gap-2 items-center border-b border-slate-200">
+        <input id="search" type="search" placeholder="Buscar OT, descripción, pieza, responsable…" class="ctl flex-1 min-w-[12rem]">
+        <select id="fGerente" class="ctl" aria-label="Gerente / Director"></select>
+        <select id="fResponsable" class="ctl" aria-label="Responsable"></select>
+        <select id="fEstado" class="ctl" aria-label="Estado"></select>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600"><tr id="tableHead"></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="p-3 flex items-center gap-2 border-t border-slate-200 text-sm">
+        <span id="pageInfo" class="text-slate-600"></span>
+        <button id="prevPage" class="btn ml-auto">‹ Anterior</button>
+        <button id="nextPage" class="btn">Siguiente ›</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

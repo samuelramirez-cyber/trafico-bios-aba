@@ -1,0 +1,38 @@
+// Configuración del Dashboard de Tráfico — único archivo a editar para conectar la hoja.
+export const CONFIG = {
+  // 'apps_script' (recomendado) → Web App de apps-script/DashboardApi.gs: la hoja sigue PRIVADA y el
+  //                 script devuelve solo las filas del cliente permitido. La URL /exec no expone la hoja.
+  // 'csv'         → exportación CSV directa (exige compartir la hoja por enlace = TODOS los clientes visibles).
+  //                 Usar solo en local. Nunca publicar un SHEET_ID de una hoja compartida por enlace.
+  // Si falta APPS_SCRIPT_URL / SHEET_ID el dashboard arranca en MODO DEMO con data/sample.csv.
+  SOURCE: 'apps_script',
+  APPS_SCRIPT_URL: '',
+
+  SHEET_ID: '',
+  TABS: [
+    { name: 'OT 2026', gid: '0' },
+  ],
+
+  // Filtro fijo en el navegador (segunda capa; el filtro que protege los datos es el del Apps Script).
+  CLIENT_FILTER: ['GRUPO BIOS ABA'],
+
+  CACHE_TTL_MIN: 5,        // no se vuelve a pedir la hoja si el caché local tiene menos de N minutos
+  AUTO_REFRESH_MIN: 5,     // refresco automático (solo con la pestaña visible)
+  FETCH_TIMEOUT_MS: 15000,
+  RETRIES: 3,              // reintentos con backoff exponencial (1s, 2s, 4s)
+  PAGE_SIZE: 25,
+
+  DATE_ORDER: 'DMY',       // orden de fechas ambiguas tipo 03/04/2026 → 3 de abril
+  YEARS: [2024, 2025, 2026],
+  LOCALE: 'es-CO',
+
+  // Estados (columna ESTADO). Se evalúan en orden; cada término se compara como prefijo de palabra,
+  // sin tildes ni mayúsculas. Filas sin coincidencia → "Sin estado".
+  STATUSES: [
+    { key: 'norealizado', label: 'No realizado', color: '#dc2626', match: ['NO REALIZ', 'CANCEL', 'ANUL', 'RECHAZ'] },
+    { key: 'reproceso',   label: 'En reproceso', color: '#7c3aed', match: ['REPROCESO', 'CORRECCION', 'AJUSTE'] },
+    { key: 'revision',    label: 'En revisión',  color: '#d97706', match: ['REVISION', 'PENDIENT', 'ESPERA'] },
+    { key: 'proceso',     label: 'En proceso',   color: '#2563eb', match: ['PROCESO', 'CURSO', 'PRODUCCION'] },
+    { key: 'entregado',   label: 'Entregado',    color: '#16a34a', match: ['ENTREGAD', 'APROB', 'FINALIZ', 'TERMINAD'] },
+  ],
+};

@@ -1,0 +1,401 @@
+  ,MES,GERENTE / DIRECTOR,CLIENTE,FECHA INGRESO,FECHA ENTREGA,DESCRIPCIÓN,PIEZA,CANTIDAD,RESPONSABLE 1,RESPONSABLE 2,ESTADO
+000001,Enero,Gerente B,GRUPO BIOS ABA,07/01/2025,18/01/2025,ot_000001_aba_catalogo,Diseño Grafico,2,Diseñador 1,Diseñador 3,Entregado
+000002,Enero,Gerente A,GRUPO BIOS ABA,09/01/2025,26/01/2025,ot_000002_aba_ajuste_empaque,Campaña Estratégica,7,Diseñador 1,,En revisión
+000003,Enero,Gerente A,GRUPO BIOS ABA,10/01/2025,24/01/2025,ot_000003_aba_logo_campaña,Copy,1,Editor 1,,Entregado
+000004,Enero,Gerente B,GRUPO BIOS ABA,12/01/2025,30/01/2025,ot_000004_aba_post_redes,Diseño Digital,9,Diseñador 1,Diseñador 3,No realizado
+000005,Enero,Gerente A,GRUPO BIOS ABA,14/01/2025,20/01/2025,ot_000005_aba_senaletica_sede,Diseño Grafico,9,Diseñador 1,Diseñador 1,Entregado
+000006,Enero,Gerente B,NAVITRANS,15/01/2025,31/01/2025,ot_000006_navitrans_senaletica_sede,Campaña Estratégica,10,Editor 1,,Entregado
+000007,Enero,Gerente A,GRUPO BIOS ABA,17/01/2025,23/01/2025,ot_000007_aba_video_lanzamiento,Video Edición,9,Editor 1,Diseñador 3,En proceso
+000008,Enero,Gerente A,GRUPO BIOS ABA,18/01/2025,28/01/2025,ot_000008_aba_video_lanzamiento,Campaña Estratégica,3,Diseñador 3,,En proceso
+000009,Enero,Gerente B,GRUPO BIOS ABA,20/01/2025,22/01/2025,ot_000009_aba_senaletica_sede,Video Edición,10,Editor 1,,Entregado
+000010,Enero,Gerente A,ARKADIA,22/01/2025,31/01/2025,ot_000010_arkadia_ajuste_empaque,Video Edición,11,Editor 1,Diseñador 3,En proceso
+000011,Enero,Gerente B,GRUPO BIOS ABA,23/01/2025,4/02/2025,ot_000011_aba_senaletica_sede,Diseño Digital,10,Diseñador 1,,Entregado
+000012,Enero,Gerente A,GRUPO BIOS ABA,25/01/2025,4/02/2025,ot_000012_aba_post_redes,Campaña Estratégica,8,Diseñador 1,,En proceso
+000013,Enero,Gerente A,GRUPO BIOS ABA,26/01/2025,13/02/2025,ot_000013_aba_post_redes,Copy,5,Editor 1,Diseñador 3,En proceso
+000014,Enero,Gerente A,GRUPO BIOS ABA,28/01/2025,5/02/2025,ot_000014_aba_logo_campaña,Diseño Digital,4,Diseñador 2,,En reproceso
+000015,Enero,Gerente B,GRUPO BIOS ABA,30/01/2025,5/02/2025,ot_000015_aba_ajuste_empaque,Diseño Digital,7,Diseñador 3,,
+000016,Enero,Gerente B,GRUPO BIOS ABA,31/01/2025,17/02/2025,ot_000016_aba_catalogo,Copy,7,Editor 1,,Entregado
+000017,Febrero,Gerente A,GRUPO BIOS PIC ,02/02/2025,18/02/2025,ot_000017_pic_logo_campaña,Diseño Grafico,4,Editor 1,,Entregado
+000018,Febrero,Gerente A,GRUPO BIOS ABA,03/02/2025,23/02/2025,ot_000018_aba_ajuste_empaque,Copy,3,Diseñador 1,Diseñador 3,Entregado
+000019,Febrero,Gerente B,GRUPO BIOS ABA,05/02/2025,8/02/2025,ot_000019_aba_logo_campaña,Video Edición,6,Diseñador 3,,Entregado
+000020,Febrero,Gerente B,ARKADIA,07/02/2025,23/02/2025,ot_000020_arkadia_post_redes,Video Edición,2,Diseñador 2,Diseñador 1,Entregado
+000021,Febrero,Gerente A,ARKADIA,08/02/2025,17/02/2025,ot_000021_arkadia_video_lanzamiento,Diseño Grafico,4,Diseñador 3,Diseñador 2,En revisión
+000022,Febrero,Gerente B,NAVITRANS,10/02/2025,11/02/2025,ot_000022_navitrans_catalogo,Diseño Grafico,12,Diseñador 3,,Entregado
+000023,Febrero,Gerente B,NAVITRANS,11/02/2025,19/02/2025,ot_000023_navitrans_catalogo,Diseño Digital,10,Diseñador 2,,
+000024,Febrero,Gerente B,GRUPO BIOS ABA,13/02/2025,21/02/2025,ot_000024_aba_senaletica_sede,Diseño Grafico,1,Diseñador 3,,Entregado
+000025,Febrero,Gerente B,GRUPO BIOS ABS,15/02/2025,7/03/2025,ot_000025_abs_catalogo,Video Edición,6,Diseñador 1,,Entregado
+000026,Febrero,Gerente B,GRUPO BIOS ABA,16/02/2025,4/03/2025,ot_000026_aba_logo_campaña,Campaña Estratégica,10,Diseñador 1,Editor 1,Entregado
+000027,Febrero,Gerente B,GRUPO BIOS ABA,18/02/2025,21/02/2025,ot_000027_aba_catalogo,Diseño Digital,8,Diseñador 2,Editor 1,Entregado
+000028,Febrero,Gerente B,GRUPO BIOS PIC ,19/02/2025,22/02/2025,ot_000028_pic_post_redes,Diseño Grafico,12,Diseñador 2,,Entregado
+000029,Febrero,Gerente A,ARKADIA,21/02/2025,26/02/2025,ot_000029_arkadia_video_lanzamiento,Copy,8,Diseñador 3,Diseñador 2,En revisión
+000030,Febrero,Gerente A,GRUPO BIOS ABA,23/02/2025,28/02/2025,ot_000030_aba_catalogo,Diseño Grafico,9,Diseñador 2,,Entregado
+000031,Febrero,Gerente A,GRUPO BIOS ABA,24/02/2025,25/02/2025,ot_000031_aba_senaletica_sede,Copy,4,Diseñador 3,Diseñador 3,En proceso
+000032,Febrero,Gerente B,GRUPO BIOS ABA,26/02/2025,3/03/2025,ot_000032_aba_post_redes,Copy,9,Editor 1,Diseñador 2,Entregado
+000033,Febrero,Gerente A,NAVITRANS,27/02/2025,16/03/2025,ot_000033_navitrans_post_redes,Diseño Digital,10,Diseñador 1,,Entregado
+000034,Marzo,Gerente A,GRUPO BIOS ABA,01/03/2025,17/03/2025,ot_000034_aba_senaletica_sede,Copy,9,Editor 1,Diseñador 1,Entregado
+000035,Marzo,Gerente B,GRUPO BIOS ABA,03/03/2025,11/03/2025,ot_000035_aba_ajuste_empaque,Diseño Grafico,9,Editor 1,,En proceso
+000036,Marzo,Gerente A,NAVITRANS,04/03/2025,15/03/2025,ot_000036_navitrans_catalogo,Video Edición,8,Editor 1,Diseñador 2,En revisión
+000037,Marzo,Gerente A,NAVITRANS,06/03/2025,15/03/2025,ot_000037_navitrans_post_redes,Diseño Digital,7,Diseñador 1,,Entregado
+000038,Marzo,Gerente B,GRUPO BIOS ABA,07/03/2025,10/03/2025,ot_000038_aba_ajuste_empaque,Diseño Digital,11,Diseñador 3,,
+000039,Marzo,Gerente B,GRUPO BIOS ABA,09/03/2025,21/03/2025,ot_000039_aba_logo_campaña,Campaña Estratégica,4,Diseñador 1,,Entregado
+000040,Marzo,Gerente B,GRUPO BIOS ABA,31/02/2025,19/03/2025,ot_000040_aba_video_lanzamiento,Campaña Estratégica,6,Editor 1,,Entregado
+000041,Marzo,Gerente A,GRUPO BIOS ABS,12/03/2025,15/03/2025,ot_000041_abs_senaletica_sede,Copy,8,Editor 1,,Entregado
+000042,Marzo,Gerente A,GRUPO BIOS ABA,14/03/2025,31/03/2025,ot_000042_aba_ajuste_empaque,Diseño Digital,2,Diseñador 1,,Entregado
+000043,Marzo,Gerente A,GRUPO BIOS ABA,15/03/2025,21/03/2025,ot_000043_aba_post_redes,Video Edición,7,Diseñador 2,Editor 1,Entregado
+000044,Marzo,Gerente A,GRUPO BIOS ABA,17/03/2025,20/03/2025,ot_000044_aba_catalogo,Diseño Digital,7,Diseñador 1,,No realizado
+000045,Marzo,Gerente A,GRUPO BIOS ABA,19/03/2025,22/03/2025,ot_000045_aba_video_lanzamiento,Diseño Digital,2,Diseñador 3,,Entregado
+000046,Marzo,Gerente B,NAVITRANS,20/03/2025,31/03/2025,ot_000046_navitrans_senaletica_sede,Copy,3,Diseñador 1,,Entregado
+000047,Marzo,Gerente A,GRUPO BIOS ABA,22/03/2025,31/03/2025,ot_000047_aba_logo_campaña,Video Edición,11,Diseñador 3,,En proceso
+000048,Marzo,Gerente B,GRUPO BIOS ABA,23/03/2025,9/04/2025,ot_000048_aba_senaletica_sede,Diseño Grafico,5,Diseñador 1,,
+000049,Marzo,Gerente A,NAVITRANS,25/03/2025,11/04/2025,ot_000049_navitrans_video_lanzamiento,Campaña Estratégica,4,Editor 1,Diseñador 1,No realizado
+000050,Marzo,Gerente B,ARKADIA,27/03/2025,10/04/2025,ot_000050_arkadia_video_lanzamiento,Video Edición,12,Diseñador 2,,Entregado
+000051,Marzo,Gerente B,GRUPO BIOS PIC ,28/03/2025,2/04/2025,ot_000051_pic_ajuste_empaque,Diseño Digital,1,Diseñador 1,,Entregado
+000052,Marzo,Gerente B,GRUPO BIOS ABA,30/03/2025,1/04/2025,ot_000052_aba_video_lanzamiento,Video Edición,10,Diseñador 2,,En proceso
+000053,Marzo,Gerente B,GRUPO BIOS ABA,31/03/2025,6/04/2025,ot_000053_aba_post_redes,Diseño Grafico,5,Diseñador 3,Diseñador 3,Entregado
+000054,Abril,Gerente B,GRUPO BIOS ABA,02/04/2025,10/04/2025,ot_000054_aba_logo_campaña,Video Edición,3,Diseñador 1,,Entregado
+000055,Abril,Gerente A,GRUPO BIOS ABA,04/04/2025,20/04/2025,ot_000055_aba_logo_campaña,Copy,1,Diseñador 1,,Entregado
+000056,Abril,Gerente B,GRUPO BIOS ABA,05/04/2025,18/04/2025,ot_000056_aba_ajuste_empaque,Video Edición,5,Diseñador 2,Diseñador 1,En revisión
+000057,Abril,Gerente B,GRUPO BIOS PIC ,07/04/2025,12/04/2025,ot_000057_pic_catalogo,Campaña Estratégica,3,Diseñador 3,,
+000058,Abril,Gerente A,GRUPO BIOS PIC ,08/04/2025,25/04/2025,ot_000058_pic_video_lanzamiento,Copy,10,Diseñador 1,,Entregado
+000059,Abril,Gerente B,GRUPO BIOS ABA,10/04/2025,12/04/2025,ot_000059_aba_ajuste_empaque,Campaña Estratégica,8,Diseñador 1,Diseñador 1,En revisión
+000060,Abril,Gerente B,ARKADIA,12/04/2025,20/04/2025,ot_000060_arkadia_ajuste_empaque,Campaña Estratégica,2,Diseñador 1,Diseñador 1,
+000061,Abril,Gerente A,GRUPO BIOS ABA,13/04/2025,29/04/2025,ot_000061_aba_senaletica_sede,Diseño Digital,12,Diseñador 2,Diseñador 2,No realizado
+000062,Abril,Gerente B,ARKADIA,15/04/2025,30/04/2025,ot_000062_arkadia_ajuste_empaque,Campaña Estratégica,11,Diseñador 3,Diseñador 1,No realizado
+000063,Abril,Gerente A,GRUPO BIOS ABA,16/04/2025,23/04/2025,ot_000063_aba_senaletica_sede,Video Edición,11,Diseñador 3,,En proceso
+000064,Abril,Gerente B,ARKADIA,18/04/2025,20/04/2025,ot_000064_arkadia_catalogo,Diseño Grafico,12,Diseñador 2,,
+000065,Abril,Gerente B,GRUPO BIOS ABA,20/04/2025,7/05/2025,ot_000065_aba_post_redes,Campaña Estratégica,2,Diseñador 2,,En proceso
+000066,Abril,Gerente B,GRUPO BIOS ABA,21/04/2025,22/04/2025,ot_000066_aba_ajuste_empaque,Copy,8,Diseñador 3,,Entregado
+000067,Abril,Gerente A,GRUPO BIOS ABA,23/04/2025,26/04/2025,ot_000067_aba_catalogo,Copy,5,Diseñador 3,Diseñador 2,No realizado
+000068,Abril,Gerente A,GRUPO BIOS ABA,24/04/2025,11/05/2025,ot_000068_aba_catalogo,Video Edición,4,Editor 1,,Entregado
+000069,Abril,Gerente B,GRUPO BIOS ABA,26/04/2025,2/05/2025,ot_000069_aba_catalogo,Campaña Estratégica,7,Diseñador 3,,Entregado
+000070,Abril,Gerente A,GRUPO BIOS ABS,28/04/2025,11/05/2025,ot_000070_abs_senaletica_sede,Diseño Grafico,6,Diseñador 3,,Entregado
+000071,Abril,Gerente B,GRUPO BIOS ABA,29/04/2025,30/04/2025,ot_000071_aba_senaletica_sede,Diseño Grafico,7,Editor 1,,En proceso
+000072,Mayo,Gerente B,GRUPO BIOS ABA,01/05/2025,10/05/2025,ot_000072_aba_ajuste_empaque,Diseño Grafico,11,Diseñador 3,,Entregado
+000073,Mayo,Gerente B,NAVITRANS,02/05/2025,16/05/2025,ot_000073_navitrans_logo_campaña,Video Edición,7,Diseñador 1,Editor 1,En revisión
+000074,Mayo,Gerente A,GRUPO BIOS ABA,04/05/2025,11/05/2025,ot_000074_aba_catalogo,Campaña Estratégica,8,Diseñador 2,,Entregado
+000075,Mayo,Gerente A,GRUPO BIOS ABA,06/05/2025,24/05/2025,ot_000075_aba_post_redes,Campaña Estratégica,6,Diseñador 3,,
+000076,Mayo,Gerente A,GRUPO BIOS PIC ,07/05/2025,16/05/2025,ot_000076_pic_senaletica_sede,Campaña Estratégica,9,Editor 1,,No realizado
+000077,Mayo,Gerente A,GRUPO BIOS ABA,04/05 /2025,15/05/2025,ot_000077_aba_video_lanzamiento,Campaña Estratégica,9,Diseñador 2,,En proceso
+000078,Mayo,Gerente A,GRUPO BIOS ABA,10/05/2025,24/05/2025,ot_000078_aba_logo_campaña,Diseño Grafico,3,Diseñador 3,,Entregado
+000079,Mayo,Gerente A,GRUPO BIOS ABA,12/05/2025,24/05/2025,ot_000079_aba_ajuste_empaque,Campaña Estratégica,7,Editor 1,,Entregado
+000080,Mayo,Gerente B,GRUPO BIOS ABA,14/05/2025,25/05/2025,ot_000080_aba_senaletica_sede,Copy,6,Diseñador 2,,Entregado
+000081,Mayo,Gerente B,GRUPO BIOS PIC ,15/05/2025,23/05/2025,ot_000081_pic_catalogo,Campaña Estratégica,7,Diseñador 3,,Entregado
+000082,Mayo,Gerente B,ARKADIA,17/05/2025,31/05/2025,ot_000082_arkadia_ajuste_empaque,Diseño Grafico,7,Editor 1,,Entregado
+000083,Mayo,Gerente A,GRUPO BIOS ABA,18/05/2025,26/05/2025,ot_000083_aba_video_lanzamiento,Diseño Grafico,12,Editor 1,Diseñador 1,Entregado
+000084,Mayo,Gerente A,GRUPO BIOS ABA,20/05/2025,21/05/2025,ot_000084_aba_video_lanzamiento,Diseño Grafico,11,Diseñador 3,Diseñador 2,Entregado
+000085,Mayo,Gerente A,GRUPO BIOS PIC ,22/05/2025,8/06/2025,ot_000085_pic_ajuste_empaque,Diseño Grafico,5,Diseñador 2,,Entregado
+000086,Mayo,Gerente A,GRUPO BIOS ABA,23/05/2025,12/06/2025,ot_000086_aba_video_lanzamiento,Video Edición,8,Diseñador 3,Diseñador 3,Entregado
+000087,Mayo,Gerente A,NAVITRANS,25/05/2025,10/06/2025,ot_000087_navitrans_video_lanzamiento,Diseño Digital,1,Editor 1,,Entregado
+000088,Mayo,Gerente B,ARKADIA,26/05/2025,2/06/2025,ot_000088_arkadia_ajuste_empaque,Video Edición,4,Editor 1,,En proceso
+000089,Mayo,Gerente B,GRUPO BIOS ABS,28/05/2025,30/05/2025,ot_000089_abs_senaletica_sede,Campaña Estratégica,4,Diseñador 1,Diseñador 3,En revisión
+000090,Mayo,Gerente B,GRUPO BIOS ABA,30/05/2025,2/06/2025,ot_000090_aba_logo_campaña,Video Edición,4,Diseñador 2,,Entregado
+000091,Mayo,Gerente B,GRUPO BIOS ABA,31/05/2025,10/06/2025,ot_000091_aba_video_lanzamiento,Diseño Digital,4,Editor 1,Editor 1,Entregado
+000092,Junio,Gerente B,GRUPO BIOS ABA,02/06/2025,22/06/2025,ot_000092_aba_ajuste_empaque,Diseño Digital,1,Diseñador 2,,
+000093,Junio,Gerente B,GRUPO BIOS ABA,03/06/2025,5/06/2025,ot_000093_aba_post_redes,Video Edición,12,Diseñador 1,,Entregado
+000094,Junio,Gerente B,GRUPO BIOS ABA,05/06/2025,12/06/2025,ot_000094_aba_ajuste_empaque,Video Edición,11,Editor 1,,En proceso
+000095,Junio,Gerente A,GRUPO BIOS ABA,07/06/2025,13/06/2025,ot_000095_aba_ajuste_empaque,Video Edición,2,Diseñador 3,,En revisión
+000096,Junio,Gerente B,GRUPO BIOS PIC ,08/06/2025,15/06/2025,ot_000096_pic_senaletica_sede,Campaña Estratégica,2,Diseñador 1,,Entregado
+000097,Junio,Gerente A,ARKADIA,10/06/2025,28/06/2025,ot_000097_arkadia_senaletica_sede,Video Edición,12,Editor 1,Diseñador 1,En proceso
+000098,Junio,Gerente A,GRUPO BIOS PIC ,11/06/2025,19/06/2025,ot_000098_pic_post_redes,Diseño Grafico,8,Diseñador 1,,Entregado
+000099,Junio,Gerente B,GRUPO BIOS ABS,13/06/2025,16/06/2025,ot_000099_abs_senaletica_sede,Video Edición,10,Diseñador 1,Diseñador 3,
+000100,Junio,Gerente B,GRUPO BIOS ABA,15/06/2025,26/06/2025,ot_000100_aba_ajuste_empaque,Copy,11,Diseñador 1,,Entregado
+000101,Junio,Gerente B,ARKADIA,16/06/2025,2/07/2025,ot_000101_arkadia_senaletica_sede,Campaña Estratégica,8,Diseñador 2,,Entregado
+000102,Junio,Gerente A,GRUPO BIOS ABA,18/06/2025,28/06/2025,ot_000102_aba_senaletica_sede,Video Edición,8,Diseñador 3,Diseñador 1,Entregado
+000103,Junio,Gerente A,GRUPO BIOS ABA,19/06/2025,2/07/2025,ot_000103_aba_post_redes,Diseño Grafico,11,Diseñador 1,Editor 1,En revisión
+000104,Junio,Gerente B,GRUPO BIOS ABA,21/06/2025,2/07/2025,ot_000104_aba_ajuste_empaque,Diseño Grafico,5,Diseñador 1,,En proceso
+000105,Junio,Gerente A,ARKADIA,23/06/2025,9/07/2025,ot_000105_arkadia_logo_campaña,Diseño Digital,7,Editor 1,Diseñador 2,En revisión
+000106,Junio,Gerente B,GRUPO BIOS ABA,24/06/2025,28/06/2025,ot_000106_aba_senaletica_sede,Copy,5,Diseñador 3,Diseñador 3,Entregado
+000107,Junio,Gerente A,ARKADIA,26/06/2025,3/07/2025,ot_000107_arkadia_logo_campaña,Diseño Digital,4,Diseñador 2,Diseñador 3,Entregado
+000108,Junio,Gerente B,GRUPO BIOS ABA,27/06/2025,8/07/2025,ot_000108_aba_senaletica_sede,Diseño Digital,9,Diseñador 2,Diseñador 1,En proceso
+000109,Junio,Gerente A,GRUPO BIOS ABA,29/06/2025,1/07/2025,ot_000109_aba_post_redes,Diseño Digital,8,Diseñador 3,,Entregado
+000110,Julio,Gerente A,GRUPO BIOS ABA,01/07/2025,5/07/2025,ot_000110_aba_video_lanzamiento,Copy,4,Diseñador 1,Diseñador 3,Entregado
+000111,Julio,Gerente A,GRUPO BIOS ABA,02/07/2025,17/07/2025,ot_000111_aba_ajuste_empaque,Copy,12,Diseñador 3,,Entregado
+000112,Julio,Gerente A,GRUPO BIOS ABA,04/07/2025,15/07/2025,ot_000112_aba_logo_campaña,Video Edición,1,Diseñador 2,,En proceso
+000113,Julio,Gerente B,GRUPO BIOS ABA,05/07/2025,17/07/2025,ot_000113_aba_ajuste_empaque,Diseño Digital,1,Editor 1,,En proceso
+000114,Julio,Gerente A,GRUPO BIOS PIC ,07/07/2025,11/07/2025,ot_000114_pic_catalogo,Copy,2,Diseñador 2,Editor 1,Entregado
+000115,Julio,Gerente B,GRUPO BIOS ABA,09/07/2025,23/07/2025,ot_000115_aba_post_redes,Diseño Grafico,5,Diseñador 3,,Entregado
+000116,Julio,Gerente B,GRUPO BIOS ABA,10/07/2025,22/07/2025,ot_000116_aba_catalogo,Campaña Estratégica,4,Diseñador 1,,En proceso
+000117,Julio,Gerente B,GRUPO BIOS ABA,12/07/2025,16/07/2025,ot_000117_aba_video_lanzamiento,Video Edición,8,Diseñador 2,,Entregado
+000118,Julio,Gerente B,GRUPO BIOS ABA,13/07/2025,31/07/2025,ot_000118_aba_ajuste_empaque,Copy,10,Diseñador 3,,Entregado
+000119,Julio,Gerente A,GRUPO BIOS ABA,15/07/2025,25/07/2025,ot_000119_aba_ajuste_empaque,Diseño Grafico,7,Editor 1,,Entregado
+000120,Julio,Gerente B,ARKADIA,17/07/2025,04/23/2025,ot_000120_arkadia_ajuste_empaque,Copy,11,Editor 1,Diseñador 1,En reproceso
+000121,Julio,Gerente B,GRUPO BIOS ABA,18/07/2025,24/07/2025,ot_000121_aba_video_lanzamiento,Diseño Digital,8,Diseñador 2,,En proceso
+000122,Julio,Gerente B,GRUPO BIOS ABA,20/07/2025,6/08/2025,ot_000122_aba_senaletica_sede,Diseño Grafico,3,Diseñador 2,,En revisión
+000123,Julio,Gerente A,GRUPO BIOS ABS,21/07/2025,23/07/2025,ot_000123_abs_post_redes,Copy,8,Diseñador 3,,En reproceso
+000124,Julio,Gerente B,GRUPO BIOS PIC ,23/07/2025,31/07/2025,ot_000124_pic_catalogo,Video Edición,8,Editor 1,,Entregado
+000125,Julio,Gerente B,ARKADIA,25/07/2025,14/08/2025,ot_000125_arkadia_logo_campaña,Campaña Estratégica,10,Editor 1,,En proceso
+000126,Julio,Gerente A,GRUPO BIOS ABA,26/07/2025,30/07/2025,ot_000126_aba_senaletica_sede,Campaña Estratégica,6,Diseñador 1,Editor 1,En revisión
+000127,Julio,Gerente A,GRUPO BIOS ABA,28/07/2025,30/07/2025,ot_000127_aba_ajuste_empaque,Video Edición,12,Diseñador 1,Diseñador 1,En proceso
+000128,Julio,Gerente A,GRUPO BIOS ABA,29/07/2025,3/08/2025,ot_000128_aba_video_lanzamiento,Diseño Grafico,4,Diseñador 2,,Entregado
+000129,Julio,Gerente B,GRUPO BIOS ABA,31/07/2025,8/08/2025,ot_000129_aba_video_lanzamiento,Video Edición,3,Diseñador 3,,Entregado
+000130,Agosto,Gerente B,NAVITRANS,02/08/2025,11/08/2025,ot_000130_navitrans_logo_campaña,Copy,5,Diseñador 2,,Entregado
+000131,Agosto,Gerente B,GRUPO BIOS ABA,03/08/2025,10/08/2025,ot_000131_aba_logo_campaña,Video Edición,11,Diseñador 3,,Entregado
+000132,Agosto,Gerente A,NAVITRANS,05/08/2025,9/08/2025,ot_000132_navitrans_catalogo,Video Edición,8,Diseñador 1,Diseñador 3,No realizado
+000133,Agosto,Gerente B,GRUPO BIOS ABS,06/08/2025,19/08/2025,ot_000133_abs_post_redes,Video Edición,10,Diseñador 2,,Entregado
+000134,Agosto,Gerente A,GRUPO BIOS ABA,08/08/2025,23/08/2025,ot_000134_aba_video_lanzamiento,Diseño Grafico,5,Diseñador 3,Diseñador 3,En reproceso
+000135,Agosto,Gerente A,GRUPO BIOS ABA,10/08/2025,21/08/2025,ot_000135_aba_logo_campaña,Diseño Digital,5,Editor 1,Editor 1,Entregado
+000136,Agosto,Gerente B,GRUPO BIOS ABA,11/08/2025,13/08/2025,ot_000136_aba_logo_campaña,Copy,11,Diseñador 1,,Entregado
+000137,Agosto,Gerente B,GRUPO BIOS ABS,13/08/2025,1/09/2025,ot_000137_abs_ajuste_empaque,Copy,6,Diseñador 2,Editor 1,Entregado
+000138,Agosto,Gerente A,GRUPO BIOS ABA,14/08/2025,2/09/2025,ot_000138_aba_senaletica_sede,Copy,8,Diseñador 2,,Entregado
+000139,Agosto,Gerente A,ARKADIA,16/08/2025,21/08/2025,ot_000139_arkadia_ajuste_empaque,Diseño Digital,11,Diseñador 3,,Entregado
+000140,Agosto,Gerente B,NAVITRANS,18/08/2025,20/08/2025,ot_000140_navitrans_video_lanzamiento,Copy,8,Editor 1,,Entregado
+000141,Agosto,Gerente A,GRUPO BIOS ABA,19/08/2025,21/08/2025,ot_000141_aba_post_redes,Diseño Digital,4,Diseñador 2,,Entregado
+000142,Agosto,Gerente A,NAVITRANS,21/08/2025,10/09/2025,ot_000142_navitrans_logo_campaña,Campaña Estratégica,4,Editor 1,Diseñador 2,Entregado
+000143,Agosto,Gerente A,GRUPO BIOS ABA,22/08/2025,25/08/2025,ot_000143_aba_catalogo,Campaña Estratégica,12,Diseñador 1,,
+000144,Agosto,Gerente B,GRUPO BIOS ABA,24/08/2025,8/09/2025,ot_000144_aba_logo_campaña,Diseño Digital,2,Diseñador 3,Diseñador 2,Entregado
+000145,Agosto,Gerente B,GRUPO BIOS ABS,26/08/2025,30/08/2025,ot_000145_abs_catalogo,Diseño Grafico,5,Editor 1,,No realizado
+000146,Agosto,Gerente A,GRUPO BIOS ABA,27/08/2025,3/09/2025,ot_000146_aba_logo_campaña,Video Edición,4,Diseñador 2,Diseñador 2,Entregado
+000147,Agosto,Gerente B,GRUPO BIOS PIC ,29/08/2025,5/09/2025,ot_000147_pic_video_lanzamiento,Diseño Digital,7,Editor 1,Editor 1,
+000148,Agosto,Gerente B,GRUPO BIOS ABA,30/08/2025,31/08/2025,ot_000148_aba_catalogo,Diseño Digital,10,Diseñador 3,,En reproceso
+000149,Septiembre,Gerente A,GRUPO BIOS ABA,01/09/2025,20/09/2025,ot_000149_aba_logo_campaña,Diseño Grafico,1,Diseñador 1,Diseñador 1,Entregado
+000150,Septiembre,Gerente A,GRUPO BIOS ABA,03/09/2025,15/09/2025,ot_000150_aba_ajuste_empaque,Diseño Grafico,3,Diseñador 1,Diseñador 1,Entregado
+000151,Septiembre,Gerente A,GRUPO BIOS ABS,04/09/2025,7/09/2025,ot_000151_abs_video_lanzamiento,Diseño Grafico,12,Editor 1,,Entregado
+000152,Septiembre,Gerente A,GRUPO BIOS ABA,06/09/2025,13/09/2025,ot_000152_aba_ajuste_empaque,Diseño Grafico,11,Diseñador 3,,Entregado
+000153,Septiembre,Gerente B,GRUPO BIOS ABA,07/09/2025,11/09/2025,ot_000153_aba_senaletica_sede,Video Edición,7,Diseñador 3,,Entregado
+000154,Septiembre,Gerente B,GRUPO BIOS ABA,09/09/2025,19/09/2025,ot_000154_aba_senaletica_sede,Copy,9,Editor 1,Diseñador 3,
+000155,Septiembre,Gerente A,GRUPO BIOS PIC ,11/09/2025,12/09/2025,ot_000155_pic_post_redes,Copy,2,Diseñador 3,Editor 1,Entregado
+000156,Septiembre,Gerente A,GRUPO BIOS ABA,12/09/2025,30/09/2025,ot_000156_aba_video_lanzamiento,Video Edición,3,Editor 1,Diseñador 1,Entregado
+000157,Septiembre,Gerente A,GRUPO BIOS ABA,14/09/2025,24/09/2025,ot_000157_aba_senaletica_sede,Campaña Estratégica,2,Editor 1,,En reproceso
+000158,Septiembre,Gerente B,NAVITRANS,15/09/2025,27/09/2025,ot_000158_navitrans_video_lanzamiento,Diseño Digital,5,Diseñador 2,,Entregado
+000159,Septiembre,Gerente B,GRUPO BIOS ABA,17/09/2025,21/09/2025,ot_000159_aba_catalogo,Copy,2,Diseñador 3,,En proceso
+000160,Septiembre,Gerente B,GRUPO BIOS ABA,19/09/2025,2/10/2025,ot_000160_aba_catalogo,Diseño Grafico,6,Diseñador 2,,En proceso
+000161,Septiembre,Gerente A,NAVITRANS,20/09/2025,8/10/2025,ot_000161_navitrans_post_redes,Diseño Digital,8,Diseñador 2,,En reproceso
+000162,Septiembre,Gerente A,NAVITRANS,22/09/2025,3/10/2025,ot_000162_navitrans_post_redes,Copy,12,Diseñador 3,,En proceso
+000163,Septiembre,Gerente A,GRUPO BIOS ABA,23/09/2025,2/10/2025,ot_000163_aba_senaletica_sede,Campaña Estratégica,11,Diseñador 2,,Entregado
+000164,Septiembre,Gerente A,GRUPO BIOS ABA,25/09/2025,15/10/2025,ot_000164_aba_logo_campaña,Video Edición,10,Diseñador 3,,Entregado
+000165,Septiembre,Gerente A,GRUPO BIOS ABA,27/09/2025,4/10/2025,ot_000165_aba_logo_campaña,Diseño Grafico,4,Editor 1,,Entregado
+000166,Septiembre,Gerente B,GRUPO BIOS PIC ,28/09/2025,8/10/2025,ot_000166_pic_logo_campaña,Diseño Grafico,11,Diseñador 1,,En proceso
+000167,Septiembre,Gerente A,GRUPO BIOS ABA,30/09/2025,15/10/2025,ot_000167_aba_post_redes,Campaña Estratégica,12,Diseñador 2,,Entregado
+000168,Octubre,Gerente B,GRUPO BIOS ABA,01/10/2025,6/10/2025,ot_000168_aba_ajuste_empaque,Diseño Digital,7,Editor 1,Diseñador 2,
+000169,Octubre,Gerente A,GRUPO BIOS ABA,03/10/2025,22/10/2025,ot_000169_aba_catalogo,Diseño Grafico,8,Editor 1,,No realizado
+000170,Octubre,Gerente A,GRUPO BIOS PIC ,05/10/2025,9/10/2025,ot_000170_pic_post_redes,Diseño Digital,5,Editor 1,,Entregado
+000171,Octubre,Gerente A,GRUPO BIOS PIC ,06/10/2025,26/10/2025,ot_000171_pic_catalogo,Video Edición,1,Editor 1,,Entregado
+000172,Octubre,Gerente A,NAVITRANS,08/10/2025,17/10/2025,ot_000172_navitrans_logo_campaña,Diseño Digital,9,Diseñador 3,Diseñador 1,En proceso
+000173,Octubre,Gerente B,GRUPO BIOS ABA,09/10/2025,27/10/2025,ot_000173_aba_video_lanzamiento,Diseño Grafico,11,Diseñador 3,,
+000174,Octubre,Gerente A,GRUPO BIOS ABA,11/10/2025,26/10/2025,ot_000174_aba_post_redes,Copy,2,Diseñador 3,,Entregado
+000175,Octubre,Gerente A,GRUPO BIOS PIC ,13/10/2025,26/10/2025,ot_000175_pic_ajuste_empaque,Diseño Grafico,7,Editor 1,Diseñador 3,Entregado
+000176,Octubre,Gerente B,GRUPO BIOS ABA,14/10/2025,18/10/2025,ot_000176_aba_catalogo,Campaña Estratégica,9,Diseñador 2,,Entregado
+000177,Octubre,Gerente A,GRUPO BIOS ABA,16/10/2025,22/10/2025,ot_000177_aba_catalogo,Diseño Digital,8,Diseñador 2,,No realizado
+000178,Octubre,Gerente B,ARKADIA,17/10/2025,31/10/2025,ot_000178_arkadia_video_lanzamiento,Diseño Digital,8,Diseñador 3,,
+000179,Octubre,Gerente B,GRUPO BIOS ABA,19/10/2025,1/11/2025,ot_000179_aba_catalogo,Diseño Digital,8,Diseñador 1,,Entregado
+000180,Octubre,Gerente B,GRUPO BIOS ABS,21/10/2025,31/10/2025,ot_000180_abs_post_redes,Campaña Estratégica,10,Diseñador 1,,Entregado
+000181,Octubre,Gerente A,GRUPO BIOS ABA,22/10/2025,4/11/2025,ot_000181_aba_video_lanzamiento,Video Edición,3,Diseñador 3,Diseñador 1,Entregado
+000182,Octubre,Gerente B,GRUPO BIOS ABA,24/10/2025,31/10/2025,ot_000182_aba_senaletica_sede,Copy,2,Diseñador 2,,En proceso
+000183,Octubre,Gerente A,GRUPO BIOS ABA,25/10/2025,6/11/2025,ot_000183_aba_post_redes,Copy,3,Diseñador 1,,En proceso
+000184,Octubre,Gerente A,NAVITRANS,27/10/2025,3/11/2025,ot_000184_navitrans_catalogo,Campaña Estratégica,11,Diseñador 1,,En proceso
+000185,Octubre,Gerente B,GRUPO BIOS ABA,29/10/2025,6/11/2025,ot_000185_aba_post_redes,Copy,1,Editor 1,,
+000186,Octubre,Gerente B,GRUPO BIOS ABA,30/10/2025,15/11/2025,ot_000186_aba_logo_campaña,Copy,10,Diseñador 1,,En proceso
+000187,Noviembre,Gerente B,ARKADIA,01/11/2025,20/11/2025,ot_000187_arkadia_post_redes,Video Edición,7,Editor 1,,No realizado
+000188,Noviembre,Gerente A,GRUPO BIOS ABA,02/11/2025,14/11/2025,ot_000188_aba_video_lanzamiento,Diseño Grafico,11,Diseñador 3,Diseñador 1,En proceso
+000189,Noviembre,Gerente A,GRUPO BIOS ABA,04/11/2025,20/11/2025,ot_000189_aba_logo_campaña,Campaña Estratégica,11,Diseñador 2,,No realizado
+000190,Noviembre,Gerente B,GRUPO BIOS ABS,06/11/2025,18/11/2025,ot_000190_abs_video_lanzamiento,Copy,4,Diseñador 3,,En proceso
+000191,Noviembre,Gerente A,NAVITRANS,07/11/2025,16/11/2025,ot_000191_navitrans_senaletica_sede,Video Edición,6,Editor 1,,En revisión
+000192,Noviembre,Gerente B,NAVITRANS,09/11/2025,18/11/2025,ot_000192_navitrans_logo_campaña,Campaña Estratégica,2,Diseñador 3,,
+000193,Noviembre,Gerente A,GRUPO BIOS ABA,10/11/2025,20/11/2025,ot_000193_aba_ajuste_empaque,Campaña Estratégica,12,Editor 1,,Entregado
+000194,Noviembre,Gerente A,GRUPO BIOS ABA,12/11/2025,16/11/2025,ot_000194_aba_logo_campaña,Campaña Estratégica,10,Diseñador 1,Editor 1,Entregado
+000195,Noviembre,Gerente A,GRUPO BIOS ABA,14/11/2025,4/12/2025,ot_000195_aba_ajuste_empaque,Campaña Estratégica,11,Diseñador 2,Diseñador 1,Entregado
+000196,Noviembre,Gerente A,GRUPO BIOS PIC ,15/11/2025,17/11/2025,ot_000196_pic_catalogo,Diseño Grafico,6,Diseñador 2,Diseñador 3,
+000197,Noviembre,Gerente A,GRUPO BIOS ABA,17/11/2025,26/11/2025,ot_000197_aba_post_redes,Diseño Grafico,6,Diseñador 1,Editor 1,No realizado
+000198,Noviembre,Gerente B,GRUPO BIOS ABA,18/11/2025,7/12/2025,ot_000198_aba_video_lanzamiento,Copy,1,Diseñador 1,Editor 1,
+000199,Noviembre,Gerente A,ARKADIA,20/11/2025,3/12/2025,ot_000199_arkadia_ajuste_empaque,Campaña Estratégica,10,Diseñador 2,,En revisión
+000200,Noviembre,Gerente B,GRUPO BIOS ABA,22/11/2025,26/11/2025,ot_000200_aba_logo_campaña,Diseño Digital,11,Diseñador 1,,Entregado
+000201,Noviembre,Gerente A,GRUPO BIOS ABA,23/11/2025,27/11/2025,ot_000201_aba_ajuste_empaque,Diseño Digital,8,Diseñador 1,Diseñador 3,En reproceso
+000202,Noviembre,Gerente A,ARKADIA,25/11/2025,3/12/2025,ot_000202_arkadia_ajuste_empaque,Video Edición,12,Diseñador 2,,No realizado
+000203,Noviembre,Gerente B,ARKADIA,26/11/2025,14/12/2025,ot_000203_arkadia_catalogo,Video Edición,1,Diseñador 1,,Entregado
+000204,Noviembre,Gerente B,GRUPO BIOS ABA,28/11/2025,18/12/2025,ot_000204_aba_senaletica_sede,Video Edición,12,Diseñador 2,Editor 1,Entregado
+000205,Noviembre,Gerente B,GRUPO BIOS ABS,30/11/2025,11/12/2025,ot_000205_abs_post_redes,Diseño Digital,3,Diseñador 1,Diseñador 3,Entregado
+000206,Diciembre,Gerente B,ARKADIA,01/12/2025,15/12/2025,ot_000206_arkadia_post_redes,Video Edición,10,Diseñador 3,,Entregado
+000207,Diciembre,Gerente A,GRUPO BIOS ABS,03/12/2025,23/12/2025,ot_000207_abs_logo_campaña,Copy,5,Editor 1,,En proceso
+000208,Diciembre,Gerente B,GRUPO BIOS ABA,04/12/2025,17/12/2025,ot_000208_aba_senaletica_sede,Diseño Grafico,6,Diseñador 3,,Entregado
+000209,Diciembre,Gerente B,GRUPO BIOS ABA,06/12/2025,25/12/2025,ot_000209_aba_logo_campaña,Copy,3,Diseñador 3,,En revisión
+000210,Diciembre,Gerente B,NAVITRANS,08/12/2025,11/12/2025,ot_000210_navitrans_post_redes,Diseño Digital,12,Diseñador 2,Diseñador 3,Entregado
+000211,Diciembre,Gerente A,ARKADIA,09/12/2025,22/12/2025,ot_000211_arkadia_senaletica_sede,Copy,1,Editor 1,Editor 1,Entregado
+000212,Diciembre,Gerente A,GRUPO BIOS ABS,11/12/2025,29/12/2025,ot_000212_abs_logo_campaña,Campaña Estratégica,10,Diseñador 3,,En revisión
+000213,Diciembre,Gerente A,GRUPO BIOS ABA,12/12/2025,31/12/2025,ot_000213_aba_logo_campaña,Diseño Digital,2,Diseñador 2,,En reproceso
+000214,Diciembre,Gerente B,GRUPO BIOS ABS,14/12/2025,2/01/2026,ot_000214_abs_video_lanzamiento,Diseño Digital,4,Diseñador 1,,Entregado
+000215,Diciembre,Gerente A,ARKADIA,16/12/2025,28/12/2025,ot_000215_arkadia_logo_campaña,Video Edición,10,Diseñador 1,,En revisión
+000216,Diciembre,Gerente A,GRUPO BIOS ABA,17/12/2025,6/01/2026,ot_000216_aba_ajuste_empaque,Diseño Digital,10,Editor 1,,Entregado
+000217,Diciembre,Gerente B,GRUPO BIOS ABA,19/12/2025,2/01/2026,ot_000217_aba_video_lanzamiento,Copy,3,Diseñador 3,,Entregado
+000218,Diciembre,Gerente A,GRUPO BIOS PIC ,20/12/2025,26/12/2025,ot_000218_pic_ajuste_empaque,Diseño Grafico,1,Diseñador 3,,Entregado
+000219,Diciembre,Gerente A,GRUPO BIOS PIC ,22/12/2025,11/01/2026,ot_000219_pic_catalogo,Diseño Grafico,5,Diseñador 3,Diseñador 2,Entregado
+000220,Diciembre,Gerente A,GRUPO BIOS PIC ,24/12/2025,10/01/2026,ot_000220_pic_post_redes,Diseño Digital,6,Diseñador 2,,Entregado
+000221,Diciembre,Gerente A,GRUPO BIOS ABS,25/12/2025,3/01/2026,ot_000221_abs_video_lanzamiento,Diseño Grafico,1,Diseñador 3,,Entregado
+000222,Diciembre,Gerente A,GRUPO BIOS ABS,27/12/2025,1/01/2026,ot_000222_abs_logo_campaña,Video Edición,10,Editor 1,,Entregado
+000223,Diciembre,Gerente B,GRUPO BIOS ABA,28/12/2025,9/01/2026,ot_000223_aba_ajuste_empaque,Video Edición,8,Editor 1,,Entregado
+000224,Diciembre,Gerente B,GRUPO BIOS ABA,30/12/2025,4/01/2026,ot_000224_aba_catalogo,Diseño Digital,1,Diseñador 2,,En reproceso
+000225,Enero,Gerente B,GRUPO BIOS ABA,01/01/2026,13/01/2026,ot_000225_aba_ajuste_empaque,Campaña Estratégica,1,Diseñador 1,,Entregado
+000226,Enero,Gerente A,ARKADIA,02/01/2026,10/01/2026,ot_000226_arkadia_catalogo,Video Edición,3,Diseñador 3,Diseñador 2,Entregado
+000227,Enero,Gerente A,ARKADIA,04/01/2026,10/01/2026,ot_000227_arkadia_post_redes,Diseño Digital,5,Editor 1,,Entregado
+000228,Enero,Gerente B,GRUPO BIOS ABA,05/01/2026,6/01/2026,ot_000228_aba_senaletica_sede,Diseño Digital,5,Editor 1,,En proceso
+000229,Enero,Gerente A,GRUPO BIOS ABA,07/01/2026,23/01/2026,ot_000229_aba_video_lanzamiento,Diseño Grafico,11,Diseñador 2,,Entregado
+000230,Enero,Gerente B,GRUPO BIOS ABA,09/01/2026,18/01/2026,ot_000230_aba_post_redes,Video Edición,4,Diseñador 2,,Entregado
+000231,Enero,Gerente A,GRUPO BIOS ABA,10/01/2026,24/01/2026,ot_000231_aba_catalogo,Video Edición,3,Diseñador 1,Editor 1,Entregado
+000232,Enero,Gerente B,GRUPO BIOS ABA,12/01/2026,29/01/2026,ot_000232_aba_ajuste_empaque,Copy,5,Diseñador 2,,Entregado
+000233,Enero,Gerente B,GRUPO BIOS ABA,13/01/2026,27/01/2026,ot_000233_aba_video_lanzamiento,Diseño Digital,3,Diseñador 2,Diseñador 2,Entregado
+000234,Enero,Gerente A,GRUPO BIOS ABA,15/01/2026,22/01/2026,ot_000234_aba_video_lanzamiento,Campaña Estratégica,5,Diseñador 2,,En reproceso
+000235,Enero,Gerente A,GRUPO BIOS ABA,17/01/2026,24/01/2026,ot_000235_aba_ajuste_empaque,Diseño Grafico,12,Editor 1,Diseñador 1,Entregado
+000236,Enero,Gerente B,GRUPO BIOS ABA,18/01/2026,29/01/2026,ot_000236_aba_ajuste_empaque,Diseño Grafico,7,Editor 1,Diseñador 2,Entregado
+000237,Enero,Gerente B,GRUPO BIOS ABA,20/01/2026,28/01/2026,ot_000237_aba_ajuste_empaque,Diseño Digital,12,Diseñador 3,,En revisión
+000238,Enero,Gerente A,NAVITRANS,21/01/2026,5/02/2026,ot_000238_navitrans_ajuste_empaque,Video Edición,12,Diseñador 2,Diseñador 3,En proceso
+000239,Enero,Gerente B,GRUPO BIOS ABA,23/01/2026,11/02/2026,ot_000239_aba_ajuste_empaque,Campaña Estratégica,8,Diseñador 1,,Entregado
+000240,Enero,Gerente A,GRUPO BIOS ABA,25/01/2026,28/01/2026,ot_000240_aba_logo_campaña,Diseño Grafico,5,Diseñador 3,,Entregado
+000241,Enero,Gerente A,GRUPO BIOS ABA,26/01/2026,2/02/2026,ot_000241_aba_video_lanzamiento,Copy,8,Diseñador 2,,Entregado
+000242,Enero,Gerente A,GRUPO BIOS ABA,28/01/2026,1/02/2026,ot_000242_aba_senaletica_sede,Diseño Grafico,8,Editor 1,,Entregado
+000243,Enero,Gerente A,GRUPO BIOS PIC ,29/01/2026,2/02/2026,ot_000243_pic_video_lanzamiento,Copy,4,Diseñador 2,Diseñador 2,En reproceso
+000244,Enero,Gerente A,GRUPO BIOS PIC ,31/01/2026,15/02/2026,ot_000244_pic_ajuste_empaque,Campaña Estratégica,12,Editor 1,,Entregado
+000245,Febrero,Gerente B,GRUPO BIOS ABS,02/02/2026,14/02/2026,ot_000245_abs_logo_campaña,Video Edición,12,Editor 1,,En revisión
+000246,Febrero,Gerente A,GRUPO BIOS ABS,03/02/2026,5/02/2026,ot_000246_abs_catalogo,Video Edición,4,Editor 1,,Entregado
+000247,Febrero,Gerente A,GRUPO BIOS ABA,05/02/2026,22/02/2026,ot_000247_aba_senaletica_sede,Campaña Estratégica,4,Diseñador 1,,En proceso
+000248,Febrero,Gerente A,ARKADIA,06/02/2026,19/02/2026,ot_000248_arkadia_ajuste_empaque,Diseño Grafico,11,Diseñador 3,Diseñador 3,En revisión
+000249,Febrero,Gerente B,GRUPO BIOS ABA,08/02/2026,10/02/2026,ot_000249_aba_ajuste_empaque,Copy,1,Editor 1,,Entregado
+000250,Febrero,Gerente B,GRUPO BIOS ABA,10/02/2026,14/02/2026,ot_000250_aba_catalogo,Diseño Digital,2,Diseñador 1,,En proceso
+000251,Febrero,Gerente A,NAVITRANS,11/02/2026,2/03/2026,ot_000251_navitrans_post_redes,Diseño Grafico,9,Diseñador 2,,En reproceso
+000252,Febrero,Gerente A,GRUPO BIOS ABA,13/02/2026,23/02/2026,ot_000252_aba_catalogo,Diseño Grafico,12,Diseñador 3,Editor 1,
+000253,Febrero,Gerente B,GRUPO BIOS ABA,14/02/2026,5/03/2026,ot_000253_aba_logo_campaña,Copy,12,Diseñador 3,Editor 1,Entregado
+000254,Febrero,Gerente B,ARKADIA,16/02/2026,8/03/2026,ot_000254_arkadia_senaletica_sede,Diseño Grafico,4,Diseñador 3,,En revisión
+000255,Febrero,Gerente B,GRUPO BIOS PIC ,18/02/2026,8/03/2026,ot_000255_pic_ajuste_empaque,Video Edición,3,Diseñador 2,Diseñador 3,Entregado
+000256,Febrero,Gerente B,GRUPO BIOS ABA,19/02/2026,7/03/2026,ot_000256_aba_logo_campaña,Video Edición,1,Diseñador 1,Diseñador 2,Entregado
+000257,Febrero,Gerente B,GRUPO BIOS ABS,21/02/2026,13/03/2026,ot_000257_abs_catalogo,Diseño Grafico,9,Editor 1,,
+000258,Febrero,Gerente A,NAVITRANS,22/02/2026,26/02/2026,ot_000258_navitrans_catalogo,Diseño Digital,7,Diseñador 3,,No realizado
+000259,Febrero,Gerente A,GRUPO BIOS ABA,24/02/2026,3/03/2026,ot_000259_aba_catalogo,Campaña Estratégica,5,Diseñador 2,,Entregado
+000260,Febrero,Gerente A,NAVITRANS,26/02/2026,12/03/2026,ot_000260_navitrans_post_redes,Campaña Estratégica,10,Diseñador 2,,En reproceso
+000261,Febrero,Gerente B,GRUPO BIOS ABA,27/02/2026,19/03/2026,ot_000261_aba_post_redes,Campaña Estratégica,5,Diseñador 3,,En proceso
+000262,Marzo,Gerente B,NAVITRANS,01/03/2026,18/03/2026,ot_000262_navitrans_catalogo,Video Edición,1,Editor 1,,Entregado
+000263,Marzo,Gerente B,NAVITRANS,02/03/2026,8/03/2026,ot_000263_navitrans_logo_campaña,Campaña Estratégica,10,Editor 1,,Entregado
+000264,Marzo,Gerente B,GRUPO BIOS ABA,04/03/2026,15/03/2026,ot_000264_aba_logo_campaña,Campaña Estratégica,1,Diseñador 1,,En reproceso
+000265,Marzo,Gerente B,GRUPO BIOS ABA,06/03/2026,22/03/2026,ot_000265_aba_video_lanzamiento,Copy,7,Editor 1,,Entregado
+000266,Marzo,Gerente B,GRUPO BIOS ABS,07/03/2026,9/03/2026,ot_000266_abs_ajuste_empaque,Diseño Grafico,9,Diseñador 2,,Entregado
+000267,Marzo,Gerente A,GRUPO BIOS PIC ,09/03/2026,26/03/2026,ot_000267_pic_logo_campaña,Campaña Estratégica,8,Editor 1,Editor 1,En reproceso
+000268,Marzo,Gerente A,NAVITRANS,10/03/2026,21/03/2026,ot_000268_navitrans_logo_campaña,Video Edición,6,Diseñador 3,,En revisión
+000269,Marzo,Gerente B,GRUPO BIOS ABA,12/03/2026,18/03/2026,ot_000269_aba_catalogo,Video Edición,9,Editor 1,Diseñador 2,Entregado
+000270,Marzo,Gerente A,GRUPO BIOS ABA,14/03/2026,31/03/2026,ot_000270_aba_post_redes,Diseño Digital,1,Diseñador 1,Diseñador 3,No realizado
+000271,Marzo,Gerente A,GRUPO BIOS PIC ,15/03/2026,17/03/2026,ot_000271_pic_ajuste_empaque,Video Edición,12,Diseñador 1,,Entregado
+000272,Marzo,Gerente A,GRUPO BIOS ABA,17/03/2026,5/04/2026,ot_000272_aba_logo_campaña,Diseño Digital,8,Diseñador 3,Diseñador 2,Entregado
+000273,Marzo,Gerente A,GRUPO BIOS ABA,18/03/2026,1/04/2026,ot_000273_aba_logo_campaña,Copy,9,Diseñador 1,,Entregado
+000274,Marzo,Gerente B,NAVITRANS,20/03/2026,26/03/2026,ot_000274_navitrans_post_redes,Copy,7,Diseñador 1,Diseñador 1,En reproceso
+000275,Marzo,Gerente A,GRUPO BIOS ABA,22/03/2026,2/04/2026,ot_000275_aba_senaletica_sede,Video Edición,3,Diseñador 1,Diseñador 3,Entregado
+000276,Marzo,Gerente B,GRUPO BIOS ABA,23/03/2026,11/04/2026,ot_000276_aba_logo_campaña,Campaña Estratégica,10,Editor 1,,Entregado
+000277,Marzo,Gerente B,GRUPO BIOS ABA,25/03/2026,7/04/2026,ot_000277_aba_ajuste_empaque,Copy,4,Diseñador 2,,Entregado
+000278,Marzo,Gerente B,GRUPO BIOS ABA,26/03/2026,14/04/2026,ot_000278_aba_ajuste_empaque,Campaña Estratégica,5,Editor 1,,Entregado
+000279,Marzo,Gerente A,GRUPO BIOS PIC ,28/03/2026,5/04/2026,ot_000279_pic_post_redes,Video Edición,7,Editor 1,,Entregado
+000280,Marzo,Gerente B,GRUPO BIOS ABA,30/03/2026,5/04/2026,ot_000280_aba_post_redes,Diseño Digital,1,Diseñador 3,Editor 1,Entregado
+000281,Marzo,Gerente B,GRUPO BIOS ABS,31/03/2026,4/04/2026,ot_000281_abs_senaletica_sede,Campaña Estratégica,11,Diseñador 1,,Entregado
+000282,Abril,Gerente B,GRUPO BIOS ABA,02/04/2026,20/04/2026,ot_000282_aba_logo_campaña,Campaña Estratégica,5,Diseñador 3,,Entregado
+000283,Abril,Gerente B,GRUPO BIOS ABA,03/04/2026,12/04/2026,ot_000283_aba_logo_campaña,Diseño Digital,12,Diseñador 2,,Entregado
+000284,Abril,Gerente B,GRUPO BIOS ABA,05/04/2026,23/04/2026,ot_000284_aba_post_redes,Diseño Digital,3,Diseñador 3,,
+000285,Abril,Gerente A,GRUPO BIOS PIC ,07/04/2026,20/04/2026,ot_000285_pic_senaletica_sede,Campaña Estratégica,9,Diseñador 2,,No realizado
+000286,Abril,Gerente B,GRUPO BIOS ABA,08/04/2026,13/04/2026,ot_000286_aba_video_lanzamiento,Video Edición,9,Diseñador 2,Editor 1,En revisión
+000287,Abril,Gerente A,GRUPO BIOS ABA,10/04/2026,17/04/2026,ot_000287_aba_catalogo,Copy,2,Diseñador 3,,No realizado
+000288,Abril,Gerente B,GRUPO BIOS ABA,11/04/2026,30/04/2026,ot_000288_aba_ajuste_empaque,Campaña Estratégica,12,Diseñador 1,,Entregado
+000289,Abril,Gerente A,GRUPO BIOS ABA,13/04/2026,20/04/2026,ot_000289_aba_video_lanzamiento,Video Edición,9,Diseñador 3,,
+000290,Abril,Gerente A,GRUPO BIOS ABA,15/04/2026,25/04/2026,ot_000290_aba_senaletica_sede,Diseño Digital,12,Editor 1,,En proceso
+000291,Abril,Gerente B,GRUPO BIOS ABA,16/04/2026,1/05/2026,ot_000291_aba_logo_campaña,Diseño Grafico,6,Diseñador 3,,No realizado
+000292,Abril,Gerente B,GRUPO BIOS ABA,18/04/2026,3/05/2026,ot_000292_aba_senaletica_sede,Diseño Grafico,3,Diseñador 3,,En reproceso
+000293,Abril,Gerente B,GRUPO BIOS ABA,19/04/2026,27/04/2026,ot_000293_aba_ajuste_empaque,Copy,3,Editor 1,,Entregado
+000294,Abril,Gerente B,GRUPO BIOS ABA,21/04/2026,4/05/2026,ot_000294_aba_catalogo,Diseño Digital,10,Diseñador 2,Editor 1,En revisión
+000295,Abril,Gerente B,GRUPO BIOS PIC ,23/04/2026,2/05/2026,ot_000295_pic_ajuste_empaque,Diseño Grafico,11,Diseñador 3,Diseñador 1,En reproceso
+000296,Abril,Gerente A,GRUPO BIOS ABA,24/04/2026,26/04/2026,ot_000296_aba_ajuste_empaque,Video Edición,4,Diseñador 3,,
+000297,Abril,Gerente B,GRUPO BIOS ABA,26/04/2026,9/05/2026,ot_000297_aba_video_lanzamiento,Diseño Grafico,6,Editor 1,,
+000298,Abril,Gerente A,ARKADIA,27/04/2026,14/05/2026,ot_000298_arkadia_catalogo,Diseño Digital,7,Diseñador 2,,Entregado
+000299,Abril,Gerente A,GRUPO BIOS ABA,29/04/2026,17/05/2026,ot_000299_aba_video_lanzamiento,Diseño Digital,11,Diseñador 2,,Entregado
+000300,Mayo,Gerente B,GRUPO BIOS ABS,01/05/2026,7/05/2026,ot_000300_abs_post_redes,Diseño Grafico,4,Diseñador 3,,No realizado
+000301,Mayo,Gerente A,ARKADIA,02/05/2026,18/05/2026,ot_000301_arkadia_catalogo,Diseño Digital,1,Editor 1,Diseñador 2,Entregado
+000302,Mayo,Gerente A,GRUPO BIOS ABA,04/05/2026,14/05/2026,ot_000302_aba_video_lanzamiento,Copy,4,Diseñador 3,Diseñador 1,En proceso
+000303,Mayo,Gerente B,GRUPO BIOS ABA,05/05/2026,11/05/2026,ot_000303_aba_post_redes,Diseño Digital,2,Diseñador 3,,En proceso
+000304,Mayo,Gerente A,GRUPO BIOS ABA,07/05/2026,14/05/2026,ot_000304_aba_senaletica_sede,Video Edición,4,Diseñador 1,,Entregado
+000305,Mayo,Gerente B,GRUPO BIOS ABS,09/05/2026,15/05/2026,ot_000305_abs_post_redes,Copy,6,Diseñador 3,Diseñador 2,Entregado
+000306,Mayo,Gerente B,GRUPO BIOS ABA,10/05/2026,12/05/2026,ot_000306_aba_post_redes,Diseño Grafico,12,Diseñador 3,,No realizado
+000307,Mayo,Gerente B,GRUPO BIOS PIC ,12/05/2026,28/05/2026,ot_000307_pic_logo_campaña,Copy,6,Diseñador 1,,No realizado
+000308,Mayo,Gerente A,GRUPO BIOS ABA,13/05/2026,23/05/2026,ot_000308_aba_ajuste_empaque,Diseño Digital,12,Diseñador 1,,Entregado
+000309,Mayo,Gerente A,GRUPO BIOS ABS,15/05/2026,25/05/2026,ot_000309_abs_catalogo,Copy,11,Diseñador 2,Diseñador 1,Entregado
+000310,Mayo,Gerente B,GRUPO BIOS ABS,17/05/2026,6/06/2026,ot_000310_abs_logo_campaña,Video Edición,6,Diseñador 2,,En revisión
+000311,Mayo,Gerente A,GRUPO BIOS ABA,18/05/2026,30/05/2026,ot_000311_aba_ajuste_empaque,Diseño Grafico,2,Editor 1,,En proceso
+000312,Mayo,Gerente A,ARKADIA,20/05/2026,3/06/2026,ot_000312_arkadia_senaletica_sede,Copy,10,Diseñador 1,Diseñador 2,Entregado
+000313,Mayo,Gerente B,GRUPO BIOS ABA,21/05/2026,27/05/2026,ot_000313_aba_catalogo,Campaña Estratégica,2,Diseñador 1,,Entregado
+000314,Mayo,Gerente A,GRUPO BIOS ABS,23/05/2026,30/05/2026,ot_000314_abs_ajuste_empaque,Copy,9,Editor 1,,Entregado
+000315,Mayo,Gerente B,NAVITRANS,25/05/2026,27/05/2026,ot_000315_navitrans_senaletica_sede,Diseño Grafico,8,Diseñador 1,Diseñador 2,Entregado
+000316,Mayo,Gerente A,GRUPO BIOS ABA,26/05/2026,8/06/2026,ot_000316_aba_post_redes,Copy,11,Diseñador 3,,Entregado
+000317,Mayo,Gerente B,GRUPO BIOS ABS,28/05/2026,15/06/2026,ot_000317_abs_post_redes,Copy,11,Diseñador 2,Editor 1,En reproceso
+000318,Mayo,Gerente B,GRUPO BIOS ABA,29/05/2026,1/06/2026,ot_000318_aba_video_lanzamiento,Video Edición,10,Editor 1,,No realizado
+000319,Mayo,Gerente B,GRUPO BIOS ABA,31/05/2026,5/06/2026,ot_000319_aba_video_lanzamiento,Diseño Grafico,4,Diseñador 2,Editor 1,Entregado
+000320,Junio,Gerente B,GRUPO BIOS ABS,02/06/2026,7/06/2026,ot_000320_abs_senaletica_sede,Copy,4,Editor 1,,Entregado
+000321,Junio,Gerente A,GRUPO BIOS ABA,03/06/2026,11/06/2026,ot_000321_aba_video_lanzamiento,Diseño Grafico,4,Diseñador 3,,En revisión
+000322,Junio,Gerente A,ARKADIA,05/06/2026,14/06/2026,ot_000322_arkadia_video_lanzamiento,Campaña Estratégica,4,Diseñador 1,,No realizado
+000323,Junio,Gerente A,ARKADIA,06/06/2026,9/06/2026,ot_000323_arkadia_video_lanzamiento,Copy,9,Diseñador 1,,No realizado
+000324,Junio,Gerente A,NAVITRANS,08/06/2026,21/06/2026,ot_000324_navitrans_logo_campaña,Copy,8,Diseñador 1,,En reproceso
+000325,Junio,Gerente A,GRUPO BIOS PIC ,10/06/2026,12/06/2026,ot_000325_pic_ajuste_empaque,Video Edición,1,Diseñador 1,,Entregado
+000326,Junio,Gerente B,GRUPO BIOS ABA,11/06/2026,15/06/2026,ot_000326_aba_ajuste_empaque,Copy,4,Diseñador 1,,Entregado
+000327,Junio,Gerente B,GRUPO BIOS ABA,13/06/2026,24/06/2026,ot_000327_aba_ajuste_empaque,Diseño Digital,6,Diseñador 3,,En reproceso
+000328,Junio,Gerente B,GRUPO BIOS ABA,14/06/2026,26/06/2026,ot_000328_aba_video_lanzamiento,Video Edición,10,Diseñador 1,Diseñador 1,Entregado
+000329,Junio,Gerente A,GRUPO BIOS ABS,16/06/2026,25/06/2026,ot_000329_abs_catalogo,Campaña Estratégica,1,Editor 1,,En proceso
+000330,Junio,Gerente B,GRUPO BIOS ABA,18/06/2026,22/06/2026,ot_000330_aba_logo_campaña,Diseño Digital,9,Diseñador 3,,En reproceso
+000331,Junio,Gerente B,NAVITRANS,19/06/2026,28/06/2026,ot_000331_navitrans_post_redes,Diseño Grafico,1,Diseñador 3,,En revisión
+000332,Junio,Gerente A,GRUPO BIOS ABA,21/06/2026,7/07/2026,ot_000332_aba_ajuste_empaque,Diseño Digital,10,Editor 1,,
+000333,Junio,Gerente A,GRUPO BIOS PIC ,22/06/2026,7/07/2026,ot_000333_pic_video_lanzamiento,Copy,2,Diseñador 3,Diseñador 3,Entregado
+000334,Junio,Gerente A,GRUPO BIOS ABA,24/06/2026,4/07/2026,ot_000334_aba_logo_campaña,Diseño Digital,6,Editor 1,Diseñador 3,En proceso
+000335,Junio,Gerente B,GRUPO BIOS ABS,26/06/2026,9/07/2026,ot_000335_abs_ajuste_empaque,Video Edición,10,Editor 1,,Entregado
+000336,Junio,Gerente A,ARKADIA,27/06/2026,5/07/2026,ot_000336_arkadia_catalogo,Diseño Digital,12,Diseñador 2,,Entregado
+000337,Junio,Gerente B,NAVITRANS,29/06/2026,2/07/2026,ot_000337_navitrans_senaletica_sede,Copy,10,Diseñador 2,Diseñador 1,Entregado
+000338,Junio,Gerente A,GRUPO BIOS PIC ,30/06/2026,7/07/2026,ot_000338_pic_senaletica_sede,Video Edición,4,Diseñador 2,,Entregado
+000339,Julio,Gerente A,NAVITRANS,02/07/2026,14/07/2026,ot_000339_navitrans_senaletica_sede,Copy,12,Editor 1,,
+000340,Julio,Gerente B,GRUPO BIOS ABS,04/07/2026,15/07/2026,ot_000340_abs_video_lanzamiento,Video Edición,4,Diseñador 2,,Entregado
+000341,Julio,Gerente B,GRUPO BIOS ABA,05/07/2026,12/07/2026,ot_000341_aba_post_redes,Campaña Estratégica,7,Diseñador 3,Diseñador 2,Entregado
+000342,Julio,Gerente B,GRUPO BIOS ABA,07/07/2026,12/07/2026,ot_000342_aba_senaletica_sede,Copy,9,Diseñador 3,,En reproceso
+000343,Julio,Gerente B,GRUPO BIOS ABA,08/07/2026,11/07/2026,ot_000343_aba_video_lanzamiento,Video Edición,8,Diseñador 3,Editor 1,Entregado
+000344,Julio,Gerente A,GRUPO BIOS ABS,10/07/2026,26/07/2026,ot_000344_abs_senaletica_sede,Video Edición,9,Diseñador 1,Diseñador 2,Entregado
+000345,Julio,Gerente A,GRUPO BIOS ABA,12/07/2026,20/07/2026,ot_000345_aba_ajuste_empaque,Campaña Estratégica,8,Diseñador 2,Diseñador 3,No realizado
+000346,Julio,Gerente A,GRUPO BIOS ABA,13/07/2026,17/07/2026,ot_000346_aba_catalogo,Diseño Grafico,3,Diseñador 1,,En reproceso
+000347,Julio,Gerente A,GRUPO BIOS ABA,15/07/2026,26/07/2026,ot_000347_aba_logo_campaña,Video Edición,9,Diseñador 1,,Entregado
+000348,Julio,Gerente A,GRUPO BIOS ABS,16/07/2026,27/07/2026,ot_000348_abs_catalogo,Campaña Estratégica,7,Diseñador 3,,En proceso
+000349,Julio,Gerente B,GRUPO BIOS ABA,18/07/2026,20/07/2026,ot_000349_aba_post_redes,Copy,7,Diseñador 3,,Entregado
+000350,Julio,Gerente A,GRUPO BIOS ABS,20/07/2026,31/07/2026,ot_000350_abs_post_redes,Copy,12,Diseñador 3,,Entregado
+000351,Julio,Gerente A,GRUPO BIOS ABA,21/07/2026,26/07/2026,ot_000351_aba_video_lanzamiento,Diseño Grafico,6,Diseñador 3,,En revisión
+000352,Julio,Gerente A,NAVITRANS,23/07/2026,11/08/2026,ot_000352_navitrans_catalogo,Copy,10,Diseñador 3,Diseñador 2,En reproceso
+000353,Julio,Gerente A,ARKADIA,24/07/2026,2/08/2026,ot_000353_arkadia_catalogo,Video Edición,11,Editor 1,,En revisión
+000354,Julio,Gerente A,GRUPO BIOS ABA,26/07/2026,12/08/2026,ot_000354_aba_senaletica_sede,Diseño Grafico,9,Editor 1,Diseñador 1,Entregado
+000355,Julio,Gerente B,GRUPO BIOS ABA,28/07/2026,2/08/2026,ot_000355_aba_ajuste_empaque,Diseño Grafico,10,Diseñador 2,,En revisión
+000356,Julio,Gerente A,GRUPO BIOS ABA,29/07/2026,15/08/2026,ot_000356_aba_senaletica_sede,Copy,6,Diseñador 2,Diseñador 2,Entregado
+000357,Julio,Gerente B,GRUPO BIOS ABA,31/07/2026,17/08/2026,ot_000357_aba_catalogo,Diseño Digital,8,Editor 1,Diseñador 2,Entregado
+000358,Agosto,Gerente A,ARKADIA,01/08/2026,14/08/2026,ot_000358_arkadia_senaletica_sede,Diseño Grafico,2,Diseñador 1,Diseñador 1,En proceso
+000359,Agosto,Gerente A,GRUPO BIOS ABA,03/08/2026,15/08/2026,ot_000359_aba_video_lanzamiento,Campaña Estratégica,7,Editor 1,,Entregado
+000360,Agosto,Gerente B,GRUPO BIOS ABA,05/08/2026,6/08/2026,ot_000360_aba_logo_campaña,Diseño Digital,6,Diseñador 2,,No realizado
+000361,Agosto,Gerente B,GRUPO BIOS ABA,06/08/2026,15/08/2026,ot_000361_aba_logo_campaña,Copy,3,Editor 1,,Entregado
+000362,Agosto,Gerente B,GRUPO BIOS ABA,08/08/2026,18/08/2026,ot_000362_aba_ajuste_empaque,Campaña Estratégica,4,Diseñador 2,Diseñador 3,En reproceso
+000363,Agosto,Gerente A,ARKADIA,09/08/2026,29/08/2026,ot_000363_arkadia_video_lanzamiento,Diseño Grafico,4,Diseñador 3,,Entregado
+000364,Agosto,Gerente B,GRUPO BIOS ABA,11/08/2026,25/08/2026,ot_000364_aba_catalogo,Diseño Grafico,2,Diseñador 2,,Entregado
+000365,Agosto,Gerente B,NAVITRANS,13/08/2026,18/08/2026,ot_000365_navitrans_ajuste_empaque,Diseño Digital,8,Editor 1,,Entregado
+000366,Agosto,Gerente A,GRUPO BIOS ABS,14/08/2026,27/08/2026,ot_000366_abs_video_lanzamiento,Diseño Digital,4,Diseñador 1,,En revisión
+000367,Agosto,Gerente B,GRUPO BIOS ABA,16/08/2026,5/09/2026,ot_000367_aba_catalogo,Diseño Grafico,12,Diseñador 1,,Entregado
+000368,Agosto,Gerente B,GRUPO BIOS ABA,17/08/2026,21/08/2026,ot_000368_aba_logo_campaña,Copy,7,Diseñador 1,,No realizado
+000369,Agosto,Gerente A,GRUPO BIOS ABA,19/08/2026,6/09/2026,ot_000369_aba_video_lanzamiento,Video Edición,8,Diseñador 1,,Entregado
+000370,Agosto,Gerente A,GRUPO BIOS ABA,21/08/2026,24/08/2026,ot_000370_aba_ajuste_empaque,Video Edición,5,Diseñador 1,,En revisión
+000371,Agosto,Gerente B,GRUPO BIOS PIC ,22/08/2026,24/08/2026,ot_000371_pic_senaletica_sede,Diseño Grafico,6,Diseñador 1,Editor 1,Entregado
+000372,Agosto,Gerente B,GRUPO BIOS ABS,24/08/2026,11/09/2026,ot_000372_abs_catalogo,Video Edición,7,Editor 1,Diseñador 3,En proceso
+000373,Agosto,Gerente B,GRUPO BIOS ABA,25/08/2026,7/09/2026,ot_000373_aba_post_redes,Campaña Estratégica,3,Diseñador 1,Diseñador 2,En revisión
+000374,Agosto,Gerente A,GRUPO BIOS PIC ,27/08/2026,5/09/2026,ot_000374_pic_logo_campaña,Diseño Grafico,2,Diseñador 1,,
+000375,Agosto,Gerente B,GRUPO BIOS ABS,29/08/2026,16/09/2026,ot_000375_abs_video_lanzamiento,Video Edición,8,Diseñador 1,Editor 1,No realizado
+000376,Agosto,Gerente B,NAVITRANS,30/08/2026,15/09/2026,ot_000376_navitrans_video_lanzamiento,Copy,7,Diseñador 2,,
+000377,Septiembre,Gerente B,GRUPO BIOS PIC ,01/09/2026,4/09/2026,ot_000377_pic_video_lanzamiento,Video Edición,2,Diseñador 2,,En proceso
+000378,Septiembre,Gerente B,NAVITRANS,02/09/2026,14/09/2026,ot_000378_navitrans_video_lanzamiento,Diseño Digital,3,Diseñador 1,Diseñador 3,Entregado
+000379,Septiembre,Gerente B,GRUPO BIOS ABA,04/09/2026,21/09/2026,ot_000379_aba_logo_campaña,Diseño Digital,3,Editor 1,Diseñador 2,No realizado
+000380,Septiembre,Gerente B,GRUPO BIOS ABS,06/09/2026,8/09/2026,ot_000380_abs_senaletica_sede,Campaña Estratégica,2,Editor 1,Diseñador 2,Entregado
+000381,Septiembre,Gerente B,GRUPO BIOS ABA,07/09/2026,20/09/2026,ot_000381_aba_senaletica_sede,Copy,9,Diseñador 3,Editor 1,Entregado
+000382,Septiembre,Gerente B,GRUPO BIOS PIC ,09/09/2026,18/09/2026,ot_000382_pic_post_redes,Diseño Grafico,8,Editor 1,Diseñador 2,Entregado
+000383,Septiembre,Gerente B,GRUPO BIOS ABA,10/09/2026,11/09/2026,ot_000383_aba_post_redes,Copy,11,Diseñador 2,Diseñador 3,Entregado
+000384,Septiembre,Gerente A,GRUPO BIOS ABA,12/09/2026,25/09/2026,ot_000384_aba_video_lanzamiento,Diseño Digital,1,Diseñador 3,Diseñador 1,Entregado
+000385,Septiembre,Gerente B,NAVITRANS,14/09/2026,24/09/2026,ot_000385_navitrans_senaletica_sede,Video Edición,4,Diseñador 3,,En revisión
+000386,Septiembre,Gerente A,GRUPO BIOS ABA,15/09/2026,1/10/2026,ot_000386_aba_logo_campaña,Campaña Estratégica,5,Diseñador 3,Diseñador 1,En proceso
+000387,Septiembre,Gerente A,GRUPO BIOS ABS,17/09/2026,30/09/2026,ot_000387_abs_catalogo,Video Edición,7,Editor 1,,Entregado
+000388,Septiembre,Gerente A,GRUPO BIOS ABA,18/09/2026,1/10/2026,ot_000388_aba_catalogo,Copy,6,Diseñador 1,,Entregado
+000389,Septiembre,Gerente B,ARKADIA,20/09/2026,23/09/2026,ot_000389_arkadia_post_redes,Copy,7,Editor 1,,En reproceso
+000390,Septiembre,Gerente B,ARKADIA,22/09/2026,11/10/2026,ot_000390_arkadia_catalogo,Campaña Estratégica,7,Editor 1,,En proceso
+000391,Septiembre,Gerente A,ARKADIA,23/09/2026,6/10/2026,ot_000391_arkadia_video_lanzamiento,Diseño Grafico,11,Diseñador 2,,En revisión
+000392,Septiembre,Gerente B,GRUPO BIOS ABA,25/09/2026,27/09/2026,ot_000392_aba_post_redes,Campaña Estratégica,2,Diseñador 1,,En reproceso
+000393,Septiembre,Gerente B,GRUPO BIOS ABA,26/09/2026,27/09/2026,ot_000393_aba_ajuste_empaque,Diseño Digital,10,Editor 1,Diseñador 1,Entregado
+000394,Septiembre,Gerente A,ARKADIA,28/09/2026,9/10/2026,ot_000394_arkadia_video_lanzamiento,Campaña Estratégica,10,Diseñador 2,,No realizado
+000395,Septiembre,Gerente B,GRUPO BIOS ABS,30/09/2026,5/10/2026,ot_000395_abs_logo_campaña,Copy,1,Diseñador 2,Diseñador 3,Entregado
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
