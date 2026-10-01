@@ -13,8 +13,11 @@ const GID = 0;                          // pestaña "OT 2026" (número tras #gid
 const CLIENTES = ['GRUPO BIOS ABA'];    // único cliente expuesto
 const CACHE_SEG = 60;                   // evita leer la hoja en cada visita
 
-function doGet() {
+function doGet(e) {
   try {
+    const view = e && e.parameter && e.parameter.view;
+    if (view === 'pestanas') return out_(pestanas_());                       // Semanal.gs
+    if (view === 'semana') return out_(semana_(Number(e.parameter.gid)));    // Semanal.gs
     const cache = CacheService.getScriptCache();
     const hit = cache.get('payload');
     if (hit) return out_(hit);

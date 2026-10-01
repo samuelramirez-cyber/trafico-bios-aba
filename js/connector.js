@@ -105,3 +105,70 @@ export function loadData({ force = false } = {}) {
   })().finally(() => { inflight = null; });
   return inflight;
 }
+
+/* ---------- Seguimiento semanal (Cuadro Tango: una pestaña por semana) ---------- */
+
+const WEEK_INDEX_KEY = 'bios-trafico:semanas:idx:v1';
+const WEEK_KEY = (gid) => `bios-trafico:semana:v1:${gid}`;
+const WEEK_TTL_MIN = 10;   // semanas visibles e índice; las ocultas (histórico) se guardan sin vencimiento
+
+async function fetchJSON(url) {
+  const text = await withRetry(() => fetchText(url));
+  let json;
+  try { json = JSON.parse(text); } catch { throw new FetchError('Respuesta no válida del Apps Script', false); }
+  if (!json.ok) throw new FetchError(json.error || 'Error en Apps Script', false);
+  return json;
+}
+
+function cachedJSON(key) {
+  try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
+}
+function storeJSON(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* cuota llena: se sigue sin caché */ }
+}
+
+/** Índice de semanas [{gid, nombre, fecha, oculta}] ordenado por fecha. null si la fuente no es apps_script. */
+export async function loadWeekIndex({ force = false } = {}) {
+  if (sourceMode() !== 'apps_script') return null;
+  const cached = cachedJSON(WEEK_INDEX_KEY);
+  if (!force && cached && Date.now() - cached.ts < WEEK_TTL_MIN * 60000) return cached.semanas;
+  try {
+    const { semanas } = await fetchJSON(`${CONFIG.APPS_SCRIPT_URL}?view=pestanas`);
+    storeJSON(WEEK_INDEX_KEY, { ts: Date.now(), semanas });
+    return semanas;
+  } catch (e) {
+    if (cached) return cached.semanas;
+    throw e;
+  }
+}
+
+/** Una semana { leyenda, items }. Las ocultas no cambian: su caché local no vence. */
+export async function loadWeek(t, { force = false } = {}) {
+  const key = WEEK_KEY(t.gid);
+  const cached = cachedJSON(key);
+  if (!force && cached && (t.oculta || Date.now() - cached.ts < WEEK_TTL_MIN * 60000)) return cached;
+  try {
+    const { leyenda, items, error } = await fetchJSON(`${CONFIG.APPS_SCRIPT_URL}?view=semana&gid=${encodeURIComponent(t.gid)}`);
+    const week = { ts: Date.now(), leyenda: leyenda || [], items: items || [], error };
+    storeJSON(key, week);
+    return week;
+  } catch (e) {
+    if (cached) return cached;
+    throw e;
+  }
+}
+
+/** Carga varias semanas con concurrencia limitada; onProgress(hechas, total). */
+export async function loadWeeks(tabs, { force = false, concurrency = 4, onProgress } = {}) {
+  const out = new Array(tabs.length);
+  let next = 0, done = 0;
+  const worker = async () => {
+    while (next < tabs.length) {
+      const i = next++;
+      out[i] = { ...tabs[i], ...(await loadWeek(tabs[i], { force: force && !tabs[i].oculta })) };
+      onProgress?.(++done, tabs.length);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(concurrency, tabs.length) }, worker));
+  return out;
+}

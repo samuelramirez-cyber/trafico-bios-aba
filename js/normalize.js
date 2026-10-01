@@ -191,6 +191,7 @@ export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], ca
       cliente: get(r, 'cliente'), gerente: get(r, 'gerente'),
       responsable: get(r, 'responsable'), responsable2: get(r, 'responsable2'),
       desc: splitOT(rawDesc).titulo || rawDesc, pieza: get(r, 'pieza'),
+      codigo: rawDesc.toLowerCase().split(/\s+/)[0],   // "ot_001354_aba_..." = llave de cruce con el Cuadro Tango
       estadoRaw: get(r, 'estado'), issues: [] };
 
     for (const f of ['ingreso', 'entrega']) {

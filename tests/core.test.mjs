@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { parseCSV, parseDate, formatDate, mapColumns, detectHeader, splitOT, classify, normalizeTable } from '../js/normalize.js';
 import { periodRange, applyFilters, computeKPIs } from '../js/filters.js';
 import { CONFIG } from '../config.js';
+import { weeklyBalance } from '../js/weekly.js';
 
 const fd = (s) => formatDate(parseDate(s).date);
 const opts = { statuses: CONFIG.STATUSES, clientFilter: ['GRUPO BIOS ABA'] };
@@ -83,4 +84,21 @@ test('periodRange: límites semiabiertos', () => {
   assert.equal(+r.from, +new Date(2026, 9, 1));
   assert.equal(+r.to, +new Date(2027, 0, 1));
   assert.equal(periodRange({ period: 'all' }), null);
+});
+
+test('weeklyBalance: nuevas, cambios, salidas, estancadas y cruce', () => {
+  const it = (key, estado) => [key, key, 'ELI', 'ALEJO', estado, '', ''];
+  const semanas = [
+    { fecha: '2026-09-15', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'EN PROCESO'), it('ot_000003_aba_c', 'PENDIENTE INSUMO')] },
+    { fecha: '2026-09-22', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'APROBADO'), it('ot_000003_aba_c', 'PENDIENTE INSUMO')] },
+    { fecha: '2026-09-29', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'APROBADO'), it('ot_000004_aba_d', 'EN PROCESO')] },
+  ];
+  const cross = new Map([['ot_000002_aba_b', { estado: 'proceso' }], ['ot_000001_aba_a', { estado: 'proceso' }]]);
+  const b = weeklyBalance(semanas, 2, cross);
+  assert.deepEqual([b.total, b.nuevas.length, b.salieron.length, b.cambios.length], [3, 1, 1, 0]);
+  assert.deepEqual(b.estancadas.map((x) => x.key), ['ot_000001_aba_a']);
+  assert.deepEqual(b.discrepancias.map((x) => x.key), ['ot_000002_aba_b']);   // aprobado en cuadro, en proceso en OT 2026
+  const b1 = weeklyBalance(semanas, 1, cross);
+  assert.deepEqual(b1.aprobadas.map((x) => x.key), ['ot_000002_aba_b']);
+  assert.equal(weeklyBalance(semanas, 0).nuevas.length, 0);
 });

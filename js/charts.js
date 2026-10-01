@@ -10,7 +10,7 @@ const pctLabel = (c) => {
 const pointer = (enabled) => (e, els) => { e.native.target.style.cursor = enabled && els.length ? 'pointer' : 'default'; };
 
 // Crea el gráfico la primera vez y luego solo actualiza datos/opciones.
-function upsert(id, type, data, options) {
+export function upsert(id, type, data, options) {
   if (charts[id]) {
     charts[id].data = data;
     Object.assign(charts[id].options, options);
@@ -20,15 +20,15 @@ function upsert(id, type, data, options) {
   }
 }
 
-function doughnut(id, items, onClick) {
+export function doughnut(id, items, onClick) {
   upsert(id, 'doughnut', {
     labels: items.map((i) => i.label),
     datasets: [{ data: items.map((i) => i.n), backgroundColor: items.map((i) => i.color), borderWidth: 2, borderColor: '#fff' }],
   }, {
     cutout: '62%',
     plugins: { legend, tooltip: { callbacks: { label: pctLabel } } },
-    onClick: (_, els) => els.length && onClick(items[els[0].index]),
-    onHover: pointer(true),
+    onClick: (_, els) => els.length && onClick?.(items[els[0].index]),
+    onHover: pointer(Boolean(onClick)),
   });
 }
 

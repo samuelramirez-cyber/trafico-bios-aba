@@ -36,6 +36,12 @@ export const CONFIG = {
     { key: 'entregado',   label: 'Entregado',    color: '#16a34a', match: ['ENTREGAD', 'APROB', 'FINALIZ', 'TERMINAD'] },
   ],
 
+  // Seguimiento semanal (Cuadro Tango): semanas que se cargan al abrir; el resto con "Cargar histórico".
+  WEEKS_INITIAL: 12,
+  STALE_WEEKS: 3,          // "estancada": mismo estado (no aprobado) durante ≥ N semanas seguidas
+  // Colores del Cuadro que no están en su leyenda → estado. Ej.: '#34a853': 'APROBADO'.
+  CUADRO_COLORES: {},
+
   // Tipos de pieza, detectados en DESCRIPCIÓN + PIEZA (en orden; la primera que coincide gana).
   // Término = prefijo de palabra ('FACH' → fachada, fach); con '$' = palabra exacta ('INV$' → inv, no investigación).
   // Lo que no coincide queda en "Otros".

@@ -1,10 +1,11 @@
 // Orquestador del dashboard: estado de filtros, carga de datos y render reactivo.
 import { CONFIG } from './config.js';
-import { loadData, sourceMode } from './js/connector.js';
+import { loadData, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
 import { normalizeTable } from './js/normalize.js';
 import { applyFilters, computeKPIs, crossTab, periodRange, uniqueSorted, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
 import { renderTable } from './js/table.js';
+import { renderWeekly } from './js/weekly.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
 const FILTERS_KEY = 'bios-trafico:filters:v3';
@@ -20,6 +21,7 @@ const DEFAULTS = {
 const state = { ...DEFAULTS, ...readSaved() };
 const view = { page: 1, sortKey: 'ingreso', sortDir: -1 };
 let records = [], issues = [], lastLoad = null;
+const weeks = { index: null, loaded: [], loading: null, error: null };
 
 function readSaved() {
   try {
@@ -49,6 +51,7 @@ async function load(force = false) {
     lastLoad = res;
     updateBanner();
     render();
+    drawWeekly();
   } catch (e) {
     if (lastLoad) { lastLoad = { ...lastLoad, origin: 'stale', error: e.message }; updateBanner(); }
     else setBanner('error', `No fue posible cargar los datos: ${e.message}`, true);
@@ -179,6 +182,39 @@ function renderIssues(range) {
   ).join('') + (issues.length > 200 ? `<li>… y ${fmtInt(issues.length - 200)} más</li>` : '');
 }
 
+/* ---------- Seguimiento semanal ---------- */
+
+function drawWeekly() {
+  if (!weeks.index) return renderWeekly(sourceMode() === 'apps_script' ? { semanas: [], total: 0, loading: weeks.loading, error: weeks.error } : null);
+  renderWeekly({
+    semanas: weeks.loaded, total: weeks.index.length, loading: weeks.loading, error: weeks.error,
+    cross: new Map(records.map((r) => [r.codigo, r])),
+    onLoadAll: () => refreshWeekly({ all: true }),
+  });
+}
+
+// Carga las últimas WEEKS_INITIAL semanas (o todas); las ocultas quedan en caché local permanente.
+async function refreshWeekly({ all = false, force = false } = {}) {
+  if (sourceMode() !== 'apps_script' || weeks.loading) return;
+  try {
+    weeks.loading = 'Cargando semanas…';
+    drawWeekly();
+    weeks.index = await loadWeekIndex({ force });
+    // Últimas N semanas (o todas); si ya se había cargado más histórico, se conserva ese alcance.
+    const want = all ? weeks.index : weeks.index.slice(-Math.max(CONFIG.WEEKS_INITIAL, weeks.loaded.length));
+    weeks.loaded = await loadWeeks(want, {
+      force,
+      onProgress: (done, total) => { weeks.loading = `Cargando semanas… ${done}/${total}`; drawWeekly(); },
+    });
+    weeks.error = null;
+  } catch (e) {
+    weeks.error = `Seguimiento semanal: ${e.message}`;
+  } finally {
+    weeks.loading = null;
+    drawWeekly();
+  }
+}
+
 /* ---------- Eventos ---------- */
 
 function bind() {
@@ -204,7 +240,7 @@ function bind() {
     view.page = 1; render();
   };
   $('#btnReset').onclick = () => { Object.assign(state, DEFAULTS); view.page = 1; render(); };
-  $('#btnRefresh').onclick = () => load(true);
+  $('#btnRefresh').onclick = () => { load(true); refreshWeekly({ force: true }); };
   $('#prevPage').onclick = () => { view.page--; render(); };
   $('#nextPage').onclick = () => { view.page++; render(); };
 
@@ -216,6 +252,7 @@ function bind() {
 
 bind();
 load();
+refreshWeekly();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(() => { /* PWA opcional */ });
