@@ -1,6 +1,6 @@
 // Orquestador del dashboard: estado de filtros, carga de datos y render reactivo.
 import { CONFIG } from './config.js';
-import { loadData, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
+import { isWeekCached, loadData, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
 import { normalizeTable } from './js/normalize.js';
 import { applyFilters, computeKPIs, crossTab, periodRange, uniqueSorted, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
@@ -200,8 +200,11 @@ async function refreshWeekly({ all = false, force = false } = {}) {
     weeks.loading = 'Cargando semanas…';
     drawWeekly();
     weeks.index = await loadWeekIndex({ force });
-    // Últimas N semanas (o todas); si ya se había cargado más histórico, se conserva ese alcance.
-    const want = all ? weeks.index : weeks.index.slice(-Math.max(CONFIG.WEEKS_INITIAL, weeks.loaded.length));
+    // Últimas N semanas + todo lo que ya esté en caché local (o todas, si se pidió el histórico completo).
+    const n = weeks.index.length;
+    const loadedGids = new Set(weeks.loaded.map((w) => w.gid));
+    const want = all ? weeks.index : weeks.index.filter((t, i) =>
+      i >= n - CONFIG.WEEKS_INITIAL || loadedGids.has(t.gid) || isWeekCached(t));
     weeks.loaded = await loadWeeks(want, {
       force,
       onProgress: (done, total) => { weeks.loading = `Cargando semanas… ${done}/${total}`; drawWeekly(); },

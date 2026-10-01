@@ -158,6 +158,9 @@ export async function loadWeek(t, { force = false } = {}) {
   }
 }
 
+// Semana oculta ya guardada localmente (no requiere red).
+export const isWeekCached = (t) => t.oculta && cachedJSON(WEEK_KEY(t.gid)) != null;
+
 /** Carga varias semanas con concurrencia limitada; onProgress(hechas, total). */
 export async function loadWeeks(tabs, { force = false, concurrency = 4, onProgress } = {}) {
   const out = new Array(tabs.length);
