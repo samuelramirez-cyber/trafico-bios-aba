@@ -6,7 +6,8 @@ import { applyFilters, computeKPIs, crossTab, periodRange, yearsIn, MONTH_NAMES 
 import { renderCharts } from './js/charts.js';
 import { renderWeekly } from './js/weekly.js';
 import { renderAnnual } from './js/annual.js';
-import { evolutionMonths, fetchSpan, monthsInRange, renderRedes, renderWeb, webBrand } from './js/digital.js';
+import { evolutionMonths, fetchSpan, monthsInRange, renderRedes, renderWeb, socialSelection, webBrand } from './js/digital.js';
+import { renderInteractions } from './js/interactions.js';
 import { renderTareas } from './js/tasks.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
@@ -284,20 +285,22 @@ function syncWeekly() {
 
 /* ---------- Web y redes (Dashboard Digital API) ---------- */
 
-const digital = { web: {}, redes: {}, tareas: {} };   // por vista: { key, data, loading, error }
+const digital = { web: {}, redes: {}, interacciones: {}, tareas: {} };   // por vista: { key, data, loading, error }
 
 function drawDigital() {
   const months = monthsInRange(periodRange(state));
   const onRender = drawDigital;
   renderWeb({ ...digital.web, months: evolutionMonths(months), onRender });
   renderRedes({ ...digital.redes, months, onRender });
+  const sel = socialSelection();
+  renderInteractions({ inter: digital.interacciones.data, redes: digital.redes.data?.marcas?.[sel.marca], marca: sel.marca, ym: sel.ym });
   renderTareas({ ...digital.tareas, marca: webBrand(), range: periodRange(state), periodLabel: periodLabelText() });
 }
 
 // Al cambiar el periodo: pide a la API el rango necesario (con el mes anterior para comparar).
 function syncDigital(force = false) {
   const months = monthsInRange(periodRange(state));
-  for (const view of ['web', 'redes']) {
+  for (const view of ['web', 'redes', 'interacciones']) {
     const span = fetchSpan(view === 'web' ? evolutionMonths(months) : months);
     const st = digital[view];
     const key = span ? `${span.from}|${span.to}` : '';

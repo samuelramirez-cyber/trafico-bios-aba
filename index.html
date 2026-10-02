@@ -15,21 +15,22 @@
   <script type="importmap">
   {
     "imports": {
-      "./app.js": "./app.js?v=13",
-      "./config.js": "./config.js?v=13",
-      "./js/annual.js": "./js/annual.js?v=13",
-      "./js/charts.js": "./js/charts.js?v=13",
-      "./js/connector.js": "./js/connector.js?v=13",
-      "./js/digital.js": "./js/digital.js?v=13",
-      "./js/filters.js": "./js/filters.js?v=13",
-      "./js/normalize.js": "./js/normalize.js?v=13",
-      "./js/tasks.js": "./js/tasks.js?v=13",
-      "./js/ui.js": "./js/ui.js?v=13",
-      "./js/weekly.js": "./js/weekly.js?v=13"
+      "./app.js": "./app.js?v=14",
+      "./config.js": "./config.js?v=14",
+      "./js/annual.js": "./js/annual.js?v=14",
+      "./js/charts.js": "./js/charts.js?v=14",
+      "./js/connector.js": "./js/connector.js?v=14",
+      "./js/digital.js": "./js/digital.js?v=14",
+      "./js/filters.js": "./js/filters.js?v=14",
+      "./js/interactions.js": "./js/interactions.js?v=14",
+      "./js/normalize.js": "./js/normalize.js?v=14",
+      "./js/tasks.js": "./js/tasks.js?v=14",
+      "./js/ui.js": "./js/ui.js?v=14",
+      "./js/weekly.js": "./js/weekly.js?v=14"
     }
   }
   </script>
-  <script type="module" src="app.js?v=13"></script>
+  <script type="module" src="app.js?v=14"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">
@@ -222,6 +223,16 @@
       </div>
       <div id="redesBody" class="space-y-3" hidden>
         <div id="redesKpis" class="grid lg:grid-cols-2 gap-3"></div>
+        <div id="interBox" class="grid lg:grid-cols-3 gap-3" hidden>
+          <div class="lg:col-span-2">
+            <h2 id="interTitulo" class="section-title">Interacciones</h2>
+            <div id="interKpis"></div>
+          </div>
+          <div class="card">
+            <h2 class="section-title">Tipos de interacción por red</h2>
+            <div class="chart-box" style="height:260px"><canvas id="interChart"></canvas></div>
+          </div>
+        </div>
         <div class="grid lg:grid-cols-2 gap-3">
           <div class="card">
             <h2 class="section-title">Seguidores</h2>

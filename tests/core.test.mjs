@@ -220,3 +220,11 @@ test('parseTareas: encabezado, separadores de mes y año mal digitado', async ()
   assert.equal(t[1].solicitud.getFullYear(), 2026);           // 04/08/06 corregido con el año de la resolución
   assert.equal(formatDate(t[2].fecha), '29/09/2026');          // sin resolución → fecha de solicitud
 });
+
+test('interactionSummary: total, variación y engagement por red', async () => {
+  const { interactionSummary } = await import('../js/interactions.js');
+  const inter = { instagram: { '2026-08': { likes: 100, comentarios: 10 }, '2026-09': { likes: 150, comentarios: 20, guardados: 5 } } };
+  const redes = { instagram: { impresiones: [['2026-08-10', 5000], ['2026-09-10', 10000]] } };
+  const s = interactionSummary(inter, redes, '2026-09').instagram;
+  assert.deepEqual([s.total, s.prevTotal, s.imp, s.eng, s.engPrev], [175, 110, 10000, 1.75, 2.2]);
+});

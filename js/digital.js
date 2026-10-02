@@ -168,7 +168,8 @@ export function renderWeb(s) {
 
 /* ---------- Redes ---------- */
 
-const redesView = { marca: null };
+const redesView = { marca: null, ym: null };
+export const socialSelection = () => ({ ...redesView });
 
 /** Resumen por red para un mes: seguidores (fin de mes) y su cambio; impresiones (suma) y su variación %. */
 export function socialSummary(redes, ym) {
@@ -194,6 +195,7 @@ export function renderRedes(s) {
   $('#redesBody').hidden = !withData.length;
   if (!withData.length) { $('#redesInfo').textContent = `Sin datos de ${redesView.marca} en el periodo (Metricool tiene datos desde mediados de 2026).`; return; }
   const ym = withData.at(-1);
+  redesView.ym = ym;
   const sum = socialSummary(redes, ym);
   const tot = (k) => nets.reduce((a, n) => a + (sum[n][k] ?? 0), 0);
   const segTot = tot('seg'), segPrevTot = tot('segPrev'), impTot = tot('imp'), impPrevTot = tot('impPrev');

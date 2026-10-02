@@ -4,6 +4,8 @@
  *   ?view=web&from=YYYY-MM-DD&to=YYYY-MM-DD   → métricas web mensuales (GA4) de Contegral y Finca
  *   ?view=ga4props                            → diagnóstico: propiedades GA4 visibles para la cuenta
  *   ?view=tareas                              → tareas web realizadas por marca (hoja de tareas, compartida por enlace)
+ *   ?view=interacciones&from=…&to=…           → interacciones por marca, red, mes y tipo (me gusta, comentarios…)
+ *   ?view=mc&marca=…&network=…&metric=…&subject=…&from=…&to=… → diagnóstico de una métrica (solo marcas de MARCAS)
  * Secretos en Propiedades del script (Configuración del proyecto → Propiedades del script):
  *   METRICOOL_TOKEN, METRICOOL_USER_ID
  *   TAREAS_WEB: {"id": "<ID de la hoja de tareas>", "tabs": {"Contegral": "<gid>", "Finca": "<gid>"}}
@@ -18,6 +20,13 @@ const REDES = {
   facebook: { campo: 'facebook', seguidores: 'pageFollows', impresiones: 'page_media_view' },
   linkedin: { campo: 'linkedinCompany', seguidores: 'followers', impresiones: 'impressionCount' },
 };
+// Tipos de interacción por red: [tipo, subject, métrica de Metricool]. Se suman por mes.
+const INTERACCIONES = {
+  instagram: [['likes', 'posts', 'likes'], ['likes', 'reels', 'likes'], ['comentarios', 'posts', 'comments'], ['comentarios', 'reels', 'comments'],
+    ['compartidos', 'posts', 'shares'], ['compartidos', 'reels', 'shares'], ['guardados', 'posts', 'saves'], ['guardados', 'reels', 'saved']],
+  facebook: [['reacciones', 'posts', 'reactions'], ['comentarios', 'posts', 'comments'], ['compartidos', 'posts', 'shares'], ['clics', 'posts', 'clicks']],
+  linkedin: [['likes', 'account', 'likeCount'], ['comentarios', 'account', 'commentCount'], ['compartidos', 'account', 'shareCount'], ['clics', 'account', 'clickCount']],
+};
 const MC = 'https://app.metricool.com/api';
 const ZONA = 'America/Bogota';
 const CACHE_SEG = 3600;
@@ -28,6 +37,8 @@ function doGet(e) {
     const rango = rango_(p.from, p.to);
     if (p.view === 'redes') return out_(conCache_('redes|' + rango.from + '|' + rango.to, () => redes_(rango)));
     if (p.view === 'web') return out_(conCache_('web|' + rango.from + '|' + rango.to, () => web_(rango)));
+    if (p.view === 'interacciones') return out_(conCache_('inter|' + rango.from + '|' + rango.to, () => interacciones_(rango)));
+    if (p.view === 'mc') return out_(diagnostico_(p, rango));
     if (p.view === 'tareas') return out_(conCache_('tareas', () => tareas_()));
     if (p.view === 'ga4props') return out_(JSON.stringify({ ok: true, propiedades: propiedadesGa4_() }));
     return out_(JSON.stringify({ ok: false, error: 'Use ?view=redes o ?view=web' }));
@@ -79,6 +90,62 @@ function redes_(rango) {
     red[x.cual] = Object.keys(puntos).sort().map((d) => [d, puntos[d]]);
   });
   return JSON.stringify({ ok: true, ts: new Date().toISOString(), rango, marcas: out });
+}
+
+// Credenciales y perfiles de las marcas configuradas.
+function metricool_() {
+  const props = PropertiesService.getScriptProperties();
+  const token = props.getProperty('METRICOOL_TOKEN');
+  const userId = props.getProperty('METRICOOL_USER_ID');
+  if (!token || !userId) throw new Error('Faltan METRICOOL_TOKEN / METRICOOL_USER_ID en Propiedades del script');
+  const headers = { 'X-Mc-Auth': token };
+  const perfiles = JSON.parse(UrlFetchApp.fetch(MC + '/admin/simpleProfiles?userId=' + userId, { headers }).getContentText());
+  const marcas = {};
+  MARCAS.forEach((m) => { const p = perfiles.find((x) => norm_(x.label).indexOf(norm_(m)) === 0); if (p) marcas[m] = p; });
+  return { headers, userId, marcas };
+}
+
+const tlUrl_ = (mc, perfil, network, metric, subject, rango) => MC + '/v2/analytics/timelines?' + qs_({
+  userId: mc.userId, blogId: perfil.id, network, metric, subject, timezone: ZONA,
+  from: rango.from + 'T00:00:00', to: rango.to + 'T23:59:59',
+});
+
+/** Interacciones por marca → red → mes → { tipo: n }. */
+function interacciones_(rango) {
+  const mc = metricool_();
+  const pedidos = [];
+  Object.keys(mc.marcas).forEach((marca) => {
+    const perfil = mc.marcas[marca];
+    Object.keys(INTERACCIONES).forEach((red) => {
+      if (!perfil[REDES[red].campo]) return;
+      INTERACCIONES[red].forEach(([tipo, subject, metric]) => pedidos.push({ marca, red, tipo, url: tlUrl_(mc, perfil, red, metric, subject, rango) }));
+    });
+  });
+  const resps = UrlFetchApp.fetchAll(pedidos.map((x) => ({ url: x.url, headers: mc.headers, muteHttpExceptions: true })));
+  const out = {}, errores = [];
+  pedidos.forEach((x, i) => {
+    const red = (((out[x.marca] = out[x.marca] || {})[x.red]) = out[x.marca][x.red] || {});
+    if (resps[i].getResponseCode() !== 200) { errores.push(x.marca + '/' + x.red + '/' + x.tipo + ': HTTP ' + resps[i].getResponseCode()); return; }
+    (JSON.parse(resps[i].getContentText()).data || []).forEach((serie) => (serie.values || []).forEach((v) => {
+      if (v.value == null) return;
+      const ym = String(v.dateTime).slice(0, 7);
+      const mes = (red[ym] = red[ym] || {});
+      mes[x.tipo] = (mes[x.tipo] || 0) + v.value;
+    }));
+  });
+  return JSON.stringify({ ok: true, ts: new Date().toISOString(), rango, marcas: out, errores });
+}
+
+/** Diagnóstico de una métrica (para validar contra Metricool). Solo marcas configuradas. */
+function diagnostico_(p, rango) {
+  const mc = metricool_();
+  const perfil = mc.marcas[p.marca];
+  if (!perfil) return JSON.stringify({ ok: false, error: 'Marca no configurada' });
+  const r = UrlFetchApp.fetch(tlUrl_(mc, perfil, p.network, p.metric, p.subject || 'account', rango), { headers: mc.headers, muteHttpExceptions: true });
+  const data = r.getResponseCode() === 200 ? JSON.parse(r.getContentText()).data || [] : [];
+  const vals = [];
+  data.forEach((s) => (s.values || []).forEach((v) => { if (v.value != null) vals.push([String(v.dateTime).slice(0, 10), v.value]); }));
+  return JSON.stringify({ ok: r.getResponseCode() === 200, http: r.getResponseCode(), n: vals.length, suma: vals.reduce((a, v) => a + v[1], 0), valores: vals });
 }
 
 /* ---------- Web (Google Analytics 4, API de datos) ---------- */
