@@ -43,7 +43,7 @@ const valueLabels = {
         } else if (opts.mode === 'stackPct') {
           const col = chart.data.datasets.reduce((a, d, k) => a + (chart.isDatasetVisible(k) ? Number(d.data[i]) || 0 : 0), 0);
           text = `${Math.round((100 * v) / col)}%`;
-        } else text = compact(v);
+        } else text = opts.format === 'full' ? fmtInt(Math.round(v)) : compact(v);
         const pos = el.tooltipPosition();
         let x = pos.x, y = pos.y, color = '#fff';
         if (el.width !== undefined) {               // barras
@@ -55,7 +55,7 @@ const valueLabels = {
             color = '#334155';
             if (horizontal) x = el.x + ctx.measureText(text).width / 2 + 4; else y = el.y - 8;
           } else if (horizontal) x = (el.x + el.base) / 2; else y = (el.y + el.base) / 2;
-        } else if (meta.type === 'line') { y -= 10; color = '#334155'; }
+        } else if (meta.type === 'line') { y -= 16; color = '#334155'; }
         ctx.fillStyle = color;
         if (color === '#fff') { ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 2; } else ctx.shadowBlur = 0;
         ctx.fillText(text, x, y);

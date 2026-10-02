@@ -194,3 +194,10 @@ test('tipo de trabajo: la PIEZA CampaÃ±a tiene prioridad y lanzamiento es campaÃ
   const { records } = normalizeTable(rows, 'T', { ...opts, categories: CONFIG.CATEGORIES });
   assert.deepEqual(records.map((r) => r.categoria), ['campanas', 'campanas', 'eventos', 'pdv']);
 });
+
+test('evolutionMonths: de enero al mes elegido', async () => {
+  const { evolutionMonths } = await import('../js/digital.js');
+  assert.deepEqual(evolutionMonths(['2026-09']), ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09']);
+  assert.deepEqual(evolutionMonths(['2025-11', '2025-12', '2026-01']), ['2025-11', '2025-12', '2026-01']);
+  assert.deepEqual(evolutionMonths([]), []);
+});

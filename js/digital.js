@@ -26,6 +26,20 @@ export function monthsInRange(range, today = new Date()) {
   return out;
 }
 
+/** Evolución "hasta ese momento": desde enero del año del último mes del periodo (o antes, si el periodo empieza antes). */
+export function evolutionMonths(months) {
+  if (!months.length) return [];
+  const last = months.at(-1);
+  const start = months[0] < `${last.slice(0, 4)}-01` ? months[0] : `${last.slice(0, 4)}-01`;
+  const out = [];
+  for (let ym = start; ym <= last; ) {
+    out.push(ym);
+    const [y, m] = ym.split('-').map(Number);
+    ym = m === 12 ? `${y + 1}-01` : `${y}-${pad(m + 1)}`;
+  }
+  return out;
+}
+
 /** Fechas a pedir a la API: desde el mes anterior al primero (para comparar) hasta el último día del periodo. */
 export function fetchSpan(months, today = new Date()) {
   if (!months.length) return null;
@@ -87,7 +101,7 @@ const legend = { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true
 
 const webView = { marca: null };
 
-/** s: { data: respuesta ?view=web | null, months, loading, error, onRender } */
+/** s: { data: respuesta ?view=web | null, months: evolución (enero → mes elegido), loading, error, onRender } */
 export function renderWeb(s) {
   const marcas = Object.keys(s.data?.marcas ?? {});
   $('#webInfo').textContent = s.loading || s.error || (!marcas.length ? 'Sin datos de GA4.' : '');
@@ -111,17 +125,31 @@ export function renderWeb(s) {
     + card('Nuevos vs. recurrentes', fmtPct(cur.pctNuevos), `nuevos · ${fmtPct(cur.pctRecurrentes)} volvieron`)
     + card('Dispositivo', fmtPct(cur.pctComputador, 0), `computador · ${fmtPct(cur.pctCelular, 0)} celular`);
 
+  $('#webEvoTitulo').textContent = `Visitas mes a mes · ${monthLabel(rows[0].ym)} → ${monthLabel(cur.ym)}`;
+  $('#webPieTitulo').textContent = `Nuevos vs. recurrentes · ${monthLabel(cur.ym)}`;
   if (chartsOk()) {
-    upsert('webChart', 'bar', {
+    // Línea punteada con el número de visitas en cada mes (como el informe); el mes elegido resaltado.
+    upsert('webChart', 'line', {
       labels: rows.map((r) => shortMonth(r.ym)),
-      datasets: [
-        { label: 'Visitas', data: rows.map((r) => r.visitas), backgroundColor: WEB_COLOR, borderRadius: 3, yAxisID: 'y' },
-        { label: 'Usuarios nuevos', type: 'line', data: rows.map((r) => r.nuevos), borderColor: '#f59e0b', backgroundColor: '#f59e0b', tension: 0.25, yAxisID: 'y1' },
-      ],
+      datasets: [{
+        label: 'Visitas', data: rows.map((r) => r.visitas), borderColor: '#7c3aed', backgroundColor: '#7c3aed',
+        borderDash: [4, 4], borderWidth: 2, tension: 0, fill: false,
+        pointRadius: rows.map((_, i) => (i === rows.length - 1 ? 7 : 5)), pointHoverRadius: 8,
+      }],
     }, {
-      interaction: { mode: 'index', intersect: false },
-      scales: { x: { grid: { display: false } }, y: { beginAtZero: true, position: 'left' }, y1: { beginAtZero: true, position: 'right', grid: { display: false } } },
-      plugins: { legend, valueLabels: { mode: 'value' } },
+      layout: { padding: { top: 22, left: 8, right: 8 } },
+      scales: { x: { grid: { display: false } }, y: { beginAtZero: false, grace: '15%', ticks: { callback: (v) => fmtK(v) } } },
+      plugins: { legend: { display: false }, valueLabels: { mode: 'value', lines: true, format: 'full' },
+        tooltip: { callbacks: { label: (c) => ` ${fmtInt(c.raw)} visitas` } } },
+    });
+    // Torta del mes elegido: % de usuarios nuevos y de los que volvieron.
+    const pie = [cur.pctNuevos ?? 0, cur.pctRecurrentes ?? 0];
+    upsert('webPie', 'pie', {
+      labels: ['Nuevos usuarios', 'Usuarios que volvieron'],
+      datasets: [{ data: pie, backgroundColor: ['#7c3aed', '#94a3b8'], borderColor: '#fff', borderWidth: 2 }],
+    }, {
+      plugins: { legend, valueLabels: { mode: 'pct' },
+        tooltip: { callbacks: { label: (c) => ` ${c.label}: ${fmtPct(c.raw)}` } } },
     });
   }
   $('#webTabla').innerHTML = `<thead class="bg-slate-50 text-slate-600"><tr>${['Mes', 'Visitas', 'vs mes ant.', 'Usuarios nuevos', 'Permanencia', '% nuevos', '% celular', '% computador']

@@ -6,7 +6,7 @@ import { applyFilters, computeKPIs, crossTab, periodRange, yearsIn, MONTH_NAMES 
 import { renderCharts } from './js/charts.js';
 import { renderWeekly } from './js/weekly.js';
 import { renderAnnual } from './js/annual.js';
-import { fetchSpan, monthsInRange, renderRedes, renderWeb } from './js/digital.js';
+import { evolutionMonths, fetchSpan, monthsInRange, renderRedes, renderWeb } from './js/digital.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
 const FILTERS_KEY = 'bios-trafico:filters:v3';
@@ -288,14 +288,15 @@ const digital = { web: {}, redes: {} };   // por vista: { key, data, loading, er
 function drawDigital() {
   const months = monthsInRange(periodRange(state));
   const onRender = drawDigital;
-  renderWeb({ ...digital.web, months, onRender });
+  renderWeb({ ...digital.web, months: evolutionMonths(months), onRender });
   renderRedes({ ...digital.redes, months, onRender });
 }
 
 // Al cambiar el periodo: pide a la API el rango necesario (con el mes anterior para comparar).
 function syncDigital(force = false) {
-  const span = fetchSpan(monthsInRange(periodRange(state)));
+  const months = monthsInRange(periodRange(state));
   for (const view of ['web', 'redes']) {
+    const span = fetchSpan(view === 'web' ? evolutionMonths(months) : months);
     const st = digital[view];
     const key = span ? `${span.from}|${span.to}` : '';
     if (!force && st.key === key) continue;

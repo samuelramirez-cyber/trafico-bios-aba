@@ -15,20 +15,20 @@
   <script type="importmap">
   {
     "imports": {
-      "./app.js": "./app.js?v=9",
-      "./config.js": "./config.js?v=9",
-      "./js/annual.js": "./js/annual.js?v=9",
-      "./js/charts.js": "./js/charts.js?v=9",
-      "./js/connector.js": "./js/connector.js?v=9",
-      "./js/digital.js": "./js/digital.js?v=9",
-      "./js/filters.js": "./js/filters.js?v=9",
-      "./js/normalize.js": "./js/normalize.js?v=9",
-      "./js/ui.js": "./js/ui.js?v=9",
-      "./js/weekly.js": "./js/weekly.js?v=9"
+      "./app.js": "./app.js?v=11",
+      "./config.js": "./config.js?v=11",
+      "./js/annual.js": "./js/annual.js?v=11",
+      "./js/charts.js": "./js/charts.js?v=11",
+      "./js/connector.js": "./js/connector.js?v=11",
+      "./js/digital.js": "./js/digital.js?v=11",
+      "./js/filters.js": "./js/filters.js?v=11",
+      "./js/normalize.js": "./js/normalize.js?v=11",
+      "./js/ui.js": "./js/ui.js?v=11",
+      "./js/weekly.js": "./js/weekly.js?v=11"
     }
   }
   </script>
-  <script type="module" src="app.js?v=9"></script>
+  <script type="module" src="app.js?v=11"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">
@@ -179,14 +179,18 @@
       </div>
       <div id="webBody" class="space-y-3" hidden>
         <div id="webKpis" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"></div>
-        <div class="grid lg:grid-cols-2 gap-3">
-          <div class="card">
-            <h2 class="section-title">Visitas y usuarios nuevos por mes</h2>
+        <div class="grid lg:grid-cols-3 gap-3">
+          <div class="card lg:col-span-2">
+            <h2 id="webEvoTitulo" class="section-title">Visitas mes a mes</h2>
             <div class="chart-box" style="height:300px"><canvas id="webChart"></canvas></div>
           </div>
-          <div class="card !p-0 overflow-hidden">
-            <div class="overflow-x-auto"><table id="webTabla" class="min-w-full text-sm"></table></div>
+          <div class="card">
+            <h2 id="webPieTitulo" class="section-title">Nuevos vs. recurrentes</h2>
+            <div class="chart-box" style="height:300px"><canvas id="webPie"></canvas></div>
           </div>
+        </div>
+        <div class="card !p-0 overflow-hidden">
+          <div class="overflow-x-auto"><table id="webTabla" class="min-w-full text-sm"></table></div>
         </div>
       </div>
     </section>
