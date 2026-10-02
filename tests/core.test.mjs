@@ -55,7 +55,7 @@ test('splitOT y estados', () => {
   assert.deepEqual(['ot_001169_aba_fachada_agro_holstein', 'ot_1_aba_fach_la18', 'ot_2_aba_invitacion_charla_leche',
     'ot_3_aba_charla_rodeo', 'ot_4_aba_ajuste_empaque', 'ot_5_aba_logo_lactia Diseño Grafico',
     'ot_6_aba_inv_charla_porci', 'ot_7_aba_invi_jornada_pdv', 'ot_8_aba_jornada_pdv_inv', 'ot_9_aba_investigacion_instagram'].map(t),
-    ['fachadas', 'fachadas', 'invitaciones', 'eventos', 'empaques', 'otro', 'invitaciones', 'invitaciones', 'invitaciones', 'otro']);
+    ['fachadas', 'fachadas', 'invitaciones', 'eventos', 'empaques', 'marca', 'invitaciones', 'invitaciones', 'invitaciones', 'contenido']);
 });
 
 test('filtro fijo de cliente + filtros temporales sobre data/sample.csv', () => {
@@ -181,4 +181,16 @@ test('weeklyFlow: OTs con color excluido (gris) no cuentan', async () => {
   assert.equal(w1.total, 1);
   assert.deepEqual([w2.total, w2.entraron.map((x) => x.key)], [2, ['ot_000010_aba_r']]);
   assert.equal(w2.activas.length, 1);   // la #ea4335 (cancelada) no es activa
+});
+
+test('tipo de trabajo: la PIEZA Campaña tiene prioridad y lanzamiento es campaña', () => {
+  const rows = [
+    ['  ', 'CLIENTE', 'FECHA INGRESO', 'DESCRIPCIÓN', 'PIEZA', 'ESTADO'],
+    ['000001', 'GRUPO BIOS ABA', '10/09/2026', 'ot_000001_aba_jornada_porcicola', 'Campaña Táctica', 'Entregado'],
+    ['000002', 'GRUPO BIOS ABA', '10/09/2026', 'ot_000002_aba_lanzamiento_semilla_soya', 'Diseño Grafico', 'Entregado'],
+    ['000003', 'GRUPO BIOS ABA', '10/09/2026', 'ot_000003_aba_jornada_pdv', 'Diseño Digital', 'Entregado'],
+    ['000004', 'GRUPO BIOS ABA', '10/09/2026', 'ot_000004_aba_valla_tulua', 'Diseño Grafico', 'Entregado'],
+  ];
+  const { records } = normalizeTable(rows, 'T', { ...opts, categories: CONFIG.CATEGORIES });
+  assert.deepEqual(records.map((r) => r.categoria), ['campanas', 'campanas', 'eventos', 'pdv']);
 });

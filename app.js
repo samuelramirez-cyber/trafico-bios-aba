@@ -168,7 +168,10 @@ function segmentation(list) {
       .sort((a, b) => (tab[b.key]?.total ?? 0) - (tab[a.key]?.total ?? 0));
     return { field: 'pieza', tab, items };
   }
-  return { field: 'categoria', tab: crossTab(list), items: Object.values(CATEGORY) };
+  const tab = crossTab(list);
+  // De mayor a menor; "Otros" siempre al final.
+  const items = Object.values(CATEGORY).sort((a, b) => (a.key === 'otro') - (b.key === 'otro') || (tab[b.key]?.total ?? 0) - (tab[a.key]?.total ?? 0));
+  return { field: 'categoria', tab, items };
 }
 
 function renderSegmentToggle() {

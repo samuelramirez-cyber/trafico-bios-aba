@@ -51,14 +51,22 @@ export const CONFIG = {
   // Hoy: parrillas de contenido (p. ej. OT 001557, 640 piezas a dic-2026) que distorsionan el conteo.
   PIECES_EXCLUDE: ['PARRILLA'],
 
-  // Tipos de pieza, detectados en DESCRIPCIÓN + PIEZA (en orden; la primera que coincide gana).
-  // Término = prefijo de palabra ('FACH' → fachada, fach); con '$' = palabra exacta ('INV$' → inv, no investigación).
-  // Lo que no coincide queda en "Otros".
+  // Tipo de trabajo (qué es la OT). Reglas en orden:
+  //   1) `pieza`: si la columna PIEZA empieza por alguno de estos términos, gana ese tipo (las campañas).
+  //   2) `match`: términos en DESCRIPCIÓN + PIEZA (prefijo de palabra; con '$' = palabra exacta).
+  // Lo que no coincide queda en "Otros". Acordado con el usuario (2026-10): campaña tiene prioridad;
+  // "lanzamiento" cuenta como campaña.
   CATEGORIES: [
-    { key: 'fachadas',     label: 'Fachadas',             color: '#0f766e', match: ['FACH'] },
-    { key: 'invitaciones', label: 'Invitaciones',         color: '#db2777', match: ['INV$', 'INVI'] },
-    { key: 'eventos',      label: 'Eventos',              color: '#ea580c', match: ['CHAR', 'FERIA', 'JORN', 'ENCUENTRO', 'RODEO', 'STAND', 'CONGRES', 'EVENTO', 'FENAVI', 'PORKAMERICAS'] },
-    { key: 'empaques',     label: 'Empaques y etiquetas', color: '#7c3aed', match: ['EMPAQUE', 'ETIQUETA'] },
-    { key: 'audiovisual',  label: 'Audiovisual',          color: '#0284c7', match: ['VIDEO', 'FOTO', 'GRAB'] },
+    { key: 'campanas',     label: 'Campañas',                  color: '#b91c1c', pieza: ['CAMPANA'], match: ['CAMPANA', 'CAMP', 'LANZ', 'RELANZ'] },
+    { key: 'fachadas',     label: 'Fachadas',                  color: '#0f766e', match: ['FACH'] },
+    { key: 'invitaciones', label: 'Invitaciones',              color: '#db2777', match: ['INV$', 'INVI'] },
+    { key: 'eventos',      label: 'Eventos',                   color: '#ea580c', match: ['CHAR', 'FERIA', 'JORN', 'JOR$', 'ENCUENTRO', 'RODEO', 'STAND', 'CONGRES', 'EVENTO', 'FENAVI', 'PORKAMERICAS', 'SIMPOSIO', 'DIA CAMPO', 'HORSEWEEK', 'FORO', 'SEMANA'] },
+    { key: 'audiovisual',  label: 'Audiovisual',               color: '#0284c7', match: ['VIDEO', 'VID$', 'FOTO', 'GRAB', 'RESUMEN', 'RECORD'] },
+    { key: 'pdv',          label: 'PDV y señalética',          color: '#ca8a04', match: ['VALLA', 'PASACALLE', 'PENDON', 'PEND$', 'SENALETICA', 'LETRERO', 'PDV', 'STICKER', 'VOLANTE', 'PODIO', 'BANNER', 'ROMPETRAFICO', 'AVISO'] },
+    { key: 'empaques',     label: 'Empaques y etiquetas',      color: '#7c3aed', match: ['EMPAQUE', 'ETIQUETA', 'BULTO', 'DUMMIES', 'DUMMIE'] },
+    { key: 'contenido',    label: 'Contenido digital',         color: '#2563eb', match: ['PARRILLA', 'POST', 'CONTENIDO', 'PESAME', 'REDES', 'COMENTARIOS', 'INSTAGRAM', 'TERREMOTO'] },
+    { key: 'editorial',    label: 'Editorial y presentaciones', color: '#475569', match: ['BROCHURE', 'BROCH', 'PRES$', 'PRESENTACION', 'LIBRO', 'TARJETA', 'PLANTILLAS', 'CATALOGO', 'MANUAL', 'GUIA', 'PLAN', 'FORM', 'CERT'] },
+    { key: 'merch',        label: 'Merchandising',             color: '#16a34a', match: ['GORRA', 'CAMISETA', 'REGALO', 'CHAQUETA', 'ESCARAPELA', 'MESAS'] },
+    { key: 'marca',        label: 'Marca',                     color: '#9333ea', match: ['LOGO', 'NAMING', 'IMAGEN DE MARCA', 'PERSONAJE'] },
   ],
 };
