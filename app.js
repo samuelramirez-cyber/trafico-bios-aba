@@ -6,7 +6,8 @@ import { applyFilters, computeKPIs, crossTab, periodRange, yearsIn, MONTH_NAMES 
 import { renderCharts } from './js/charts.js';
 import { renderWeekly } from './js/weekly.js';
 import { renderAnnual } from './js/annual.js';
-import { evolutionMonths, fetchSpan, monthsInRange, renderRedes, renderWeb } from './js/digital.js';
+import { evolutionMonths, fetchSpan, monthsInRange, renderRedes, renderWeb, webBrand } from './js/digital.js';
+import { renderTareas } from './js/tasks.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
 const FILTERS_KEY = 'bios-trafico:filters:v3';
@@ -283,13 +284,14 @@ function syncWeekly() {
 
 /* ---------- Web y redes (Dashboard Digital API) ---------- */
 
-const digital = { web: {}, redes: {} };   // por vista: { key, data, loading, error }
+const digital = { web: {}, redes: {}, tareas: {} };   // por vista: { key, data, loading, error }
 
 function drawDigital() {
   const months = monthsInRange(periodRange(state));
   const onRender = drawDigital;
   renderWeb({ ...digital.web, months: evolutionMonths(months), onRender });
   renderRedes({ ...digital.redes, months, onRender });
+  renderTareas({ ...digital.tareas, marca: webBrand(), range: periodRange(state), periodLabel: periodLabelText() });
 }
 
 // Al cambiar el periodo: pide a la API el rango necesario (con el mes anterior para comparar).
@@ -305,6 +307,15 @@ function syncDigital(force = false) {
     loadDigital(view, span, { force })
       .then((data) => { if (st.key === key) Object.assign(st, { data, loading: null }); })
       .catch((e) => { if (st.key === key) Object.assign(st, { loading: null, error: `No fue posible cargar: ${e.message}` }); })
+      .finally(drawDigital);
+  }
+  // Tareas web: no dependen del periodo (se filtran en el navegador); se piden una vez.
+  const t = digital.tareas;
+  if (force || !t.key) {
+    Object.assign(t, { key: 'tareas', loading: 'Cargando tareas…', error: null });
+    loadDigital('tareas', { from: 'all', to: 'all' }, { force })
+      .then((data) => Object.assign(t, { data, loading: null }))
+      .catch((e) => Object.assign(t, { loading: null, error: `No fue posible cargar las tareas: ${e.message}` }))
       .finally(drawDigital);
   }
   drawDigital();

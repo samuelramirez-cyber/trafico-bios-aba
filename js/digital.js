@@ -100,6 +100,7 @@ const legend = { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true
 /* ---------- Web ---------- */
 
 const webView = { marca: null };
+export const webBrand = () => webView.marca;
 
 /** s: { data: respuesta ?view=web | null, months: evolución (enero → mes elegido), loading, error, onRender } */
 export function renderWeb(s) {

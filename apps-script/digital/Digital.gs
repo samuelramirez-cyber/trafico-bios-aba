@@ -3,8 +3,10 @@
  *   ?view=redes&from=YYYY-MM-DD&to=YYYY-MM-DD → series diarias de seguidores e impresiones por marca y red
  *   ?view=web&from=YYYY-MM-DD&to=YYYY-MM-DD   → métricas web mensuales (GA4) de Contegral y Finca
  *   ?view=ga4props                            → diagnóstico: propiedades GA4 visibles para la cuenta
+ *   ?view=tareas                              → tareas web realizadas por marca (hoja de tareas, compartida por enlace)
  * Secretos en Propiedades del script (Configuración del proyecto → Propiedades del script):
  *   METRICOOL_TOKEN, METRICOOL_USER_ID
+ *   TAREAS_WEB: {"id": "<ID de la hoja de tareas>", "tabs": {"Contegral": "<gid>", "Finca": "<gid>"}}
  *   AJUSTES_WEB (opcional): correcciones manuales por marca y mes, p. ej.
  *     {"Contegral|2026-07": {"pctCelular": 1, "pctComputador": 99, "pctNuevos": 74.7, "nota": "Dato del informe"}}
  * Despliegue: Aplicación web · Ejecutar como: Yo · Acceso: Cualquier usuario.
@@ -26,6 +28,7 @@ function doGet(e) {
     const rango = rango_(p.from, p.to);
     if (p.view === 'redes') return out_(conCache_('redes|' + rango.from + '|' + rango.to, () => redes_(rango)));
     if (p.view === 'web') return out_(conCache_('web|' + rango.from + '|' + rango.to, () => web_(rango)));
+    if (p.view === 'tareas') return out_(conCache_('tareas', () => tareas_()));
     if (p.view === 'ga4props') return out_(JSON.stringify({ ok: true, propiedades: propiedadesGa4_() }));
     return out_(JSON.stringify({ ok: false, error: 'Use ?view=redes o ?view=web' }));
   } catch (err) {
@@ -133,6 +136,26 @@ function gapi_(url, body) {
   const json = JSON.parse(res.getContentText() || '{}');
   if (res.getResponseCode() !== 200) throw new Error('Google API ' + res.getResponseCode() + ': ' + ((json.error && json.error.message) || ''));
   return json;
+}
+
+/* ---------- Tareas web (hoja por marca) ---------- */
+
+// Filas crudas de cada pestaña; el dashboard interpreta encabezado, meses y fechas.
+function tareas_() {
+  const cfg = JSON.parse(PropertiesService.getScriptProperties().getProperty('TAREAS_WEB') || 'null');
+  if (!cfg || !cfg.id || !cfg.tabs) throw new Error('Falta la propiedad TAREAS_WEB en Propiedades del script');
+  const marcas = Object.keys(cfg.tabs);
+  const resps = UrlFetchApp.fetchAll(marcas.map((m) => ({
+    url: 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(cfg.id) + '/export?format=csv&gid=' + encodeURIComponent(cfg.tabs[m]),
+    muteHttpExceptions: true,
+  })));
+  const out = {};
+  marcas.forEach((m, i) => {
+    const r = resps[i];
+    const txt = r.getResponseCode() === 200 ? r.getContentText('UTF-8') : '';
+    out[m] = txt && txt.trim().charAt(0) !== '<' ? Utilities.parseCsv(txt) : { error: 'No se pudo leer la pestaña (HTTP ' + r.getResponseCode() + ')' };
+  });
+  return JSON.stringify({ ok: true, ts: new Date().toISOString(), marcas: out });
 }
 
 /* ---------- Utilidades ---------- */

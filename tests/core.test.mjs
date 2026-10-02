@@ -201,3 +201,22 @@ test('evolutionMonths: de enero al mes elegido', async () => {
   assert.deepEqual(evolutionMonths(['2025-11', '2025-12', '2026-01']), ['2025-11', '2025-12', '2026-01']);
   assert.deepEqual(evolutionMonths([]), []);
 });
+
+test('parseTareas: encabezado, separadores de mes y año mal digitado', async () => {
+  const { parseTareas } = await import('../js/tasks.js');
+  const rows = [
+    ['FINCA', '', '', '', '', '', ''],
+    ['Tarea', 'Fecha Solicitud', 'Fecha Resolución', 'Responsable', 'Estado', 'Entregable', 'Notas'],
+    ['Julio', '', '', '', '', '', ''],
+    ['Ajuste de correo', '24/07/26', '24/07/26', 'David Uribe', 'Completa', '', ''],
+    ['', '', '', '', '', '', ''],
+    ['Agosto', '', '', '', '', '', ''],
+    ['Publicación de producto rodeo', '04/08/06', '04/08/26', 'David Uribe', 'Completa', 'https://www.finca.co/rodeo', 'ok'],
+    ['Organizar Excel', '29/09/26', '', 'David Uribe', '', '', ''],
+  ];
+  const t = parseTareas(rows);
+  assert.equal(t.length, 3);
+  assert.deepEqual(t.map((x) => x.mes), ['Julio', 'Agosto', 'Agosto']);
+  assert.equal(t[1].solicitud.getFullYear(), 2026);           // 04/08/06 corregido con el año de la resolución
+  assert.equal(formatDate(t[2].fecha), '29/09/2026');          // sin resolución → fecha de solicitud
+});
