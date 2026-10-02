@@ -142,3 +142,20 @@ test('digital: meses del periodo, rango a pedir, agregados mensuales y métricas
     ajuste: { pctCelular: 1, pctComputador: 99, pctNuevos: 74.7, nota: 'Dato del informe' } });
   assert.deepEqual([adj.pctCelular, adj.pctComputador, adj.pctNuevos, Math.round(adj.pctRecurrentes * 10) / 10, adj.nota], [1, 99, 74.7, 25.3, 'Dato del informe']);
 });
+
+test('yearEvolution: nuevas, acumulado, entregadas y en curso por mes', async () => {
+  const { yearEvolution } = await import('../js/filters.js');
+  const d = (m, day) => new Date(2026, m - 1, day);
+  const recs = [
+    { ingreso: d(1, 5), entrega: d(1, 20), estado: 'entregado', cantidad: 2 },
+    { ingreso: d(1, 10), entrega: d(2, 3), estado: 'entregado', cantidad: 3 },
+    { ingreso: d(2, 1), entrega: null, estado: 'proceso', cantidad: 5 },
+    { ingreso: d(2, 9), entrega: d(3, 1), estado: 'revision', cantidad: null },
+  ];
+  const rows = yearEvolution(recs, 2026, d(3, 15));
+  assert.deepEqual(rows.map((r) => [r.mes, r.nuevas, r.acumulado, r.piezas, r.entregadas, r.enCurso]),
+    [[1, 2, 2, 5, 1, 1], [2, 2, 4, 5, 1, 2], [3, 0, 4, 0, 0, 2]]);
+  assert.equal(rows[1].deltaNuevas, 0);
+  assert.equal(rows[2].deltaNuevas, -100);
+  assert.equal(yearEvolution(recs, 2027, d(3, 15)).length, 0);
+});

@@ -181,7 +181,7 @@ export function renderWeekly(s) {
     const common = {
       scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } },
       interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true } } },
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true } }, valueLabels: { mode: 'value' } },
       onClick: pick,
     };
     upsert('wkFlow', 'bar', {

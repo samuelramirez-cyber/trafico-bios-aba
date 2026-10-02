@@ -75,3 +75,30 @@ export const uniqueSorted = (list, ...fields) =>
 
 export const yearsIn = (list, field, extra = []) =>
   [...new Set([...extra, ...list.map((r) => r[field]?.getFullYear()).filter(Boolean)])].sort();
+
+/**
+ * Evolución mensual del año: OTs nuevas (por ingreso), acumulado, piezas, entregadas (estado Entregado con
+ * entrega en el mes) y en curso al cierre (ingresadas hasta fin de mes y no entregadas a esa fecha).
+ * Solo hasta el mes actual si el año está en curso.
+ */
+export function yearEvolution(records, year, today = new Date()) {
+  const last = year === today.getFullYear() ? today.getMonth() : year < today.getFullYear() ? 11 : -1;
+  const rows = [];
+  let acum = 0;
+  for (let m = 0; m <= last; m++) {
+    const from = new Date(year, m, 1), to = new Date(year, m + 1, 1);
+    const nuevas = records.filter((r) => r.ingreso && r.ingreso >= from && r.ingreso < to);
+    const entregadas = records.filter((r) => r.estado === 'entregado' && r.entrega && r.entrega >= from && r.entrega < to);
+    const enCurso = records.filter((r) => r.ingreso && r.ingreso >= new Date(year, 0, 1) && r.ingreso < to
+      && !(r.estado === 'entregado' && r.entrega && r.entrega < to));
+    acum += nuevas.length;
+    const prev = rows.at(-1);
+    const piezas = nuevas.reduce((a, r) => a + (r.cantidad ?? 0), 0);
+    rows.push({
+      mes: m + 1, nuevas: nuevas.length, acumulado: acum, piezas, entregadas: entregadas.length, enCurso: enCurso.length,
+      deltaNuevas: prev && prev.nuevas ? ((nuevas.length - prev.nuevas) / prev.nuevas) * 100 : null,
+      deltaPiezas: prev && prev.piezas ? ((piezas - prev.piezas) / prev.piezas) * 100 : null,
+    });
+  }
+  return rows;
+}

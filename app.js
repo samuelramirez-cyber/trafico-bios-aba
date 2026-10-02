@@ -5,6 +5,7 @@ import { normalizeTable } from './js/normalize.js';
 import { applyFilters, computeKPIs, crossTab, periodRange, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
 import { renderWeekly } from './js/weekly.js';
+import { renderAnnual } from './js/annual.js';
 import { fetchSpan, monthsInRange, renderRedes, renderWeb } from './js/digital.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
@@ -95,6 +96,10 @@ function render() {
   const k = computeKPIs(list);
 
   renderActiveFilters();
+  // Evolución anual: año elegido arriba (o el actual con "Todo"), mismos filtros de detalle, sin filtro de periodo.
+  const anual = applyFilters(records, { ...state, period: 'all' });
+  const detalle = Object.keys(DETAIL).filter((key) => state[key]).map((key) => DETAIL[key](state[key])).join(' · ');
+  renderAnnual(anual, state.period === 'all' ? new Date().getFullYear() : Number(state.year), detalle);
   renderKPIs(k);
 
   const range = periodRange(state);

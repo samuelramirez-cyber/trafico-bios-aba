@@ -121,7 +121,7 @@ export function renderWeb(s) {
     }, {
       interaction: { mode: 'index', intersect: false },
       scales: { x: { grid: { display: false } }, y: { beginAtZero: true, position: 'left' }, y1: { beginAtZero: true, position: 'right', grid: { display: false } } },
-      plugins: { legend },
+      plugins: { legend, valueLabels: { mode: 'value' } },
     });
   }
   $('#webTabla').innerHTML = `<thead class="bg-slate-50 text-slate-600"><tr>${['Mes', 'Visitas', 'vs mes ant.', 'Usuarios nuevos', 'Permanencia', '% nuevos', '% celular', '% computador']
