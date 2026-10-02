@@ -15,20 +15,20 @@
   <script type="importmap">
   {
     "imports": {
-      "./app.js": "./app.js?v=5",
-      "./config.js": "./config.js?v=5",
-      "./js/annual.js": "./js/annual.js?v=5",
-      "./js/charts.js": "./js/charts.js?v=5",
-      "./js/connector.js": "./js/connector.js?v=5",
-      "./js/digital.js": "./js/digital.js?v=5",
-      "./js/filters.js": "./js/filters.js?v=5",
-      "./js/normalize.js": "./js/normalize.js?v=5",
-      "./js/ui.js": "./js/ui.js?v=5",
-      "./js/weekly.js": "./js/weekly.js?v=5"
+      "./app.js": "./app.js?v=6",
+      "./config.js": "./config.js?v=6",
+      "./js/annual.js": "./js/annual.js?v=6",
+      "./js/charts.js": "./js/charts.js?v=6",
+      "./js/connector.js": "./js/connector.js?v=6",
+      "./js/digital.js": "./js/digital.js?v=6",
+      "./js/filters.js": "./js/filters.js?v=6",
+      "./js/normalize.js": "./js/normalize.js?v=6",
+      "./js/ui.js": "./js/ui.js?v=6",
+      "./js/weekly.js": "./js/weekly.js?v=6"
     }
   }
   </script>
-  <script type="module" src="app.js?v=5"></script>
+  <script type="module" src="app.js?v=6"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">
@@ -110,14 +110,19 @@
       <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible (no cargó Chart.js — revise la conexión).</p>
     </section>
 
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-sm font-medium text-slate-600">Segmentar por:</span>
+      <div id="segToggle" class="flex gap-2"></div>
+      <span class="text-xs text-slate-500">Tipo = según la descripción (fachada, invitación…) · Pieza = columna PIEZA de la hoja</span>
+    </div>
     <section class="grid lg:grid-cols-3 gap-3" aria-label="Por tipo de pieza">
       <div class="card">
-        <h2 class="section-title">Tipos de pieza (% del total)</h2>
+        <h2 id="segTitulo" class="section-title">Tipos de pieza (% del total)</h2>
         <div class="chart-box"><canvas id="chartCategory"></canvas></div>
         <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible.</p>
       </div>
       <div class="card lg:col-span-2">
-        <h2 class="section-title">Estado por tipo de pieza <span class="font-normal text-slate-500">· clic en una barra para ver esas OTs</span></h2>
+        <h2 class="section-title"><span id="segBarTitulo">Estado por tipo de pieza</span> <span class="font-normal text-slate-500">· clic en una barra para filtrar</span></h2>
         <div class="chart-box"><canvas id="chartCategoryStatus"></canvas></div>
         <p data-chart-fallback hidden class="text-sm text-slate-500">Gráfico no disponible.</p>
       </div>

@@ -216,6 +216,7 @@ export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], ca
     }
     rec.estado = classify(rec.estadoRaw, statuses);
     rec.categoria = classify(`${rawDesc} ${rec.pieza}`, categories);
+    rec.piezaKey = normKey(rec.pieza) || 'SIN PIEZA';   // segmentación por la columna PIEZA (sin tildes/mayúsculas)
     // Piezas que suman en los totales (las de OTs excluidas, p. ej. parrillas, no cuentan).
     rec.pzExcluida = piecesExclude.length > 0 && classify(rawDesc, excluded) === 'x';
     rec.cantidad = rec.pzExcluida ? null : rec.cantidadTotal;

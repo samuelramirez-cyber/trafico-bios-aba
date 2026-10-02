@@ -11,12 +11,12 @@ import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.j
 
 const FILTERS_KEY = 'bios-trafico:filters:v3';
 // Solo el periodo se recuerda entre visitas; los filtros de detalle se descartan al recargar.
-const PERSISTED = ['dateField', 'period', 'year', 'month', 'quarter', 'half'];
+const PERSISTED = ['dateField', 'period', 'year', 'month', 'quarter', 'half', 'segmento'];
 const now = new Date();
 const DEFAULTS = {
   dateField: 'ingreso', period: 'year', year: now.getFullYear(), month: now.getMonth() + 1,
   quarter: Math.floor(now.getMonth() / 3) + 1, half: now.getMonth() < 6 ? 1 : 2,
-  gerente: '', responsable: '', estado: '', categoria: '', q: '',
+  gerente: '', responsable: '', estado: '', categoria: '', pieza: '', q: '', segmento: 'tipo',
 };
 
 const state = { ...DEFAULTS, ...readSaved() };
@@ -96,6 +96,7 @@ function render() {
   const k = computeKPIs(list);
 
   renderActiveFilters();
+  renderSegmentToggle();
   // Evolución anual: año elegido arriba (o el actual con "Todo"), mismos filtros de detalle, sin filtro de periodo.
   const anual = applyFilters(records, { ...state, period: 'all' });
   const detalle = Object.keys(DETAIL).filter((key) => state[key]).map((key) => DETAIL[key](state[key])).join(' · ');
@@ -106,7 +107,7 @@ function render() {
   const fieldLabel = state.dateField === 'ingreso' ? 'INGRESO' : 'ENTREGA';
   $('#periodLabel').textContent = range ? `${range.label} · por fecha de ${fieldLabel}` : `Todo el histórico · por fecha de ${fieldLabel}`;
 
-  renderCharts(k, crossTab(list), pick);
+  renderCharts(k, segmentation(list), pick);
   renderIssues(range);
   syncWeekly();
   syncDigital();
@@ -115,6 +116,7 @@ function render() {
 // Chips de filtros de detalle activos (los que reducen el total), con ✕ para quitar cada uno.
 const DETAIL = {
   categoria: (v) => `Tipo: ${CATEGORY[v]?.label ?? v}`,
+  pieza: (v) => `Pieza: ${piezaLabel(v)}`,
   estado: (v) => `Estado: ${STATUS[v]?.label ?? v}`,
   gerente: (v) => `Gerente: ${v}`,
   responsable: (v) => `Responsable: ${v}`,
@@ -147,6 +149,38 @@ function renderKPIs(k) {
   $('#kpis').innerHTML = card('Total OTs', k.total, '', `${pz('total')}${excl} · ${CONFIG.CLIENT_FILTER.map(esc).join(', ')}`) +
     Object.values(STATUS).filter((s) => s.key !== 'otro' || k.otro)
       .map((s) => card(s.label, k[s.key] ?? 0, s.color, `${pct(k[s.key] ?? 0)} · ${pz(s.key)}`)).join('');
+}
+
+/* ---------- Segmentación: Tipo (por descripción) o Pieza (columna PIEZA) ---------- */
+
+const PIEZA_COLORS = ['#2563eb', '#16a34a', '#d97706', '#db2777', '#7c3aed', '#0891b2', '#dc2626', '#65a30d', '#ea580c', '#0f766e', '#9333ea', '#475569'];
+// Etiqueta legible de una clave de pieza: el primer texto original encontrado en los datos.
+const piezaLabel = (key) => (key === 'SIN PIEZA' ? 'Sin pieza' : records.find((r) => r.piezaKey === key)?.pieza ?? key);
+
+function segmentation(list) {
+  if (state.segmento === 'pieza') {
+    const tab = crossTab(list, (r) => r.piezaKey);
+    // Color por frecuencia sobre todas las OTs (no cambia al filtrar); orden por cantidad en la vista actual.
+    const freq = {};
+    for (const r of records) freq[r.piezaKey] = (freq[r.piezaKey] ?? 0) + 1;
+    const keys = Object.keys(freq).sort((a, b) => freq[b] - freq[a]);
+    const items = keys.map((key, i) => ({ key, label: piezaLabel(key), color: PIEZA_COLORS[i] ?? '#94a3b8' }))
+      .sort((a, b) => (tab[b.key]?.total ?? 0) - (tab[a.key]?.total ?? 0));
+    return { field: 'pieza', tab, items };
+  }
+  return { field: 'categoria', tab: crossTab(list), items: Object.values(CATEGORY) };
+}
+
+function renderSegmentToggle() {
+  const isPieza = state.segmento === 'pieza';
+  $('#segToggle').innerHTML = ['tipo', 'pieza'].map((s) =>
+    `<button data-seg="${s}" class="chip ${state.segmento === s ? 'chip-strong' : ''}">${s === 'tipo' ? 'Tipo' : 'Pieza'}</button>`).join('');
+  $('#segTitulo').textContent = isPieza ? 'Piezas (% del total)' : 'Tipos de pieza (% del total)';
+  $('#segBarTitulo').textContent = isPieza ? 'Estado por pieza' : 'Estado por tipo de pieza';
+  $('#segToggle').onclick = (e) => {
+    const s = e.target.closest('[data-seg]')?.dataset.seg;
+    if (s && s !== state.segmento) { state.segmento = s; render(); }
+  };
 }
 
 // Clic en un gráfico: aplica el filtro y lleva a la tabla.

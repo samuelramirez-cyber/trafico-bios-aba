@@ -90,8 +90,11 @@ export function doughnut(id, items, onClick) {
   });
 }
 
-/** kpis: conteo por estado · tab: crossTab(tipo × estado) · onPick({estado?, categoria?}) filtra la tabla. */
-export function renderCharts(kpis, tab, onPick) {
+/**
+ * kpis: conteo por estado · seg: { field: 'categoria' | 'pieza', items: [{ key, label, color }] (orden), tab: crossTab }
+ * onPick({ estado?, categoria?, pieza? }) aplica el filtro.
+ */
+export function renderCharts(kpis, seg, onPick) {
   const ok = typeof window.Chart === 'function';
   document.querySelectorAll('[data-chart-fallback]').forEach((el) => { el.hidden = ok; });
   if (!ok) return;
@@ -100,12 +103,21 @@ export function renderCharts(kpis, tab, onPick) {
     Object.values(STATUS).filter((s) => kpis[s.key] > 0).map((s) => ({ ...s, n: kpis[s.key], pz: kpis.pz[s.key] ?? 0 })),
     (s) => onPick({ estado: s.key }));
 
-  const cats = Object.values(CATEGORY).filter((c) => tab[c.key]?.total > 0);
-  doughnut('chartCategory', cats.map((c) => ({ ...c, n: tab[c.key].total, pz: tab[c.key].pz.total })), (c) => onPick({ categoria: c.key }));
+  const { field, tab } = seg;
+  const cats = seg.items.filter((c) => tab[c.key]?.total > 0);
+  // Dona: hasta 7 segmentos + "Otros" (muchas porciones no se leen); el clic en "Otros" no filtra.
+  const MAX = 7;
+  const top = cats.slice(0, MAX).map((c) => ({ ...c, n: tab[c.key].total, pz: tab[c.key].pz.total }));
+  const rest = cats.slice(MAX);
+  if (rest.length) {
+    top.push({ key: null, label: `Otros (${rest.length})`, color: '#cbd5e1',
+      n: rest.reduce((a, c) => a + tab[c.key].total, 0), pz: rest.reduce((a, c) => a + tab[c.key].pz.total, 0) });
+  }
+  doughnut('chartCategory', top, (c) => c.key && onPick({ [field]: c.key }));
 
-  // Barras apiladas: una fila por tipo, un segmento por estado.
+  // Barras apiladas: una fila por segmento (todos), un segmento por estado.
   const statuses = Object.values(STATUS).filter((s) => cats.some((c) => tab[c.key][s.key]));
-  document.getElementById('chartCategoryStatus').parentElement.style.height = `${Math.max(160, cats.length * 44 + 70)}px`;
+  document.getElementById('chartCategoryStatus').parentElement.style.height = `${Math.max(160, cats.length * 36 + 70)}px`;
   upsert('chartCategoryStatus', 'bar', {
     labels: cats.map((c) => c.label),
     datasets: statuses.map((s) => ({
@@ -125,7 +137,7 @@ export function renderCharts(kpis, tab, onPick) {
       } } },
     },
     onClick: (_, els) => els.length &&
-      onPick({ categoria: cats[els[0].index].key, estado: statuses[els[0].datasetIndex].key }),
+      onPick({ [field]: cats[els[0].index].key, estado: statuses[els[0].datasetIndex].key }),
     onHover: pointer(true),
   });
 }
