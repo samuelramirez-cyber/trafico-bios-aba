@@ -108,3 +108,16 @@ test('weeklyFlow: entradas, salidas (aprobadas/retiradas), activas y piezas', ()
   const t = flowTotals([w1, w2, w3]);
   assert.deepEqual([t.semanas, t.entraron, t.salieron, t.pzEntraron, t.pzSalieron, t.activas], [2, 2, 3, 10, 6, 2]);
 });
+
+test('parrillas: cuentan como OT pero sus piezas no suman', () => {
+  const rows = [
+    ['  ', 'CLIENTE', 'FECHA INGRESO', 'DESCRIPCIÓN', 'CANTIDAD', 'ESTADO'],
+    ['000001', 'GRUPO BIOS ABA', '10/09/2026', 'ot_000001_aba_parrilla', '640', 'En proceso'],
+    ['000002', 'GRUPO BIOS ABA', '11/09/2026', 'ot_000002_aba_fachada_x', '3', 'En proceso'],
+    ['000003', 'GRUPO BIOS ABA', '12/09/2026', 'ot_000003_aba_parrilla_redes_oct', '20', 'Entregado'],
+  ];
+  const { records } = normalizeTable(rows, 'T', { ...opts, piecesExclude: ['PARRILLA'] });
+  const k = computeKPIs(records);
+  assert.deepEqual([k.total, k.pz.total, k.pz.proceso, k.pzExcluidas], [3, 3, 3, 660]);
+  assert.deepEqual(records.map((r) => [r.pzExcluida, r.cantidadTotal]), [[true, 640], [false, 3], [true, 20]]);
+});

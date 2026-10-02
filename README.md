@@ -85,3 +85,12 @@ Fuente: libro "CUADRO TANGO – GRUPO BIOS", una pestaña por semana (`1 SEPT`, 
   navegador sin vencimiento. "Cargar histórico completo" baja todas.
 - Colores fuera de la leyenda → `CUADRO_COLORES` en config.js (p. ej. `'#34a853': 'APROBADO'`).
 - Tras editar los `.gs`: pegar en el proyecto (SHEET_ID / CUADRO_ID reales solo allí) → Implementar → Gestionar → Editar → **Versión nueva**.
+
+## 5. Publicar cambios
+
+1. `node --test tests/core.test.mjs`
+2. `python tools/bump-version.py` — sube el `?v=N` del import map de `index.html` (y la caché del service worker),
+   para que ningún navegador mezcle módulos viejos y nuevos.
+3. `git commit` + `git push` → GitHub Pages publica en 1–2 min.
+
+Piezas excluidas de los totales: `PIECES_EXCLUDE` en config.js (hoy `['PARRILLA']`: las OTs siguen contando, sus piezas no).

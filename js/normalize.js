@@ -166,7 +166,8 @@ export function classify(text, list) {
 
 /* ---------- Tabla completa ---------- */
 
-export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], categories = [], clientFilter = [] } = {}) {
+export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], categories = [], clientFilter = [], piecesExclude = [] } = {}) {
+  const excluded = [{ key: 'x', match: piecesExclude }];
   const h = detectHeader(rows);
   if (!h) {
     return { records: [], skipped: 0, map: null,
@@ -198,7 +199,7 @@ export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], ca
       cliente: get(r, 'cliente'), gerente: get(r, 'gerente'),
       responsable: get(r, 'responsable'), responsable2: get(r, 'responsable2'),
       desc: splitOT(rawDesc).titulo || rawDesc, pieza: get(r, 'pieza'),
-      cantidad: parseCount(get(r, 'cantidad')),
+      cantidadTotal: parseCount(get(r, 'cantidad')),
       codigo: rawDesc.toLowerCase().split(/\s+/)[0],   // "ot_001354_aba_..." = llave de cruce con el Cuadro Tango
       estadoRaw: get(r, 'estado'), issues: [] };
 
@@ -215,6 +216,9 @@ export function normalizeTable(rows, tab, { dateOrder = 'DMY', statuses = [], ca
     }
     rec.estado = classify(rec.estadoRaw, statuses);
     rec.categoria = classify(`${rawDesc} ${rec.pieza}`, categories);
+    // Piezas que suman en los totales (las de OTs excluidas, p. ej. parrillas, no cuentan).
+    rec.pzExcluida = piecesExclude.length > 0 && classify(rawDesc, excluded) === 'x';
+    rec.cantidad = rec.pzExcluida ? null : rec.cantidadTotal;
     rec._search = normKey([ot, rawDesc, rec.desc, rec.pieza, rec.gerente, rec.responsable, rec.responsable2, rec.estadoRaw].join(' '));
     records.push(rec);
   }

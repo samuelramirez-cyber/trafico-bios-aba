@@ -42,6 +42,10 @@ export const CONFIG = {
   // Colores del Cuadro que no están en su leyenda → estado. Ej.: '#34a853': 'APROBADO'.
   CUADRO_COLORES: {},
 
+  // OTs cuyas piezas NO se suman (siguen contando como OT). Mismo formato de términos que CATEGORIES.
+  // Hoy: parrillas de contenido (p. ej. OT 001557, 640 piezas a dic-2026) que distorsionan el conteo.
+  PIECES_EXCLUDE: ['PARRILLA'],
+
   // Tipos de pieza, detectados en DESCRIPCIÓN + PIEZA (en orden; la primera que coincide gana).
   // Término = prefijo de palabra ('FACH' → fachada, fach); con '$' = palabra exacta ('INV$' → inv, no investigación).
   // Lo que no coincide queda en "Otros".

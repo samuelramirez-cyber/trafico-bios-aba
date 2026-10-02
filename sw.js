@@ -1,6 +1,6 @@
 // Service worker: cachea el shell y las librerías CDN para abrir el dashboard sin red.
 // Los datos de Google NO pasan por aquí: los gestiona connector.js con su propio caché y reintentos.
-const VERSION = 'trafico-v5';
+const VERSION = 'trafico-v6';
 const SHELL = [
   './', 'index.html', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest', 'icon-192.png',
   'js/connector.js', 'js/normalize.js', 'js/filters.js', 'js/charts.js', 'js/table.js', 'js/ui.js', 'js/weekly.js',
@@ -26,7 +26,7 @@ self.addEventListener('fetch', (e) => {
 
   // Archivos propios: red primero (cambios visibles al instante). CDN: caché primero.
   e.respondWith(caches.open(VERSION).then(async (cache) => {
-    const hit = await cache.match(request);
+    const hit = await cache.match(request, { ignoreSearch: sameOrigin });   // ?v=N del import map
     // Propios: revalidar siempre (evita mezclar módulos viejos y nuevos tras publicar). CDN: petición normal.
     const net = fetch(sameOrigin ? new Request(request.url, { cache: 'no-cache', credentials: 'same-origin' }) : request).then((res) => {
       if (res.ok || res.type === 'opaque') cache.put(request, res.clone());

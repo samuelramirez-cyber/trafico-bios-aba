@@ -51,6 +51,7 @@ export function computeKPIs(list) {
   for (const r of list) {
     k[r.estado] = (k[r.estado] ?? 0) + 1;
     k.pz.total += r.cantidad ?? 0;
+    if (r.pzExcluida) k.pzExcluidas = (k.pzExcluidas ?? 0) + (r.cantidadTotal ?? 0);
     k.pz[r.estado] = (k.pz[r.estado] ?? 0) + (r.cantidad ?? 0);
   }
   return k;

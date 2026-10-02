@@ -12,7 +12,22 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
   <link rel="stylesheet" href="styles.css">
-  <script type="module" src="app.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "./app.js": "./app.js?v=1",
+      "./config.js": "./config.js?v=1",
+      "./js/charts.js": "./js/charts.js?v=1",
+      "./js/connector.js": "./js/connector.js?v=1",
+      "./js/filters.js": "./js/filters.js?v=1",
+      "./js/normalize.js": "./js/normalize.js?v=1",
+      "./js/table.js": "./js/table.js?v=1",
+      "./js/ui.js": "./js/ui.js?v=1",
+      "./js/weekly.js": "./js/weekly.js?v=1"
+    }
+  }
+  </script>
+  <script type="module" src="app.js?v=1"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">

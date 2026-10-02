@@ -22,11 +22,12 @@ export function toItem([key, otTxt, analista, tango, estado, ingreso, entrega, p
   const { ot, titulo } = splitOT(otTxt);
   const codigo = key.split('#')[0];
   const ot26 = cross.get(codigo) ?? null;
-  const pzCuadro = parseCount(piezasTxt);
-  const piezas = pzCuadro ?? ot26?.cantidad ?? null;
+  const excluida = CONFIG.PIECES_EXCLUDE.length > 0 && normKey(`${otTxt} ${key}`).split(' ').some((w) => CONFIG.PIECES_EXCLUDE.some((t) => w.startsWith(t)));
+  const pzCuadro = excluida ? null : parseCount(piezasTxt);
+  const piezas = excluida ? null : pzCuadro ?? ot26?.cantidad ?? null;
   return {
     key, codigo, ot: titulo ? ot : '', titulo: titulo || otTxt, analista, tango, estado: fixColor(estado),
-    ingreso, entrega, ot26, piezas, piezasFuente: pzCuadro != null ? 'cuadro' : piezas != null ? 'OT 2026' : null,
+    ingreso, entrega, ot26, piezas, excluida, piezasFuente: pzCuadro != null ? 'cuadro' : piezas != null ? 'OT 2026' : null,
   };
 }
 
@@ -48,7 +49,7 @@ export function weeklyFlow(semanas, cross = new Map()) {
       gid: w.gid, nombre: w.nombre, fecha: w.fecha, base,
       total: cur.size, entraron, salieron, activas, todas: [...cur.values()],
       pzEntraron: sumPz(entraron), pzSalieron: sumPz(salieron), pzActivas: sumPz(activas),
-      sinPiezas: entraron.filter((it) => it.piezas == null).length + salieron.filter((it) => it.piezas == null).length,
+      sinPiezas: entraron.filter((it) => it.piezas == null && !it.excluida).length + salieron.filter((it) => it.piezas == null && !it.excluida).length,
     };
   });
 }
@@ -102,7 +103,7 @@ function renderTable(w, leyenda) {
       <td class="px-3 py-2 max-w-xs truncate" title="${esc(it.titulo)}">${esc(it.titulo)}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(it.analista)}</td>
       <td class="px-3 py-2 whitespace-nowrap">${esc(it.tango)}</td>
-      <td class="px-3 py-2 tabular-nums whitespace-nowrap">${it.piezas != null ? `${fmtPz(it.piezas)}${it.piezasFuente === 'OT 2026' ? ' <span class="text-xs text-slate-400" title="Tomado de CANTIDAD en OT 2026">(OT 2026)</span>' : ''}` : '<span class="text-slate-400" title="Sin dato de piezas">—</span>'}</td>
+      <td class="px-3 py-2 tabular-nums whitespace-nowrap">${it.piezas != null ? `${fmtPz(it.piezas)}${it.piezasFuente === 'OT 2026' ? ' <span class="text-xs text-slate-400" title="Tomado de CANTIDAD en OT 2026">(OT 2026)</span>' : ''}` : it.excluida ? '<span class="text-slate-400" title="Parrilla: sus piezas no suman">excluida</span>' : '<span class="text-slate-400" title="Sin dato de piezas">—</span>'}</td>
       <td class="px-3 py-2">${view.tab === 'salieron' ? esc(it.salida) : statusChip(it.estado, leyenda)}</td>
       <td class="px-3 py-2 whitespace-nowrap">${x ? `${badge(x.estado, x.estadoRaw || STATUS[x.estado].label)} <span class="text-xs text-slate-500">${esc(CATEGORY[x.categoria].label)}</span>` : '<span class="text-slate-400">—</span>'}</td>
     </tr>`;

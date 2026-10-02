@@ -41,7 +41,7 @@ async function load(force = false) {
   if (!lastLoad) setBanner('info', 'Conectando con Google Sheets…');
   try {
     const res = await loadData({ force });
-    const opts = { dateOrder: CONFIG.DATE_ORDER, statuses: CONFIG.STATUSES, categories: CONFIG.CATEGORIES, clientFilter: CONFIG.CLIENT_FILTER };
+    const opts = { dateOrder: CONFIG.DATE_ORDER, statuses: CONFIG.STATUSES, categories: CONFIG.CATEGORIES, piecesExclude: CONFIG.PIECES_EXCLUDE, clientFilter: CONFIG.CLIENT_FILTER };
     records = []; issues = [];
     for (const t of res.tabs) {
       const out = normalizeTable(t.rows, t.name, opts);
@@ -140,7 +140,8 @@ function renderKPIs(k) {
       <p class="kpi-value"${color ? ` style="color:${color}"` : ''}>${fmtInt(value)}</p>
       <p class="text-xs text-slate-500">${sub}</p></div>`;
   const pz = (key) => `${fmtInt(k.pz[key] ?? 0)} piezas`;
-  $('#kpis').innerHTML = card('Total OTs', k.total, '', `${pz('total')} · ${CONFIG.CLIENT_FILTER.map(esc).join(', ')}`) +
+  const excl = k.pzExcluidas ? ` <span title="Piezas de OTs excluidas (${esc(CONFIG.PIECES_EXCLUDE.join(', ').toLowerCase())})">(sin parrillas: ${fmtInt(k.pzExcluidas)} pzs fuera)</span>` : '';
+  $('#kpis').innerHTML = card('Total OTs', k.total, '', `${pz('total')}${excl} · ${CONFIG.CLIENT_FILTER.map(esc).join(', ')}`) +
     Object.values(STATUS).filter((s) => s.key !== 'otro' || k.otro)
       .map((s) => card(s.label, k[s.key] ?? 0, s.color, `${pct(k[s.key] ?? 0)} · ${pz(s.key)}`)).join('');
 }
