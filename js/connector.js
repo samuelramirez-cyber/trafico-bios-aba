@@ -198,3 +198,23 @@ export async function loadWeeks(tabs, { force = false, batch = 8, concurrency = 
   await Promise.all(Array.from({ length: Math.min(concurrency, chunks.length) }, worker));
   return out;
 }
+
+/* ---------- Web y redes (Dashboard Digital API) ---------- */
+
+const DIGITAL_TTL_MIN = 60;
+
+/** ?view=web | ?view=redes para un rango {from, to} (YYYY-MM-DD); caché local 1 h. null si no hay URL. */
+export async function loadDigital(view, span, { force = false } = {}) {
+  if (!CONFIG.DIGITAL_API_URL || !span) return null;
+  const key = `bios-trafico:digital:v1:${view}:${span.from}:${span.to}`;
+  const cached = cachedJSON(key);
+  if (!force && cached && Date.now() - cached.ts < DIGITAL_TTL_MIN * 60000) return cached.data;
+  try {
+    const data = await fetchJSON(`${CONFIG.DIGITAL_API_URL}?view=${view}&from=${span.from}&to=${span.to}`);
+    storeJSON(key, { ts: Date.now(), data });
+    return data;
+  } catch (e) {
+    if (cached) return cached.data;
+    throw e;
+  }
+}

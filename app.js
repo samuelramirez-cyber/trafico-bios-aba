@@ -1,11 +1,11 @@
 // Orquestador del dashboard: estado de filtros, carga de datos y render reactivo.
 import { CONFIG } from './config.js';
-import { loadData, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
+import { loadData, loadDigital, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
 import { normalizeTable } from './js/normalize.js';
-import { applyFilters, computeKPIs, crossTab, periodRange, uniqueSorted, yearsIn, MONTH_NAMES } from './js/filters.js';
+import { applyFilters, computeKPIs, crossTab, periodRange, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
-import { renderTable } from './js/table.js';
 import { renderWeekly } from './js/weekly.js';
+import { fetchSpan, monthsInRange, renderRedes, renderWeb } from './js/digital.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
 const FILTERS_KEY = 'bios-trafico:filters:v3';
@@ -19,7 +19,6 @@ const DEFAULTS = {
 };
 
 const state = { ...DEFAULTS, ...readSaved() };
-const view = { page: 1, sortKey: 'ingreso', sortDir: -1 };
 let records = [], issues = [], lastLoad = null;
 const weeks = { index: null, loaded: [], loading: null, error: null };
 
@@ -103,9 +102,9 @@ function render() {
   $('#periodLabel').textContent = range ? `${range.label} · por fecha de ${fieldLabel}` : `Todo el histórico · por fecha de ${fieldLabel}`;
 
   renderCharts(k, crossTab(list), pick);
-  renderTable(list, view, CONFIG.PAGE_SIZE, render);
   renderIssues(range);
   syncWeekly();
+  syncDigital();
 }
 
 // Chips de filtros de detalle activos (los que reducen el total), con ✕ para quitar cada uno.
@@ -127,7 +126,6 @@ function renderActiveFilters() {
     const k = e.target.closest('[data-clear]')?.dataset.clear;
     if (!k) return;
     for (const f of k === '*' ? active : [k]) state[f] = '';
-    view.page = 1;
     render();
   };
 }
@@ -149,20 +147,14 @@ function renderKPIs(k) {
 // Clic en un gráfico: aplica el filtro y lleva a la tabla.
 function pick(sel) {
   Object.assign(state, sel);
-  view.page = 1;
   render();
-  $('#tableBody').closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('#activeFilters').scrollIntoView({ behavior: 'smooth', block: 'start' });   // el filtro aplicado queda visible
 }
 
 function syncControls() {
   fillSelect($('#year'), yearsIn(records, state.dateField, CONFIG.YEARS), state.year);
   state.year = +$('#year').value || DEFAULTS.year;
-  fillSelect($('#fGerente'), uniqueSorted(records, 'gerente'), state.gerente, 'Todos los gerentes');
-  fillSelect($('#fResponsable'), uniqueSorted(records, 'responsable', 'responsable2'), state.responsable, 'Todos los responsables');
-  fillSelect($('#fCategoria'), Object.values(CATEGORY).map((c) => [c.key, c.label]), state.categoria, 'Todos los tipos');
-  fillSelect($('#fEstado'), Object.entries(STATUS).map(([k, s]) => [k, s.label]), state.estado, 'Todos los estados');
   for (const id of ['dateField', 'period', 'month', 'quarter', 'half']) $(`#${id}`).value = state[id];
-  $('#search').value = state.q;
   for (const p of ['month', 'quarter', 'half']) $(`#${p}`).hidden = state.period !== p;
   $('#year').hidden = state.period === 'all';
 }
@@ -247,34 +239,54 @@ function syncWeekly() {
   if (weeks.index && weeksForPeriod().some((t) => !weeks.loaded.some((w) => w.gid === t.gid))) refreshWeekly();
 }
 
+/* ---------- Web y redes (Dashboard Digital API) ---------- */
+
+const digital = { web: {}, redes: {} };   // por vista: { key, data, loading, error }
+
+function drawDigital() {
+  const months = monthsInRange(periodRange(state));
+  const onRender = drawDigital;
+  renderWeb({ ...digital.web, months, onRender });
+  renderRedes({ ...digital.redes, months, onRender });
+}
+
+// Al cambiar el periodo: pide a la API el rango necesario (con el mes anterior para comparar).
+function syncDigital(force = false) {
+  const span = fetchSpan(monthsInRange(periodRange(state)));
+  for (const view of ['web', 'redes']) {
+    const st = digital[view];
+    const key = span ? `${span.from}|${span.to}` : '';
+    if (!force && st.key === key) continue;
+    Object.assign(st, { key, loading: span ? 'Cargando…' : null, error: null });
+    if (!span) { st.data = null; continue; }
+    loadDigital(view, span, { force })
+      .then((data) => { if (st.key === key) Object.assign(st, { data, loading: null }); })
+      .catch((e) => { if (st.key === key) Object.assign(st, { loading: null, error: `No fue posible cargar: ${e.message}` }); })
+      .finally(drawDigital);
+  }
+  drawDigital();
+}
+
 /* ---------- Eventos ---------- */
 
 function bind() {
   fillSelect($('#month'), MONTH_NAMES.map((m, i) => [i + 1, m]), state.month);
-  const set = (key, cast = (v) => v) => (e) => { state[key] = cast(e.target.value); view.page = 1; render(); };
+  const set = (key, cast = (v) => v) => (e) => { state[key] = cast(e.target.value); render(); };
   $('#dateField').onchange = set('dateField');
   $('#period').onchange = set('period');
   $('#year').onchange = set('year', Number);
   $('#month').onchange = set('month', Number);
   $('#quarter').onchange = set('quarter', Number);
   $('#half').onchange = set('half', Number);
-  $('#fGerente').onchange = set('gerente');
-  $('#fResponsable').onchange = set('responsable');
-  $('#fEstado').onchange = set('estado');
-  $('#fCategoria').onchange = set('categoria');
 
-  let t;
-  $('#search').oninput = (e) => { clearTimeout(t); t = setTimeout(() => set('q')(e), 200); };
 
   $('#btnCurrentMonth').onclick = () => {
     const d = new Date();
     Object.assign(state, { period: 'month', year: d.getFullYear(), month: d.getMonth() + 1 });
-    view.page = 1; render();
+    render();
   };
-  $('#btnReset').onclick = () => { Object.assign(state, DEFAULTS); view.page = 1; render(); };
-  $('#btnRefresh').onclick = () => { load(true); refreshWeekly({ force: true }); };
-  $('#prevPage').onclick = () => { view.page--; render(); };
-  $('#nextPage').onclick = () => { view.page++; render(); };
+  $('#btnReset').onclick = () => { Object.assign(state, DEFAULTS); render(); };
+  $('#btnRefresh').onclick = () => { load(true); refreshWeekly({ force: true }); syncDigital(true); };
 
   // "Tiempo real": refresco periódico solo con la pestaña visible; al volver o recuperar red se re-evalúa.
   setInterval(() => { if (!document.hidden) load(); }, CONFIG.AUTO_REFRESH_MIN * 60000);

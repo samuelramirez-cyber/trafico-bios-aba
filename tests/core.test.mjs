@@ -121,3 +121,24 @@ test('parrillas: cuentan como OT pero sus piezas no suman', () => {
   assert.deepEqual([k.total, k.pz.total, k.pz.proceso, k.pzExcluidas], [3, 3, 3, 660]);
   assert.deepEqual(records.map((r) => [r.pzExcluida, r.cantidadTotal]), [[true, 640], [false, 3], [true, 20]]);
 });
+
+test('digital: meses del periodo, rango a pedir, agregados mensuales y métricas web', async () => {
+  const { monthsInRange, fetchSpan, monthlyFromDaily, webMonth, socialSummary, deltaPct } = await import('../js/digital.js');
+  const today = new Date(2026, 9, 2);
+  assert.deepEqual(monthsInRange(periodRange({ period: 'month', year: 2026, month: 9 }), today), ['2026-09']);
+  assert.deepEqual(monthsInRange(periodRange({ period: 'quarter', year: 2026, quarter: 4 }), today), ['2026-10']);
+  assert.deepEqual(fetchSpan(['2026-07', '2026-08', '2026-09'], today), { from: '2026-06-01', to: '2026-09-30' });
+  assert.deepEqual(fetchSpan(['2026-10'], today), { from: '2026-09-01', to: '2026-10-02' });
+  const seg = [['2026-06-30', 19939], ['2026-07-01', 19942], ['2026-07-31', 20018]];
+  assert.deepEqual(monthlyFromDaily(seg, 'last'), { '2026-06': 19939, '2026-07': 20018 });
+  assert.deepEqual(monthlyFromDaily([['2026-07-01', 10], ['2026-07-02', 5]], 'sum'), { '2026-07': 15 });
+  const s = socialSummary({ instagram: { seguidores: seg, impresiones: [['2026-06-15', 100], ['2026-07-15', 150]] } }, '2026-07');
+  assert.deepEqual(s.instagram, { seg: 20018, segPrev: 19939, imp: 150, impPrev: 100 });
+  assert.equal(deltaPct(150, 100), 50);
+  const w = webMonth({ screenPageViews: 39065, newUsers: 7428, activeUsers: 100, userEngagementDuration: 6300,
+    dispositivos: { mobile: 39, desktop: 61 }, tipoUsuario: { new: 66, returning: 34 } });
+  assert.deepEqual([w.visitas, w.nuevos, w.permanencia, Math.round(w.pctCelular), w.pctNuevos, w.pctRecurrentes], [39065, 7428, 63, 39, 66, 34]);
+  const adj = webMonth({ screenPageViews: 1, dispositivos: { mobile: 39, desktop: 61 }, tipoUsuario: { new: 66, returning: 34 },
+    ajuste: { pctCelular: 1, pctComputador: 99, pctNuevos: 74.7, nota: 'Dato del informe' } });
+  assert.deepEqual([adj.pctCelular, adj.pctComputador, adj.pctNuevos, Math.round(adj.pctRecurrentes * 10) / 10, adj.nota], [1, 99, 74.7, 25.3, 'Dato del informe']);
+});

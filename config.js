@@ -9,6 +9,10 @@ export const CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxlTOL12fWzQCnbfvoV7ZfWMPbtRPOgFGKH2GCP7pzHNbbKE3HuwEmSvsJRTcNhYtfv8g/exec',
 
   SHEET_ID: '',
+
+  // Web (GA4) y redes (Metricool): Apps Script "Dashboard Digital API" (cuenta tango.red). Los tokens viven allí.
+  DIGITAL_API_URL: 'https://script.google.com/macros/s/AKfycbwhzxKtDPq4CSm8nErUeTEinKQhN98FprS6AMkwtBrIzQuRIKFEn8ldEcq7HMC7dOZ5/exec',
+  DIGITAL_FROM: '2026-01-01',   // inicio del histórico digital (con periodo "Todo")
   TABS: [
     { name: 'OT 2026', gid: '0' },
   ],

@@ -15,19 +15,19 @@
   <script type="importmap">
   {
     "imports": {
-      "./app.js": "./app.js?v=1",
-      "./config.js": "./config.js?v=1",
-      "./js/charts.js": "./js/charts.js?v=1",
-      "./js/connector.js": "./js/connector.js?v=1",
-      "./js/filters.js": "./js/filters.js?v=1",
-      "./js/normalize.js": "./js/normalize.js?v=1",
-      "./js/table.js": "./js/table.js?v=1",
-      "./js/ui.js": "./js/ui.js?v=1",
-      "./js/weekly.js": "./js/weekly.js?v=1"
+      "./app.js": "./app.js?v=3",
+      "./config.js": "./config.js?v=3",
+      "./js/charts.js": "./js/charts.js?v=3",
+      "./js/connector.js": "./js/connector.js?v=3",
+      "./js/digital.js": "./js/digital.js?v=3",
+      "./js/filters.js": "./js/filters.js?v=3",
+      "./js/normalize.js": "./js/normalize.js?v=3",
+      "./js/ui.js": "./js/ui.js?v=3",
+      "./js/weekly.js": "./js/weekly.js?v=3"
     }
   }
   </script>
-  <script type="module" src="app.js?v=1"></script>
+  <script type="module" src="app.js?v=3"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">
@@ -37,7 +37,9 @@
         <h1 class="text-lg font-semibold leading-tight">Tráfico Grupo Bios · ABA 2026</h1>
         <p id="periodLabel" class="text-sm text-teal-100">—</p>
       </div>
-      <a href="#weekly" class="ml-auto rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Flujo semanal ↓</a>
+      <a href="#web" class="ml-auto rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Web ↓</a>
+      <a href="#redes" class="rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Redes ↓</a>
+      <a href="#weekly" class=" rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Flujo semanal ↓</a>
       <button id="btnRefresh" class=" rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium disabled:opacity-50">↻ Actualizar</button>
     </div>
   </header>
@@ -144,27 +146,56 @@
       </div>
     </section>
 
-    <!-- Tabla -->
-    <section class="card !p-0 overflow-hidden" aria-label="Órdenes de trabajo">
-      <div class="p-3 flex flex-wrap gap-2 items-center border-b border-slate-200">
-        <input id="search" type="search" placeholder="Buscar OT, descripción, pieza, responsable…" class="ctl flex-1 min-w-[12rem]">
-        <select id="fGerente" class="ctl" aria-label="Gerente / Director"></select>
-        <select id="fResponsable" class="ctl" aria-label="Responsable"></select>
-        <select id="fCategoria" class="ctl" aria-label="Tipo de pieza"></select>
-        <select id="fEstado" class="ctl" aria-label="Estado"></select>
+    <!-- Web (GA4) -->
+    <section id="web" class="space-y-3" aria-label="Web">
+      <div class="card flex flex-wrap items-end gap-3">
+        <div class="min-w-0 flex-1">
+          <h2 class="text-base font-semibold text-slate-800">Web · Google Analytics <span class="font-normal text-slate-500 text-sm">(sigue el periodo de arriba)</span></h2>
+          <p id="webInfo" class="text-sm text-slate-500">Cargando…</p>
+        </div>
+        <div id="webMarcas" class="flex flex-wrap gap-2"></div>
       </div>
-      <div class="overflow-x-auto">
-        <table class="min-w-full text-sm">
-          <thead class="bg-slate-50 text-slate-600"><tr id="tableHead"></tr></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-      <div class="p-3 flex items-center gap-2 border-t border-slate-200 text-sm">
-        <span id="pageInfo" class="text-slate-600"></span>
-        <button id="prevPage" class="btn ml-auto">‹ Anterior</button>
-        <button id="nextPage" class="btn">Siguiente ›</button>
+      <div id="webBody" class="space-y-3" hidden>
+        <div id="webKpis" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"></div>
+        <div class="grid lg:grid-cols-2 gap-3">
+          <div class="card">
+            <h2 class="section-title">Visitas y usuarios nuevos por mes</h2>
+            <div class="chart-box" style="height:300px"><canvas id="webChart"></canvas></div>
+          </div>
+          <div class="card !p-0 overflow-hidden">
+            <div class="overflow-x-auto"><table id="webTabla" class="min-w-full text-sm"></table></div>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- Redes (Metricool) -->
+    <section id="redes" class="space-y-3" aria-label="Redes sociales">
+      <div class="card flex flex-wrap items-end gap-3">
+        <div class="min-w-0 flex-1">
+          <h2 class="text-base font-semibold text-slate-800">Redes sociales · Metricool <span class="font-normal text-slate-500 text-sm">(sigue el periodo de arriba)</span></h2>
+          <p id="redesInfo" class="text-sm text-slate-500">Cargando…</p>
+        </div>
+        <div id="redesMarcas" class="flex flex-wrap gap-2"></div>
+      </div>
+      <div id="redesBody" class="space-y-3" hidden>
+        <div id="redesKpis" class="grid lg:grid-cols-2 gap-3"></div>
+        <div class="grid lg:grid-cols-2 gap-3">
+          <div class="card">
+            <h2 class="section-title">Seguidores</h2>
+            <div class="chart-box" style="height:300px"><canvas id="redesSeg"></canvas></div>
+          </div>
+          <div class="card">
+            <h2 class="section-title">Impresiones</h2>
+            <div class="chart-box" style="height:300px"><canvas id="redesImp"></canvas></div>
+          </div>
+        </div>
+        <div class="card !p-0 overflow-hidden">
+          <div class="overflow-x-auto"><table id="redesTabla" class="min-w-full text-sm"></table></div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </body>
 </html>
