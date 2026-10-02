@@ -159,3 +159,14 @@ test('yearEvolution: nuevas, acumulado, entregadas y en curso por mes', async ()
   assert.equal(rows[2].deltaNuevas, -100);
   assert.equal(yearEvolution(recs, 2027, d(3, 15)).length, 0);
 });
+
+test('weeklyFlow: color sin leyenda mapeado a Cancelado cuenta como salida', async () => {
+  const { weeklyFlow } = await import('../js/weekly.js');
+  const it = (key, estado) => [key, key, 'ELI', '', estado, '', '', '1'];
+  const [, w2] = weeklyFlow([
+    { gid: 1, nombre: 'a', fecha: '2026-09-22', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000002_aba_b', 'EN PROCESO')] },
+    { gid: 2, nombre: 'b', fecha: '2026-09-29', items: [it('ot_000001_aba_a', 'COLOR #ff0000'), it('ot_000002_aba_b', 'COLOR #34a853')] },
+  ]);
+  assert.deepEqual(w2.salieron.map((x) => x.salida).sort(), ['Aprobada', 'Cancelada']);
+  assert.equal(w2.activas.length, 0);
+});

@@ -1,8 +1,8 @@
 // Flujo semanal del Cuadro Tango: cuántas OTs (y piezas) entran y salen cada semana.
 // Cada pestaña semanal es una foto; se compara con la anterior. Estado = color de la celda "No".
 //   Entraron: aparecen por primera vez en la pestaña.
-//   Salieron: pasaron a Aprobado esa semana, o se retiraron del cuadro sin aprobarse.
-//   Activas:  no aprobadas al cierre de la semana.
+//   Salieron: pasaron a Aprobado o Cancelado esa semana, o se retiraron del cuadro sin cerrarse.
+//   Activas:  ni aprobadas ni canceladas al cierre de la semana.
 // Piezas: columna PIEZAS del cuadro; si no es un número, CANTIDAD de OT's TANGO 2026 (cruce por código ot_XXXXXX_).
 import { CONFIG } from '../config.js';
 import { normKey, splitOT, parseCount } from './normalize.js';
@@ -10,6 +10,8 @@ import { upsert } from './charts.js';
 import { STATUS, CATEGORY, badge, $, esc, fmtInt } from './ui.js';
 
 const isApproved = (estado) => normKey(estado).startsWith('APROB');
+const isCancelled = (estado) => normKey(estado).startsWith('CANCEL');
+const isClosed = (estado) => isApproved(estado) || isCancelled(estado);   // fuera del flujo activo
 const fixColor = (estado) => CONFIG.CUADRO_COLORES[String(estado).replace(/^COLOR /i, '').toLowerCase()] ?? estado;
 
 export const prettyStatus = (s) => {
@@ -39,12 +41,14 @@ export function weeklyFlow(semanas, cross = new Map()) {
   return semanas.map((w) => {
     const cur = new Map(w.items.map((r) => { const it = toItem(r, cross); return [it.key, it]; }));
     const entraron = prev ? [...cur.values()].filter((it) => !prev.has(it.key)) : [];
-    const aprobadas = prev ? [...cur.values()].filter((it) => isApproved(it.estado) && prev.has(it.key) && !isApproved(prev.get(it.key).estado)) : [];
-    const retiradas = prev ? [...prev.values()].filter((it) => !cur.has(it.key) && !isApproved(it.estado)) : [];
-    const activas = [...cur.values()].filter((it) => !isApproved(it.estado));
+    // Salida = pasó a Aprobado o Cancelado esa semana, o se retiró del cuadro sin cerrarse.
+    const cerradas = prev ? [...cur.values()].filter((it) => isClosed(it.estado) && prev.has(it.key) && !isClosed(prev.get(it.key).estado)) : [];
+    const retiradas = prev ? [...prev.values()].filter((it) => !cur.has(it.key) && !isClosed(it.estado)) : [];
+    const activas = [...cur.values()].filter((it) => !isClosed(it.estado));
     const base = prev === null;
     prev = cur;
-    const salieron = [...aprobadas.map((it) => ({ ...it, salida: 'Aprobada' })), ...retiradas.map((it) => ({ ...it, salida: 'Retirada del cuadro' }))];
+    const salieron = [...cerradas.map((it) => ({ ...it, salida: isCancelled(it.estado) ? 'Cancelada' : 'Aprobada' })),
+      ...retiradas.map((it) => ({ ...it, salida: 'Retirada del cuadro' }))];
     return {
       gid: w.gid, nombre: w.nombre, fecha: w.fecha, base,
       total: cur.size, entraron, salieron, activas, todas: [...cur.values()],
@@ -83,7 +87,8 @@ const TABS = {
 
 function statusChip(estado, leyenda) {
   const hit = leyenda.find((l) => normKey(l.label) === normKey(estado));
-  const color = hit ? hit.color : normKey(estado).startsWith('COLOR') ? `#${String(estado).split('#')[1]}` : '#cbd5e1';
+  const mapped = Object.keys(CONFIG.CUADRO_COLORES).find((hex) => normKey(CONFIG.CUADRO_COLORES[hex]) === normKey(estado));
+  const color = hit ? hit.color : mapped || (normKey(estado).startsWith('COLOR') ? `#${String(estado).split('#')[1]}` : '#cbd5e1');
   return `<span class="inline-flex items-center gap-1.5 whitespace-nowrap"><span class="h-2.5 w-2.5 rounded-full border border-black/10" style="background:${color}"></span>${esc(prettyStatus(estado))}</span>`;
 }
 
