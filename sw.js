@@ -1,6 +1,6 @@
 // Service worker: cachea el shell y las librerías CDN para abrir el dashboard sin red.
 // Los datos de Google NO pasan por aquí: los gestiona connector.js con su propio caché y reintentos.
-const VERSION = 'trafico-v12';
+const VERSION = 'trafico-v13';
 const SHELL = [
   './', 'index.html', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest', 'icon-192.png',
   'js/connector.js', 'js/normalize.js', 'js/filters.js', 'js/charts.js', 'js/ui.js', 'js/weekly.js', 'js/digital.js', 'js/annual.js',

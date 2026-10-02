@@ -170,3 +170,15 @@ test('weeklyFlow: color sin leyenda mapeado a Cancelado cuenta como salida', asy
   assert.deepEqual(w2.salieron.map((x) => x.salida).sort(), ['Aprobada', 'Cancelada']);
   assert.equal(w2.activas.length, 0);
 });
+
+test('weeklyFlow: OTs con color excluido (gris) no cuentan', async () => {
+  const { weeklyFlow } = await import('../js/weekly.js');
+  const it = (key, estado) => [key, key, 'ELI', '', estado, '', '', '1'];
+  const [w1, w2] = weeklyFlow([
+    { gid: 1, nombre: 'a', fecha: '2026-09-22', items: [it('ot_000001_aba_a', 'EN PROCESO')] },
+    { gid: 2, nombre: 'b', fecha: '2026-09-29', items: [it('ot_000001_aba_a', 'EN PROCESO'), it('ot_000009_aba_g', 'COLOR #b7b7b7'), it('ot_000010_aba_r', 'COLOR #ea4335')] },
+  ]);
+  assert.equal(w1.total, 1);
+  assert.deepEqual([w2.total, w2.entraron.map((x) => x.key)], [2, ['ot_000010_aba_r']]);
+  assert.equal(w2.activas.length, 1);   // la #ea4335 (cancelada) no es activa
+});

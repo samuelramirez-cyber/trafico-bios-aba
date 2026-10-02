@@ -12,6 +12,8 @@ import { STATUS, CATEGORY, badge, $, esc, fmtInt } from './ui.js';
 const isApproved = (estado) => normKey(estado).startsWith('APROB');
 const isCancelled = (estado) => normKey(estado).startsWith('CANCEL');
 const isClosed = (estado) => isApproved(estado) || isCancelled(estado);   // fuera del flujo activo
+const EXCLUIR = new Set((CONFIG.CUADRO_EXCLUIR_COLORES ?? []).map((h) => h.toLowerCase()));
+const excluded = (estado) => EXCLUIR.has(String(estado).replace(/^COLOR /i, '').toLowerCase());
 const fixColor = (estado) => CONFIG.CUADRO_COLORES[String(estado).replace(/^COLOR /i, '').toLowerCase()] ?? estado;
 
 export const prettyStatus = (s) => {
@@ -39,7 +41,7 @@ const sumPz = (list) => list.reduce((a, it) => a + (it.piezas ?? 0), 0);
 export function weeklyFlow(semanas, cross = new Map()) {
   let prev = null;
   return semanas.map((w) => {
-    const cur = new Map(w.items.map((r) => { const it = toItem(r, cross); return [it.key, it]; }));
+    const cur = new Map(w.items.filter((r) => !excluded(r[4])).map((r) => { const it = toItem(r, cross); return [it.key, it]; }));
     const entraron = prev ? [...cur.values()].filter((it) => !prev.has(it.key)) : [];
     // Salida = pasó a Aprobado o Cancelado esa semana, o se retiró del cuadro sin cerrarse.
     const cerradas = prev ? [...cur.values()].filter((it) => isClosed(it.estado) && prev.has(it.key) && !isClosed(prev.get(it.key).estado)) : [];

@@ -44,7 +44,8 @@ export const CONFIG = {
   WEEKS_INITIAL: 12,
   STALE_WEEKS: 3,          // "estancada": mismo estado (no aprobado) durante ≥ N semanas seguidas
   // Colores del Cuadro que no están en su leyenda → estado. Ej.: '#34a853': 'APROBADO'.
-  CUADRO_COLORES: { '#34a853': 'APROBADO', '#ff0000': 'CANCELADO', '#4a86e8': 'AJUSTES' },   // definidos por las ejecutivas (2026-10)
+  CUADRO_COLORES: { '#34a853': 'APROBADO', '#ff0000': 'CANCELADO', '#ea4335': 'CANCELADO', '#4a86e8': 'AJUSTES' },   // definidos por las ejecutivas (2026-10)
+  CUADRO_EXCLUIR_COLORES: ['#b7b7b7'],   // OTs con este color no entran al flujo semanal (pedido de las ejecutivas)
 
   // OTs cuyas piezas NO se suman (siguen contando como OT). Mismo formato de términos que CATEGORIES.
   // Hoy: parrillas de contenido (p. ej. OT 001557, 640 piezas a dic-2026) que distorsionan el conteo.
