@@ -2,5 +2,8 @@
   "name": "dashboard-trafico",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test tests/core.test.mjs" }
+  "scripts": {
+    "test": "node --test tests/core.test.mjs",
+    "css": "npx tailwindcss@3.4.17 -i tools/tailwind.in.css -c tailwind.config.cjs -o tailwind.css --minify"
+  }
 }

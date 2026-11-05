@@ -1,6 +1,6 @@
 // Orquestador del dashboard: estado de filtros, carga de datos y render reactivo.
 import { CONFIG } from './config.js';
-import { loadData, loadDigital, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
+import { loadData, loadDigital, loadSheetRows, loadWeekIndex, loadWeeks, sourceMode } from './js/connector.js';
 import { normalizeTable } from './js/normalize.js';
 import { applyFilters, computeKPIs, crossTab, periodRange, yearsIn, MONTH_NAMES } from './js/filters.js';
 import { renderCharts } from './js/charts.js';
@@ -9,6 +9,7 @@ import { renderAnnual } from './js/annual.js';
 import { evolutionMonths, fetchSpan, monthsInRange, renderRedes, renderWeb, socialSelection, webBrand } from './js/digital.js';
 import { renderInteractions } from './js/interactions.js';
 import { renderTareas } from './js/tasks.js';
+import { campoRecords, renderCampo } from './js/campo.js';
 import { STATUS, CATEGORY, $, esc, fillSelect, fmtInt, fmtTime } from './js/ui.js';
 
 const FILTERS_KEY = 'bios-trafico:filters:v3';
@@ -113,6 +114,7 @@ function render() {
   renderIssues(range);
   syncWeekly();
   syncDigital();
+  drawCampo();
 }
 
 // Chips de filtros de detalle activos (los que reducen el total), con ✕ para quitar cada uno.
@@ -324,6 +326,41 @@ function syncDigital(force = false) {
   drawDigital();
 }
 
+
+/* ---------- Pestaña Campo Azul · Licitación ---------- */
+
+const campo = { rows: null, loading: null, error: null, loaded: false };
+
+function drawCampo() {
+  const range = periodRange(state);
+  renderCampo({ ...campo, months: monthsInRange(range), periodLabel: periodLabelText(),
+    ots: applyFilters(campoRecords(records), { ...DEFAULTS, dateField: state.dateField, period: state.period, year: state.year, month: state.month, quarter: state.quarter, half: state.half }),
+    onRender: drawCampo });
+}
+
+function syncCampo(force = false) {
+  const { SHEET_ID, GID } = CONFIG.CAMPO_AZUL;
+  if (!SHEET_ID || (campo.loaded && !force) || campo.loading) return;
+  campo.loading = 'Cargando…';
+  loadSheetRows(SHEET_ID, GID, { force })
+    .then((rows) => Object.assign(campo, { rows, error: null }))
+    .catch((e) => Object.assign(campo, { error: `No fue posible leer la hoja de KPIs: ${e.message}` }))
+    .finally(() => { Object.assign(campo, { loading: null, loaded: true }); drawCampo(); });
+}
+
+// Vista activa por el hash (#campo-azul); cualquier otro hash (#web, #redes…) es la vista General.
+const currentView = () => (location.hash === '#campo-azul' ? 'campo' : 'general');
+function showView() {
+  const v = currentView();
+  $('#viewGeneral').hidden = v !== 'general';
+  $('#viewCampo').hidden = v !== 'campo';
+  document.querySelectorAll('[data-general]').forEach((el) => { el.hidden = v !== 'general'; });
+  document.querySelectorAll('#viewTabs [data-view]').forEach((el) => el.setAttribute('aria-selected', String(el.dataset.view === v)));
+  $('#appTitle').textContent = v === 'campo' ? `${CONFIG.CAMPO_AZUL.TITULO} · 2026` : 'Tráfico Grupo Bios · ABA 2026';
+  document.title = v === 'campo' ? `${CONFIG.CAMPO_AZUL.TITULO} · Grupo Bios` : 'Tráfico Grupo Bios';
+  if (v === 'campo') { syncCampo(); drawCampo(); }
+}
+
 /* ---------- Eventos ---------- */
 
 function bind() {
@@ -343,7 +380,8 @@ function bind() {
     render();
   };
   $('#btnReset').onclick = () => { Object.assign(state, DEFAULTS); render(); };
-  $('#btnRefresh').onclick = () => { load(true); refreshWeekly({ force: true }); syncDigital(true); };
+  $('#btnRefresh').onclick = () => { load(true); refreshWeekly({ force: true }); syncDigital(true); if (campo.loaded) syncCampo(true); };
+  window.addEventListener('hashchange', showView);
 
   // "Tiempo real": refresco periódico solo con la pestaña visible; al volver o recuperar red se re-evalúa.
   setInterval(() => { if (!document.hidden) load(); }, CONFIG.AUTO_REFRESH_MIN * 60000);
@@ -352,6 +390,7 @@ function bind() {
 }
 
 bind();
+showView();
 load();
 refreshWeekly();
 

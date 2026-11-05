@@ -9,43 +9,53 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="tailwind.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
   <link rel="stylesheet" href="styles.css">
   <script type="importmap">
   {
     "imports": {
-      "./app.js": "./app.js?v=14",
-      "./config.js": "./config.js?v=14",
-      "./js/annual.js": "./js/annual.js?v=14",
-      "./js/charts.js": "./js/charts.js?v=14",
-      "./js/connector.js": "./js/connector.js?v=14",
-      "./js/digital.js": "./js/digital.js?v=14",
-      "./js/filters.js": "./js/filters.js?v=14",
-      "./js/interactions.js": "./js/interactions.js?v=14",
-      "./js/normalize.js": "./js/normalize.js?v=14",
-      "./js/tasks.js": "./js/tasks.js?v=14",
-      "./js/ui.js": "./js/ui.js?v=14",
-      "./js/weekly.js": "./js/weekly.js?v=14"
+      "./app.js": "./app.js?v=15",
+      "./config.js": "./config.js?v=15",
+      "./js/annual.js": "./js/annual.js?v=15",
+      "./js/campo.js": "./js/campo.js?v=15",
+      "./js/charts.js": "./js/charts.js?v=15",
+      "./js/connector.js": "./js/connector.js?v=15",
+      "./js/digital.js": "./js/digital.js?v=15",
+      "./js/filters.js": "./js/filters.js?v=15",
+      "./js/interactions.js": "./js/interactions.js?v=15",
+      "./js/normalize.js": "./js/normalize.js?v=15",
+      "./js/tasks.js": "./js/tasks.js?v=15",
+      "./js/ui.js": "./js/ui.js?v=15",
+      "./js/weekly.js": "./js/weekly.js?v=15"
     }
   }
   </script>
-  <script type="module" src="app.js?v=14"></script>
+  <script type="module" src="app.js?v=15"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">
     <div class="mx-auto max-w-7xl px-4 py-4 flex flex-wrap items-center gap-3">
       <img src="icon-192.png" alt="" class="h-9 w-9 rounded-lg bg-white/10">
       <div class="min-w-0">
-        <h1 class="text-lg font-semibold leading-tight">Tráfico Grupo Bios · ABA 2026</h1>
+        <h1 id="appTitle" class="text-lg font-semibold leading-tight">Tráfico Grupo Bios · ABA 2026</h1>
         <p id="periodLabel" class="text-sm text-teal-100">—</p>
       </div>
-      <a href="#web" class="ml-auto rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Web ↓</a>
-      <a href="#redes" class="rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Redes ↓</a>
-      <a href="#weekly" class=" rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Flujo semanal ↓</a>
+      <span class="ml-auto"></span>
+      <a href="#web" data-general class=" rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Web ↓</a>
+      <a href="#redes" data-general class="rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Redes ↓</a>
+      <a href="#weekly" data-general class="rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium">Flujo semanal ↓</a>
       <button id="btnRefresh" class=" rounded-lg bg-white/15 hover:bg-white/25 px-3 py-1.5 text-sm font-medium disabled:opacity-50">↻ Actualizar</button>
     </div>
   </header>
+
+  <!-- Pestañas tipo navegador -->
+  <nav class="bg-teal-700" aria-label="Vistas">
+    <div id="viewTabs" class="mx-auto max-w-7xl px-4 flex gap-1 overflow-x-auto" role="tablist">
+      <a href="#general" data-view="general" role="tab" class="view-tab">General</a>
+      <a href="#campo-azul" data-view="campo" role="tab" class="view-tab">Campo Azul · Licitación</a>
+    </div>
+  </nav>
 
   <main class="mx-auto max-w-7xl px-4 py-4 space-y-4">
     <div id="banner" class="rounded-lg border px-3 py-2 text-sm">Cargando…</div>
@@ -84,6 +94,7 @@
       <button id="btnReset" class="btn ml-auto">Restablecer filtros</button>
     </section>
 
+    <div id="viewGeneral" class="space-y-4">
     <!-- KPIs (generados desde CONFIG.STATUSES) -->
     <!-- Evolución anual de OTs (gerencia) -->
     <section id="anual" class="space-y-3" aria-label="Evolución anual de OTs">
@@ -249,6 +260,53 @@
       </div>
     </section>
 
+    </div>
+
+    <!-- Vista Campo Azul · Licitación -->
+    <div id="viewCampo" class="space-y-4" hidden>
+      <div id="campoPrueba" class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+        <b>Datos de prueba.</b> Los KPIs orgánicos vienen de una hoja de prueba mientras se organiza la fuente definitiva.
+      </div>
+
+      <section class="space-y-3" aria-label="KPIs orgánicos">
+        <div class="card">
+          <h2 class="text-base font-semibold text-slate-800">KPIs orgánicos <span class="font-normal text-slate-500 text-sm">(sigue el periodo de arriba)</span></h2>
+          <p id="campoKpiInfo" class="text-sm text-slate-500">Cargando…</p>
+        </div>
+        <div id="campoKpiBody" class="space-y-3" hidden>
+          <div id="campoKpis" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+          <div class="grid lg:grid-cols-3 gap-3">
+            <div class="card lg:col-span-2">
+              <h2 id="campoEvoTitulo" class="section-title">Evolución</h2>
+              <div id="campoEvoChips" class="flex flex-wrap gap-1.5 mb-2"></div>
+              <div class="chart-box" style="height:280px"><canvas id="campoEvo"></canvas></div>
+            </div>
+            <div class="card">
+              <h2 id="campoIndTitulo" class="section-title">Seguidores por industria objetivo</h2>
+              <p id="campoIndInfo" class="text-xs text-slate-500 mb-2"></p>
+              <div class="chart-box" style="height:280px"><canvas id="campoInd"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card !p-0 overflow-hidden" aria-label="OTs de Campo Azul">
+        <div class="p-3 border-b border-slate-200">
+          <h2 class="section-title !mb-0">OTs de Campo Azul</h2>
+          <p id="campoOtInfo" class="text-xs text-slate-500"></p>
+          <div id="campoOtKpis" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-2"></div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="bg-slate-50 text-slate-600"><tr>
+              <th class="px-3 py-2 text-left font-semibold">OT</th><th class="px-3 py-2 text-left font-semibold">Ingreso</th>
+              <th class="px-3 py-2 text-left font-semibold">Descripción</th><th class="px-3 py-2 text-left font-semibold">Pieza</th>
+              <th class="px-3 py-2 text-right font-semibold">Cant.</th><th class="px-3 py-2 text-left font-semibold">Estado</th></tr></thead>
+            <tbody id="campoOtBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   </main>
 </body>
 </html>

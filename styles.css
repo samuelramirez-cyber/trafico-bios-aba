@@ -20,3 +20,8 @@ code { font-size: .8em; background: rgb(0 0 0 / .06); padding: 0 .25em; border-r
 .chip:hover { background: #fef3c7; }
 .chip-strong { background: #92400e; border-color: #92400e; color: #fff; }
 .chip-strong:hover { background: #78350f; }
+
+/* Pestañas tipo navegador */
+.view-tab { padding: .5rem 1rem; border-radius: .6rem .6rem 0 0; font-size: .875rem; font-weight: 600; color: #ccfbf1; background: rgb(255 255 255 / .1); white-space: nowrap; }
+.view-tab:hover { background: rgb(255 255 255 / .2); }
+.view-tab[aria-selected="true"] { background: #f1f5f9; color: #0f766e; }

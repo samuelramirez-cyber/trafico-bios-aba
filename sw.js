@@ -1,11 +1,11 @@
 // Service worker: cachea el shell y las librerías CDN para abrir el dashboard sin red.
 // Los datos de Google NO pasan por aquí: los gestiona connector.js con su propio caché y reintentos.
-const VERSION = 'trafico-v19';
+const VERSION = 'trafico-v20';
 const SHELL = [
-  './', 'index.html', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest', 'icon-192.png',
-  'js/connector.js', 'js/normalize.js', 'js/filters.js', 'js/charts.js', 'js/ui.js', 'js/weekly.js', 'js/digital.js', 'js/annual.js', 'js/tasks.js', 'js/interactions.js',
+  './', 'index.html', 'tailwind.css', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest', 'icon-192.png',
+  'js/connector.js', 'js/normalize.js', 'js/filters.js', 'js/charts.js', 'js/ui.js', 'js/weekly.js', 'js/digital.js', 'js/annual.js', 'js/tasks.js', 'js/interactions.js', 'js/campo.js',
 ];
-const CDN = ['https://cdn.tailwindcss.com', 'https://cdnjs.cloudflare.com/'];
+const CDN = ['https://cdnjs.cloudflare.com/'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

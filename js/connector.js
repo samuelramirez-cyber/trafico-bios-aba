@@ -218,3 +218,23 @@ export async function loadDigital(view, span, { force = false } = {}) {
     throw e;
   }
 }
+
+/* ---------- Hojas de KPIs por enlace (pestaña Campo Azul) ---------- */
+
+const SHEET_TTL_MIN = 5;
+
+/** Filas de una pestaña de Google Sheets compartida por enlace (export CSV); caché local 5 min. */
+export async function loadSheetRows(sheetId, gid, { force = false } = {}) {
+  const key = `bios-trafico:hoja:v1:${sheetId}:${gid}`;
+  const cached = cachedJSON(key);
+  if (!force && cached && Date.now() - cached.ts < SHEET_TTL_MIN * 60000) return cached.rows;
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/export?format=csv&gid=${encodeURIComponent(gid)}`;
+    const rows = parseCSV(await withRetry(() => fetchText(url)));
+    storeJSON(key, { ts: Date.now(), rows });
+    return rows;
+  } catch (e) {
+    if (cached) return cached.rows;
+    throw e;
+  }
+}

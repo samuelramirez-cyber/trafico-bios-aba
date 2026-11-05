@@ -228,3 +228,30 @@ test('interactionSummary: total, variación y engagement por red', async () => {
   const s = interactionSummary(inter, redes, '2026-09').instagram;
   assert.deepEqual([s.total, s.prevTotal, s.imp, s.eng, s.engPrev], [175, 110, 10000, 1.75, 2.2]);
 });
+
+import { parseNum, parseYm, parseCampo, campoRecords } from '../js/campo.js';
+
+test('campo: números y meses de la hoja de KPIs', () => {
+  assert.equal(parseNum('1.12'), 1.12);
+  assert.equal(parseNum('1,40'), 1.4);
+  assert.equal(parseNum('4,6 %'), 4.6);
+  assert.equal(parseNum('1,850'), 1850);
+  assert.equal(parseNum(''), null);
+  assert.equal(parseYm('2026-01'), '2026-01');
+  assert.equal(parseYm('1/03/2026'), '2026-03');
+  assert.equal(parseYm('Octubre 2026'), '2026-10');
+  assert.equal(parseYm('Total'), null);
+});
+
+test('campo: parseCampo lee KPIs e industrias; OTs por descripción', () => {
+  const d = parseCampo([
+    ['Mes', 'Web visitas', 'Web tiempo promedio (min)', 'LinkedIn engagement (%)', 'Seguidores · Avicultura', 'Seguidores · Mascotas'],
+    ['2026-09', '2730', '1.42', '4.4', '563', '210'],
+    ['2026-10', '2860', '1,45', '', '584', ''],
+  ]);
+  assert.deepEqual(d.meses['2026-10'], { webVisitas: 2860, webTiempo: 1.45 });
+  assert.deepEqual(d.industrias, ['Avicultura', 'Mascotas']);
+  assert.deepEqual(d.seguidores['2026-09'], { Avicultura: 563, Mascotas: 210 });
+  const recs = [{ _search: 'OT 001 ABA CAMPO AZUL PENDON' }, { _search: 'OT 002 ABA DIA CAMPO' }];
+  assert.equal(campoRecords(recs).length, 1);
+});

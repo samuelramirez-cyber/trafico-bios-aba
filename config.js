@@ -51,6 +51,18 @@ export const CONFIG = {
   // Hoy: parrillas de contenido (p. ej. OT 001557, 640 piezas a dic-2026) que distorsionan el conteo.
   PIECES_EXCLUDE: ['PARRILLA'],
 
+  // Pestaña "Campo Azul · Licitación": KPIs orgánicos desde una hoja de Google (por ahora de PRUEBA, compartida
+  // "cualquier persona con el enlace → Lector"; no tiene datos sensibles). Columnas: Mes (2026-01) y una por KPI;
+  // las que empiezan por "Seguidores ·" son seguidores de LinkedIn por industria objetivo.
+  CAMPO_AZUL: {
+    TITULO: 'Campo Azul · Licitación',
+    SHEET_ID: '150low2F-3JUrCG7IYRNx_4_M8Lx0J3qr16wyrMLlW-g',
+    GID: '1939144763',
+    PRUEBA: true,                       // muestra el aviso "datos de prueba"
+    OT_MATCH: ['CAMPO AZUL'],           // OTs cuya descripción contiene estos textos (sin tildes/mayúsculas; "_" = espacio)
+    META_TIEMPO_MIN: 1.40,              // meta de tiempo promedio en la página (min)
+  },
+
   // Tipo de trabajo (qué es la OT). Reglas en orden:
   //   1) `pieza`: si la columna PIEZA empieza por alguno de estos términos, gana ese tipo (las campañas).
   //   2) `match`: términos en DESCRIPCIÓN + PIEZA (prefijo de palabra; con '$' = palabra exacta).
