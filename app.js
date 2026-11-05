@@ -348,7 +348,7 @@ function syncCampo(force = false) {
     .finally(() => { Object.assign(campo, { loading: null, loaded: true }); drawCampo(); });
 }
 
-// Vista activa por el hash (#campo-azul); cualquier otro hash (#web, #redes…) es la vista General.
+// Vista activa por el hash (#campo-azul); cualquier otro hash (#web, #redes…) es la vista ABA.
 const currentView = () => (location.hash === '#campo-azul' ? 'campo' : 'general');
 function showView() {
   const v = currentView();
