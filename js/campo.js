@@ -53,10 +53,14 @@ export function parseYm(raw) {
   return null;
 }
 
-/** Filas de la hoja → { meses: { ym: { kpi: n } }, industrias: [label], seguidores: { ym: { label: n } } }. */
+/**
+ * Filas de la hoja → { meses: { ym: { kpi: n } }, industrias: [label], seguidores: { ym: { label: n } },
+ *                      funciones: [label], roles: { ym: { label: n } } }.
+ * Columnas "Seguidores · <industria>" y "Función · <rol>" = demografía de seguidores de LinkedIn (taxonomía de LinkedIn).
+ */
 export function parseCampo(rows) {
   const h = rows.findIndex((r) => normKey(r[0]) === 'MES');
-  const out = { meses: {}, industrias: [], seguidores: {} };
+  const out = { meses: {}, industrias: [], seguidores: {}, funciones: [], roles: {} };
   if (h < 0) return out;
   const head = rows[h].map((x) => String(x ?? '').trim());
   const cols = head.map((txt) => {
@@ -64,20 +68,23 @@ export function parseCampo(rows) {
     const kpi = KPIS.find((x) => k.startsWith(x.match));
     if (kpi) return { kpi: kpi.key };
     if (k.startsWith('SEGUIDORES')) return { ind: txt.replace(/^seguidores\s*[·:\-–]?\s*/i, '').trim() || txt };
+    if (k.startsWith('FUNCION') || k.startsWith('ROL')) return { rol: txt.replace(/^(funci[oó]n|rol)\s*[·:\-–]?\s*/i, '').trim() || txt };
     return null;
   });
   out.industrias = cols.filter((c) => c?.ind).map((c) => c.ind);
+  out.funciones = cols.filter((c) => c?.rol).map((c) => c.rol);
   for (const r of rows.slice(h + 1)) {
     const ym = parseYm(r[0]);
     if (!ym) continue;
-    const mes = {}, seg = {};
+    const mes = {}, seg = {}, rol = {};
     cols.forEach((c, i) => {
       const n = c && parseNum(r[i]);
       if (n == null) return;
-      if (c.kpi) mes[c.kpi] = n; else seg[c.ind] = n;
+      if (c.kpi) mes[c.kpi] = n; else if (c.ind) seg[c.ind] = n; else rol[c.rol] = n;
     });
     if (Object.keys(mes).length) out.meses[ym] = mes;
     if (Object.keys(seg).length) out.seguidores[ym] = seg;
+    if (Object.keys(rol).length) out.roles[ym] = rol;
   }
   return out;
 }
@@ -142,12 +149,11 @@ export function renderCampo(s) {
     if (k && k !== evoKpi) { evoKpi = k; s.onRender?.(); }
   };
 
-  // Seguidores por industria (mes elegido).
-  const seg = data.seguidores[ym] ?? {}, segPrev = data.seguidores[prevYm(ym)] ?? {};
-  const totalSeg = Object.values(seg).reduce((a, b) => a + b, 0);
-  $('#campoIndTitulo').textContent = `LinkedIn · seguidores por industria objetivo · ${monthLabel(ym)}`;
-  $('#campoIndInfo').innerHTML = totalSeg ? `${fmtInt(totalSeg)} seguidores en industrias objetivo ${delta(totalSeg, Object.values(segPrev).reduce((a, b) => a + b, 0))}` : 'Sin datos de industrias';
-
+  const aud = audiencia(data, ym);
+  $('#campoAudTitulo').textContent = `LinkedIn · audiencia de seguidores · ${monthLabel(ym)}`;
+  $('#campoCruce').innerHTML = cruceHtml(aud);
+  $('#campoIndInfo').innerHTML = resumen(aud.ind, 'industrias objetivo');
+  $('#campoRolInfo').innerHTML = resumen(aud.rol, 'roles objetivo');
   if (typeof window.Chart !== 'function') return;
   const k = KPI[evoKpi], meses = evolutionMonths([ym]);
   $('#campoEvoTitulo').textContent = `${CANALES[k.canal].label} · ${k.label} · ${monthLabel(meses[0])} a ${monthLabel(ym)}`;
@@ -161,13 +167,74 @@ export function renderCampo(s) {
     scales: { y: { beginAtZero: k.key !== 'webTiempo' } },
     plugins: { legend: { display: k.key === 'webTiempo', position: 'bottom' }, valueLabels: {} },
   });
-  const ind = data.industrias.filter((i) => seg[i] != null).sort((a, b) => seg[b] - seg[a]);
-  upsert('campoInd', 'bar', {
-    labels: ind,
-    datasets: [{ label: 'Seguidores', data: ind.map((i) => seg[i]), backgroundColor: CANALES.linkedin.color }],
+  barras('campoInd', aud.ind);
+  barras('campoRol', aud.rol);
+}
+
+/* ---------- Audiencia LinkedIn: industria × rol ---------- */
+
+// Las columnas que empiezan por "Otr…" (Otras industrias / Otras funciones) no son objetivo.
+const esObjetivo = (label) => !normKey(label).startsWith('OTR');
+
+function dist(labels, mes, prev) {
+  const items = labels.filter((l) => mes[l] != null).map((l) => ({ label: l, n: mes[l], objetivo: esObjetivo(l) }))
+    .sort((a, b) => (b.objetivo - a.objetivo) || (b.n - a.n));
+  const total = items.reduce((a, i) => a + i.n, 0);
+  const obj = items.filter((i) => i.objetivo).reduce((a, i) => a + i.n, 0);
+  const objPrev = labels.filter(esObjetivo).reduce((a, l) => a + (prev?.[l] ?? 0), 0);
+  return { items, total, obj, objPrev: prev ? objPrev : null, pct: total ? (100 * obj) / total : null };
+}
+
+/** Distribuciones del mes + cruce estimado (LinkedIn entrega industria y rol por separado). */
+export function audiencia(data, ym) {
+  const ind = dist(data.industrias, data.seguidores[ym] ?? {}, data.seguidores[prevYm(ym)]);
+  const rol = dist(data.funciones, data.roles[ym] ?? {}, data.roles[prevYm(ym)]);
+  const total = ind.total || rol.total;
+  // Seguidores en industria objetivo Y con rol objetivo, suponiendo que ambas variables son independientes.
+  const ideal = ind.pct != null && rol.pct != null ? Math.round((total * ind.pct * rol.pct) / 10000) : null;
+  return { ind, rol, total, ideal };
+}
+
+const pct1 = (n) => (n == null ? '—' : `${n.toFixed(1).replace('.', ',')} %`);
+
+function resumen(d, txt) {
+  if (!d.items.length) return 'Sin datos';
+  return `<b>${fmtInt(d.obj)}</b> en ${txt} (${pct1(d.pct)}) ${delta(d.obj, d.objPrev)}`;
+}
+
+function cruceHtml(a) {
+  if (!a.total) return '<p class="text-sm text-slate-500">Sin datos de audiencia.</p>';
+  const topInd = a.ind.items.filter((i) => i.objetivo).slice(0, 3), topRol = a.rol.items.filter((i) => i.objetivo).slice(0, 3);
+  const cell = (i, r) => Math.round((a.total * (i.n / a.ind.total) * (r.n / a.rol.total)));
+  return `<div class="flex flex-wrap gap-6">
+      <div><p class="kpi-label">Seguidores</p><p class="kpi-value">${fmtInt(a.total)}</p></div>
+      <div><p class="kpi-label">Industria objetivo</p><p class="kpi-value" style="color:#0a66c2">${pct1(a.ind.pct)}</p></div>
+      <div><p class="kpi-label">Rol objetivo</p><p class="kpi-value" style="color:#0a66c2">${pct1(a.rol.pct)}</p></div>
+      <div><p class="kpi-label">Audiencia ideal (estimada)</p><p class="kpi-value" style="color:#16a34a">${a.ideal == null ? '—' : fmtInt(a.ideal)}</p>
+        <p class="text-xs text-slate-500">industria objetivo × rol objetivo</p></div>
+    </div>
+    ${topInd.length && topRol.length ? `<div class="overflow-x-auto mt-3"><table class="min-w-full text-xs">
+      <thead><tr class="text-slate-500"><th class="px-2 py-1 text-left font-semibold">Industria ↓ · Rol →</th>${topRol.map((r) => `<th class="px-2 py-1 text-right font-semibold">${esc(r.label)}</th>`).join('')}</tr></thead>
+      <tbody>${topInd.map((i) => `<tr class="border-t border-slate-100"><td class="px-2 py-1">${esc(i.label)}</td>${topRol.map((r) => `<td class="px-2 py-1 text-right tabular-nums">${fmtInt(cell(i, r))}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>` : ''}
+    <p class="text-xs text-slate-500 mt-2">LinkedIn entrega la industria y el rol de los seguidores por separado; el cruce es una estimación (proporcional), no un dato exacto de LinkedIn.</p>`;
+}
+
+// Etiquetas largas del eje en dos líneas (Chart.js acepta arreglos).
+const wrap = (t, max = 22) => {
+  if (t.length <= max) return t;
+  const cut = t.lastIndexOf(' ', max);
+  return cut > 0 ? [t.slice(0, cut), t.slice(cut + 1)] : t;
+};
+
+function barras(id, d) {
+  if (typeof window.Chart !== 'function') return;
+  upsert(id, 'bar', {
+    labels: d.items.map((i) => wrap(i.label)),
+    datasets: [{ label: 'Seguidores', data: d.items.map((i) => i.n), backgroundColor: d.items.map((i) => (i.objetivo ? CANALES.linkedin.color : '#cbd5e1')) }],
   }, {
     indexAxis: 'y',
-    scales: { x: { beginAtZero: true }, y: { grid: { display: false } } },
+    scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { autoSkip: false } } },
     plugins: { legend: { display: false }, valueLabels: { mode: 'value' } },
   });
 }

@@ -255,3 +255,18 @@ test('campo: parseCampo lee KPIs e industrias; OTs por descripción', () => {
   const recs = [{ _search: 'OT 001 ABA CAMPO AZUL PENDON' }, { _search: 'OT 002 ABA DIA CAMPO' }];
   assert.equal(campoRecords(recs).length, 1);
 });
+
+import { audiencia } from '../js/campo.js';
+
+test('campo: audiencia LinkedIn por industria y rol + cruce estimado', () => {
+  const d = parseCampo([
+    ['Mes', 'Seguidores · Agricultura', 'Seguidores · Otras industrias', 'Función · Compras', 'Función · Otras funciones'],
+    ['2026-10', '600', '400', '250', '750'],
+  ]);
+  assert.deepEqual(d.funciones, ['Compras', 'Otras funciones']);
+  const a = audiencia(d, '2026-10');
+  assert.equal(a.total, 1000);
+  assert.equal(a.ind.pct, 60);
+  assert.equal(a.rol.pct, 25);
+  assert.equal(a.ideal, 150);
+});

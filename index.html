@@ -15,23 +15,23 @@
   <script type="importmap">
   {
     "imports": {
-      "./app.js": "./app.js?v=16",
-      "./config.js": "./config.js?v=16",
-      "./js/annual.js": "./js/annual.js?v=16",
-      "./js/campo.js": "./js/campo.js?v=16",
-      "./js/charts.js": "./js/charts.js?v=16",
-      "./js/connector.js": "./js/connector.js?v=16",
-      "./js/digital.js": "./js/digital.js?v=16",
-      "./js/filters.js": "./js/filters.js?v=16",
-      "./js/interactions.js": "./js/interactions.js?v=16",
-      "./js/normalize.js": "./js/normalize.js?v=16",
-      "./js/tasks.js": "./js/tasks.js?v=16",
-      "./js/ui.js": "./js/ui.js?v=16",
-      "./js/weekly.js": "./js/weekly.js?v=16"
+      "./app.js": "./app.js?v=18",
+      "./config.js": "./config.js?v=18",
+      "./js/annual.js": "./js/annual.js?v=18",
+      "./js/campo.js": "./js/campo.js?v=18",
+      "./js/charts.js": "./js/charts.js?v=18",
+      "./js/connector.js": "./js/connector.js?v=18",
+      "./js/digital.js": "./js/digital.js?v=18",
+      "./js/filters.js": "./js/filters.js?v=18",
+      "./js/interactions.js": "./js/interactions.js?v=18",
+      "./js/normalize.js": "./js/normalize.js?v=18",
+      "./js/tasks.js": "./js/tasks.js?v=18",
+      "./js/ui.js": "./js/ui.js?v=18",
+      "./js/weekly.js": "./js/weekly.js?v=18"
     }
   }
   </script>
-  <script type="module" src="app.js?v=16"></script>
+  <script type="module" src="app.js?v=18"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased">
   <header class="bg-teal-700 text-white">
@@ -276,15 +276,27 @@
         <div id="campoKpiBody" class="space-y-3" hidden>
           <div id="campoKpis" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
           <div class="grid lg:grid-cols-3 gap-3">
-            <div class="card lg:col-span-2">
+            <div class="card lg:col-span-3">
               <h2 id="campoEvoTitulo" class="section-title">Evolución</h2>
               <div id="campoEvoChips" class="flex flex-wrap gap-1.5 mb-2"></div>
               <div class="chart-box" style="height:280px"><canvas id="campoEvo"></canvas></div>
             </div>
+          </div>
+          <h2 id="campoAudTitulo" class="section-title !mt-2">LinkedIn · audiencia de seguidores</h2>
+          <div class="grid lg:grid-cols-3 gap-3">
             <div class="card">
-              <h2 id="campoIndTitulo" class="section-title">Seguidores por industria objetivo</h2>
+              <h2 class="section-title">Por industria</h2>
               <p id="campoIndInfo" class="text-xs text-slate-500 mb-2"></p>
-              <div class="chart-box" style="height:280px"><canvas id="campoInd"></canvas></div>
+              <div class="chart-box" style="height:300px"><canvas id="campoInd"></canvas></div>
+            </div>
+            <div class="card">
+              <h2 class="section-title">Por rol laboral (función)</h2>
+              <p id="campoRolInfo" class="text-xs text-slate-500 mb-2"></p>
+              <div class="chart-box" style="height:300px"><canvas id="campoRol"></canvas></div>
+            </div>
+            <div class="card">
+              <h2 class="section-title">Cruce industria × rol</h2>
+              <div id="campoCruce"></div>
             </div>
           </div>
         </div>
